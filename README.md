@@ -251,9 +251,9 @@ $ systemctl start writehat
 - More granular permissions / ACLs (beyond just user + admin roles)
 
 
-## Known Bugs:
+## Known Bugs / Limitations:
 - Chrome or Chromium is the recommended browser.  Others are untested and may experience bugs.
-- 
+- "Assignee" field on report components only works with LDAP users, not local ones.
 - Annotations on images sometimes jump slightly when applied.  It's a known bug that we're tracking with the JS library:
 https://github.com/ailon/markerjs/issues/40
 - Visual bugs appear occasionally on page breaks.  These can be fixed by manually inserting a page break in the affected markdown (there's a button for it in the editor).
