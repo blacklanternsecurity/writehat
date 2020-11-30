@@ -1,0 +1,21 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Add Findings Category{% endblock %}
+
+{% block body %}
+  <form method="POST" action="/findings/categoryAdd">
+    <table class="writehat-form">
+      {{ categoryAddForm.as_table }}
+      <tr>
+        <th>
+        </th>
+        <td>
+        </td>
+      </tr>
+    </table>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with id='categoryAddSave' name='Save Category' type='save' class='btn-light border border-success' %}
+{% endblock %}

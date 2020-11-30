@@ -1,0 +1,45 @@
+{% load custom_tags %}
+
+<div class="border-{{ group.scoringType|lower }} rounded m-2 p-2">
+  <div class="m-0 p-0 container-fluid d-flex">
+    <div>
+    	<h5 id="fgroupName_{{ group.id }}">{{ group.name }}</h5>
+    </div>
+    <div class="ml-1">
+      {% include 'snippets/smallButton.html' with title='Edit Group' type='pen' attrs='fgroupID='|addstr:group.id class='fgroupEdit fg-'|addstr:group.scoringType|lower %}
+    </div>
+    <div class='ml-auto'>
+      {% include 'snippets/textButton.html' with href='/engagements/fgroup/status/'|addstr:group.id name='Status' id='findingStatus' type='check' class='btn-light border-info' %}
+      {% include 'snippets/textButton.html' with href='/engagements/fgroup/'|addstr:group.id|addstr:'/finding/new' name='New '|addstr:group.scoringType|addstr:' Finding' id='findingCreate' type='plus' class='bg-'|addstr:group.scoringType|lower %}
+      {% include 'snippets/textButton.html' with href=fgroupDelete name='Remove' id='fgroupDelete_'|addstr:group.id type='trash-alt' class='btn-danger' %}
+    </div>
+  </div>
+  <table class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate">
+    <col width="90">
+    <thead>
+      <tr>
+        <th><strong>Severity</strong></th>
+        <th><strong>Name</strong></th>
+        <th><strong>Created</strong></th>
+        <th><strong>Modified</strong></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="text-nowrap">
+      {% for finding in group.findings %}
+        <tr finding-id="{{ finding.id }}" finding-name="{{ finding.name }}">
+          <td class="background-color-severity-faded right-border-color-severity" finding-severity="{{ finding.severity }}"><a href="/engagements/fgroup/finding/edit/{{ finding.id}}">{{ finding.score }} {{ finding.severity }}</a></td>
+          <td><a href="/engagements/fgroup/finding/edit/{{ finding.id}}" style="font-weight: bold">{{ finding.name }}</a></td>
+          <td><a href="/engagements/fgroup/finding/edit/{{ finding.id}}">{{ finding.createdDate }}</a></td>
+          <td><a href="/engagements/fgroup/finding/edit/{{ finding.id}}">{{ finding.modifiedDate }}</a></td>
+          <td>
+            <div class="floating float-right vertical-align-center mt-1">
+              {% include 'snippets/smallButton.html' with href='/engagements/fgroup/finding/edit/'|addstr:finding.id title='Edit Finding' type='pen' class='text-dark' %}
+              {% include 'snippets/smallButton.html' with title='Delete Finding' type='times-circle' class='text-danger findingDelete' %}
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

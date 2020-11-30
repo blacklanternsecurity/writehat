@@ -1,0 +1,54 @@
+/*** text highlighting ***/
+
+hl[purple], [finding-severity="Critical"].severity-highlight {
+  --text-rgb: 166,0,255;
+  --highlight-rgb: 166,0,255;
+  --highlight-opacity: .1;
+}
+
+hl[red], [finding-severity="High"].severity-highlight {
+  --text-rgb: 255,0,0;
+  --highlight-rgb: 255,0,0;
+  --highlight-opacity: .1;
+}
+
+hl[orange], [finding-severity="Moderate"].severity-highlight, [finding-severity="Medium"].severity-highlight {
+  --text-rgb: 255, 89, 0;
+  --highlight-rgb: 255,136,0;
+  --highlight-opacity: .2;
+}
+
+hl[yellow], [finding-severity="Low"].severity-highlight {
+  --text-rgb: 255, 145, 0;
+  --highlight-rgb: 255, 255, 69;
+  --highlight-opacity: .4;
+}
+
+hl[green], [finding-severity="Proactive"].severity-highlight {
+  --text-rgb: 0,180,0;
+  --highlight-rgb: 0,255,0;
+  --highlight-opacity: .1;
+}
+
+hl[blue], [finding-severity="Informational"].severity-highlight {
+  --text-rgb: 0,128,255;
+  --highlight-rgb: 0,128,255;
+  --highlight-opacity: .1;
+}
+
+/* inline code is also highlighted */
+hl, :not(pre) > code, .severity-highlight {
+
+  --text-color: rgba(var(--text-rgb), 1);
+  --border-color: rgba(var(--highlight-rgb), .3);
+  --background-color: rgba(var(--highlight-rgb), var(--highlight-opacity));
+
+  padding-left: .3em;
+  padding-right: .3em;
+  padding-top: .2em;
+  padding-bottom: .2em;
+  border-radius: .3em;
+  color: var(--text-color);
+  background-color: var(--background-color);
+
+}

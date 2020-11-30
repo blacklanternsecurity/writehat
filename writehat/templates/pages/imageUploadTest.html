@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Image Uploader WIP{% endblock %}
+
+{% block headerLeft %}
+  Image Uploader WIP
+{% endblock %}
+
+{% block fullPane %}
+
+<input type="file" id="figure-input" name="image" accept="image/*">
+
+<div>
+  <img id="figure-destination" src="" style="max-width: 100%">
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<script src="/static/js/imageUploader.js"></script>
+{% endblock %}

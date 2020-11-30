@@ -1,0 +1,33 @@
+div.finding-group-name {
+  padding: .5em;
+  margin: .5em;
+  font-weight: bold;
+  font-size: 1.1em;
+  width: 100%;
+  text-align: center;
+}
+
+p.findings-summary-entry {
+    padding: .5rem;
+    padding-left: 1rem;
+    margin: 0 0 2px calc(2rem + 4px);
+    position: relative;
+}
+
+p.findings-summary-entry::before {
+    content: '';
+    padding: 1rem;
+    position: absolute;
+    background-color: var(--severity-color);
+    display: inline-block;
+    left: calc(-2rem - 2px);
+    bottom: 0;
+    top: 0;
+}
+
+p.findings-summary-entry a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+}

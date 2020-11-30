@@ -1,0 +1,20 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Create Report{% endblock %}
+
+{% block body %}
+  <table class="writehat-form">
+    {{ savedReportImportForm.as_table }}
+    <tr>
+      <th>
+      </th>
+      <td>
+      </td>
+    </tr>
+  </table>
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with name='Import Report' id='cloneReportTemplate' type='file-import' class='btn-light border border-primary' %}
+  {% include 'snippets/textButton.html' with name='Create from Scratch' id='createFromScratch' type='file-signature' class='btn-light border border-dark' %}
+{% endblock %}

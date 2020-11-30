@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}New Page Template{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/textButton.html' with href='/templates' name='Back' id='backButton' type='chevron-left' class='btn-secondary' %}
+  New Page Template
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with name='Save' id='pageTemplateSave' type='save' class='btn-success' %}
+{% endblock %}
+
+{% block fullPane %}
+
+  {% include 'panes/pageTemplateEdit.html' %}
+
+{% endblock %}
+
+{% block footer %}
+  <script src="/static/js/reports.js"></script>
+  <script src="/static/js/pageTemplates.js"></script>
+{% endblock %}

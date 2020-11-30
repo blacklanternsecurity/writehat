@@ -1,0 +1,15 @@
+{% load custom_tags %}
+<div class="p-2">
+  <div class="m-0 p-0 container-fluid d-flex">
+    <div>
+      <h4>Total Findings: {{ engagement.totalFindings }}</h4>
+    </div>
+    <div class='ml-auto'>
+      {% include 'snippets/textButton.html' with href='#' name='New Finding Group' id='fgroupAdd' type='object-group' class='btn-light border border-warning' %}
+      {% include 'snippets/textButton.html' with href=findingDownloadExcel name='Excel Export' id='findingDownloadExcel' type='download' class='btn-light border-success' %}
+    </div>
+  </div>
+  {% for group in engagement.fgroups|dictsort:"name" %}
+      {% include 'panes/engagementFindingsList.html' with group=group %}
+  {% endfor %}
+</div>

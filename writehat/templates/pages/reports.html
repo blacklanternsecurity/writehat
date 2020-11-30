@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Reports{% endblock %}
+
+{% block headerLeft %}
+  Reports
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with href='/reports/new' name='New Report' type='plus' class='btn-primary' %}
+{% endblock %}
+
+{% block fullPane %}
+
+  {% include 'panes/reportsList.html' %}
+
+{% endblock %}
+{% block footer %}
+  <script src="/static/js/reports.js"></script>
+{% endblock %}

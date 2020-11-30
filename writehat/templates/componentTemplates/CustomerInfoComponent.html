@@ -1,0 +1,69 @@
+{% load custom_tags %}
+<section class="l{{ level }} component{% if pageBreakBefore %} page-break{% endif %}" id="container_{{ id }}">
+{% include 'componentTemplates/Heading.html' %}
+<p>
+<div class='generated-table'>
+    <table class="customer-info">
+        <tr>
+            <th colspan="6">Customer Information</th>
+        </tr>
+        <tr>
+            <td class="bold">Company Name:</td><td colspan="5">{% if custName %}{{ custName }}{% else %}{{ engagement.customer.name }}{% endif %}</td>
+        </tr>
+        <tr>
+            <td class="bold">Address:</td><td colspan="5">{% if custAddress %}{{ custAddress }}{% else %}{{ engagement.customer.address }}{% endif %}</td>
+        </tr>
+        <tr>
+            <td class="bold">City:</td><td>{{ custCity }}</td>
+            <td class="bold">State:</td><td>{{ custState }}</td>
+            <td class="bold">Zip:</td><td>{{ custZip }}</td>
+        </tr>
+        <tr>
+            <td class="bold">URL:</td><td colspan="5">{{ custUrl }}</td>
+        </tr>
+        <tr>
+            <th colspan="6">Customer Contact Information</th>
+        </tr>
+        <tr>
+            <td class="bold">Contact Name:</td><td colspan="5">{% if contactName %}{{ contactName }}{% else %}{{ engagement.customer.POC }}{% endif %}</td>
+        </tr>
+        <tr>
+            <td class="bold">Title:</td><td colspan="5">{{ contactTitle }}</td>
+        </tr>
+        <tr>
+            <td class="bold">Telephone:</td><td colspan="5">{% if contactPhone %}{{ contactPhone }}{% else %}{{ engagement.customer.phone }}{% endif %}</td>
+        </tr>
+        <tr>
+            <td class="bold">E-mail:</td><td colspan="5">{% if contactEmail %}{{ contactEmail }}{% else %}{{ engagement.customer.email }}{% endif %}</td>
+        </tr>
+        <tr>
+            <th colspan="6">Operator Information</th>
+        </tr>
+        <tr>
+            <td class="bold">Contact Name:</td><td colspan="5">{{ opName }}</td>
+        </tr>
+        <tr>
+            <td class="bold">Title:</td><td colspan="5">{{ opTitle }}</td>
+        </tr>
+        <tr>
+            <td class="bold">Telephone:</td><td colspan="5">{{ opPhone }}</td>
+        </tr>
+        <tr>
+            <td class="bold">E-mail:</td><td colspan="5">{{ opEmail }}</td>
+        </tr>
+        <tr>
+            <td class="bold">Address:</td><td colspan="5">{{ opAddress }}</td>
+        </tr>
+        <tr>
+            <td class="bold">City:</td><td>{{ opCity }}</td>
+            <td class="bold">State:</td><td>{{ opState }}</td>
+            <td class="bold">Zip:</td><td>{{ opZip }}</td>
+        </tr>
+        <tr>
+            <td class="bold">URL:</td><td colspan="5">{{ opUrl }}</td>
+        </tr>
+    </table>
+</div>
+</p>
+</section>
+

@@ -1,0 +1,7 @@
+<div class="component" id="title-page-div">
+  {% if report.pageTemplate.logoImageID %}<img id="title-logo" src="/images/{{ report.pageTemplate.logoImageID }}">{% endif %}
+  
+  <p class='report-title'>{% if company %}{{ company }}{% else %}{{ engagement.customer.name }}{% endif %}</p>
+  <p class='report-subtitle'>{% if assessmentType %}{{ assessmentType }}{% else %}{{ report.name }}{% endif %}</p>
+  <p class='report-date'>Date: {{ reportDate|date:"Y/m/d" }}</p>
+</div>

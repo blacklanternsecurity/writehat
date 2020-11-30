@@ -1,0 +1,24 @@
+<div class="modal fade {% block modalClass %}{% endblock %}" id="{{ modalName }}-modal" data-backdrop="false" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog writehat-modal {% block class %}modal-xl{% endblock %} d-table" role="document">
+    <div class="modal-content border border-dark rounded">
+      <div class="modal-header">
+        <h5 class="modal-title" id="{{ modalName }}-modalLabel">{% block title %}{% endblock %}</h5>
+        <div class="p-0 m-0 ml-auto">
+          {% block header %}
+          {% endblock %}
+        </div>
+        <button type="button" class="close btn-danger rounded p-2 px-3" data-dismiss="modal" aria-label="Close" style="margin: -1rem -1rem -1rem 1rem">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% block body %}
+        {% endblock %}
+      </div>
+      <div class="modal-footer">
+        {% block footer %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</div>

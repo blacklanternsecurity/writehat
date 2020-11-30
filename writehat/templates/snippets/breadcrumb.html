@@ -1,0 +1,4 @@
+{% if current.parent %}
+  {% include 'snippets/breadcrumb.html' with current=current.parent %}&nbsp;&raquo;&nbsp;
+{% endif %}
+<a href='{{ current.url }}' {% if current.id %}breadcrumb-id='{{ current.id }}'{% endif %} {% if current.className %}breadcrumb-type='{{ current.className }}'{% endif %} class='breadcrumb-link'>{{ current.name }}</a>

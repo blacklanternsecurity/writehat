@@ -1,0 +1,15 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Edit Engagement{% endblock %}
+
+{% block body %}
+  <form method="POST" action="/engagements/edit/{{ engagement.id }}">
+    <table class="writehat-form">
+      {{ engagement.form.as_table }}
+    </table>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with id='engagementEditSave' name='Save Engagement' type='save' class='btn-light border border-success' %}
+{% endblock %}

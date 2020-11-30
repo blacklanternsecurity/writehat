@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Report Templates{% endblock %}
+
+{% block headerLeft %}
+  Report Templates
+{% endblock %}
+
+{% block headerRight %}
+{% endblock %}
+
+{% block fullPane %}
+
+  {% include 'panes/reportsList.html' %}
+  <br>
+  {% include 'panes/pageTemplatesList.html' %}
+
+{% endblock %}
+{% block footer %}
+  <script src="/static/js/reports.js"></script>
+{% endblock %}

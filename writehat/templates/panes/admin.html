@@ -1,0 +1,14 @@
+<div class='ml-auto'>
+     
+    <p>The export feature will produce a zip file containing JSON representations of each data model used within the WriteHat MySQL database, a JSON export of the mongo database, and images in their original format. </p>
+
+    <p>The zip file can be used to restore the state of the database using the import feature.</p>
+
+
+<div class="alert alert-danger" role="alert" style="width:1350px;">This should not be considered an alternative to a full offline backup. Exports created under a previous version of WriteHat are not guaranteed to be compatible with newer versions.</div>
+
+
+    {% include 'snippets/textButton.html' with id='backup' name='Data Export' type='download' class='btn-light border border-success mb-3' %}
+    <br>
+    {% include 'snippets/textButton.html' with id='restorefromBackup' name='Data Import' type='exclamation-triangle' class='btn-light border border-danger mb-3' %}
+</div>

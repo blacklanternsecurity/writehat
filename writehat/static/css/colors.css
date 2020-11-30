@@ -1,0 +1,109 @@
+/*** interface colors ***/
+
+:root {
+
+  /* purple */
+  --purple-rgba: 166, 0, 255;
+  --purple: rgba(var(--purple-rgba), 1);
+  /* red */
+  --red-rgba: 255, 0, 0;
+  --red: rgba(var(--red-rgba), 1);
+  /* orange */
+  --orange-rgba: 255, 112, 30;
+  --orange: rgba(var(--orange-rgba), 1);
+  /* yellow */
+  --yellow-rgba: 255, 200, 30;
+  --yellow: rgba(var(--yellow-rgba), 1);
+  --yellow-darker-rgba: 179, 141, 21;
+  --yellow-darker: rgba(var(--yellow-darker-rgba), 1);
+  /* faded blue */
+  --faded-blue-rgba: 72, 147, 224;
+  --faded-blue: rgba(var(--faded-blue-rgba), 1);
+  /* deep blue */
+  --deep-blue-rgba: 8, 0, 255;
+  --deep-blue: rgba(var(--deep-blue-rgba), 1);
+  /* green */
+  --green-rgba: 54, 201, 94;
+  --green: rgba(var(--green-rgba), 1);
+
+  /* dread */
+  --dread-color: rgba(224, 0, 101, 1);
+  /* cvss */
+  --cvss-color: rgba(var(--orange-rgba), 1);
+  /* proactive */
+  --proactive-color: rgba(var(--green-rgba), 1);
+
+}
+
+
+/* backgrounds */
+
+.bg-cvss {
+  background-color: var(--cvss-color);
+}
+
+.bg-dread {
+  background-color: var(--dread-color);
+}
+
+.bg-proactive {
+  background-color: var(--proactive-color);
+}
+
+
+/* foregrounds */
+
+/* cyborg theme doesn't have yellow for some reason */
+.text-yellow {
+  color: var(--yellow);
+}
+.text-yellow:hover {
+  color: var(--yellow-darker);
+}
+.btn-yellow {
+  background-color: var(--yellow) !important;
+}
+.border-yellow {
+  border-color: var(--yellow) !important;
+}
+
+.fg-cvss {
+  color: var(--cvss-color);
+}
+
+.fg-dread {
+  color: var(--dread-color);
+}
+
+.fg-proactive {
+  color: var(--proactive-color);
+}
+
+/* borders */
+
+.border-cvss {
+  border: 1px solid var(--cvss-color);
+  border-radius: .25rem;
+}
+
+.border-dread {
+  border: 1px solid var(--dread-color);
+  border-radius: .25rem;
+}
+
+.border-proactive {
+  border: 1px solid var(--proactive-color);
+  border-radius: .25rem;
+}
+
+.borderleft-cvss {
+  border-left: .5em solid var(--cvss-color);
+}
+
+.borderleft-dread {
+  border-left: .5em solid var(--dread-color);
+}
+
+.borderleft-proactive {
+  border-left: .5em solid var(--proactive-color);
+}

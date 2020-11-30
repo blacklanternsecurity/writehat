@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+{% load custom_tags %}
+
+{% block title %}Create Report{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/textButton.html' with name='Back' id='backButton' type='chevron-left' class='btn-secondary' %}
+  Create Report
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with name='Save' id='reportCreate' type='save' class='btn-success' %}
+  {% include 'snippets/textButton.html' with name='Discard Changes' href='/engagements/edit/'|addstr:engagement.id type='times' class='btn-danger' %}
+{% endblock %}
+
+{% block leftPane %}
+  {% include 'panes/reportBuilder.html' %}
+{% endblock %}
+
+{% block rightPane %}
+  {% include 'panes/availableComponents.html' %}
+{% endblock %}
+
+{% block footer %}
+  {% if engagement %}
+    <span id="engagement-info" engagement-name="{{ engagement.name }}" engagement-id="{{ engagement.id }}" style="display: none;"></span>
+  {% endif %}
+  <script src="/static/js/reports.js"></script>
+  <script src="/static/js/reportNew.js"></script>
+  <script src="/static/js/reportEdit.js"></script>
+{% endblock %}

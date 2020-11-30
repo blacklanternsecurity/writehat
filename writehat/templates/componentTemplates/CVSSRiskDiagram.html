@@ -1,0 +1,85 @@
+<section class="l{{ level }} component{% if pageBreakBefore %} page-break{% endif %}" id="container_{{ id }}">
+  {% include 'componentTemplates/Heading.html' %}
+
+  <div id='figure_{{ id }}' class="figure">
+
+    <div class='cvss-risk-diagram-container'>
+
+      <div class='cvss-risk-diagram'>
+
+        <div class="diagram-label normal">
+          <span class='diagram-label-content'>
+            <span class="label-text">
+              Impact
+            </span>
+            <div class="arrow">
+              <div class="line"></div>
+              <div class="point"></div>
+            </div>
+          </span>
+        </div>
+
+        <div class="diagram-label rotate">
+          <span class='diagram-label-content'>
+            <span class="label-text">
+              Likelihood
+            </span>
+          <div class="arrow">
+            <div class="line"></div>
+            <div class="point"></div>
+          </div>
+          </span>
+        </div>
+
+        <table cellspacing="0" align="center">
+          <tr>
+            <td finding-severity="Moderate">Moderate</td>
+            <td finding-severity="High">High</td>
+            <td finding-severity="Critical">Critical</td>
+          </tr>
+          <tr>
+            <td finding-severity="Low">Low</td>
+            <td finding-severity="Moderate">Moderate</td>
+            <td finding-severity="High">High</td>
+          </tr>
+          <tr>
+            <td finding-severity="Informational">Informational</td>
+            <td finding-severity="Low">Low</td>
+            <td finding-severity="Moderate">Moderate</td>
+          </tr>
+        </table>
+
+      </div>
+
+      <table class='cvss-risk-diagram-legend'>
+        <tr class='severity' finding-severity='Critical'>
+          <th>Critical</th>
+          <td>9.0 - 10.0</td>
+        </tr>
+        <tr class='severity' finding-severity='High'>
+          <th>High</th>
+          <td>7.0 - 8.9</td>
+        </tr>
+        <tr class='severity' finding-severity='Medium'>
+          <th>Medium</th>
+          <td>4.0 - 6.9</td>
+        </tr>
+        <tr class='severity' finding-severity='Low'>
+          <th>Low</th>
+          <td>0.1 - 3.9</td>
+        </tr>
+        <tr class='severity' finding-severity='Informational'>
+          <th>Informational</th>
+          <td>0.0 - 0.0</td>
+        </tr>
+      </table>
+
+    </div>
+
+    <figcaption class='cvss-diagram-figure-caption'>
+      <span class='figure-number'>Figure <span class='figure-counter'></span>.</span> CVSS Risk Diagram
+    </figcaption>
+
+  </div>
+
+</section>

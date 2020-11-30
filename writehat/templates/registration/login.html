@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+{% block nav %}{% endblock %}
+{% block title %}WriteHat - Log In{% endblock %}
+{% block fullPane %}
+
+{% block header %}
+{% endblock %}
+
+<div class="container">
+  <div class="row">
+    <div class="mx-auto">
+      <div class="card card-signin my-5">
+        <div class="card-body text-center p-5">
+          <img src="/static/png/writehat_transparent.png" style="width: 40rem">
+          <form method="post" class="form-signin">
+            <table class="my-4 mx-auto writehat-login-form">
+              {% csrf_token %}
+              {{ form.as_table }}
+            </table>
+            <button class="d-inline btn btn-md btn-block btn-outline-primary text-uppercase p-2" type="submit" style="width: 26.5rem">Log In</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

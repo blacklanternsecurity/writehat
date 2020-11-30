@@ -1,0 +1,5 @@
+<div class="container-fluid p-2">
+  {% for categoryID, categoryTree in findingsTree.items %}
+    {% include 'snippets/categoryBrowse.html' with findingsTree=categoryTree.categoryChildren %}
+  {% endfor %}
+</div>

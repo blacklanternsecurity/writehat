@@ -1,0 +1,13 @@
+<div class="nav-user-div">
+  <div class="nav-user-area">
+    <div class="nav-profile-image">
+      {% include 'snippets/smallIcon.html' with type='user-circle' size='lg'%}
+      <div class="nav-username">
+        {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}
+      </div>
+    </div>
+    <div class="nav-profile-buttons">
+      {% include 'snippets/textButton.html' with href='/logout' name='Logout' type='sign-out-alt' class='nav-logout' %}
+    </div>
+  </div>
+</div>

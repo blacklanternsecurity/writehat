@@ -1,0 +1,22 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block body %}
+  <form method="POST">
+    <table class="writehat-form">
+      {{ categoryEditForm.as_table }}
+      <tr>
+        <th>
+        </th>
+        <td>
+        </td>
+      </tr>
+    </table>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with id='categoryEditSave' name='Save Category' type='save' class='btn-light border border-success' %}
+  {% include 'snippets/textButton.html' with id='categoryEditDelete' name='Delete Category' type='save' class='btn-light border border-danger' %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}New Engagement{% endblock %}
+
+{% block headerLeft %}
+  New Engagement
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with name='Save' id='engagementSave' type='save' class='btn-success' attrs='type="submit"'%}
+{% endblock %}
+
+{% block fullPane %}
+  {% include 'panes/engagementNew.html' %}
+{% endblock %}
+
+{% block footer %}
+  <script src="/static/js/engagementNew.js"></script>
+  <script src="/static/js/customers.js"></script>
+{% endblock %}

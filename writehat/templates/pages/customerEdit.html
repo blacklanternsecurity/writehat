@@ -1,0 +1,22 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Edit Customer{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/breadcrumbs.html' with current=customer %}
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with name='Save' id='customerSave' type='save' class='btn-success' %}
+  {% include 'snippets/textButton.html' with name='Delete' id='customerDelete' type='times' class='btn-danger' %}
+{% endblock %}
+
+{% block fullPane %}
+  {% include 'panes/customerEdit.html' %}
+{% endblock %}
+
+{% block footer %}
+  <!-- Hidden customer div for storing Customer Name, UUID, etc. -->
+  <span id="customer-info" customer-name="{{ customer.name }}" customer-id="{{ customer.id }}" style="display: none;"></span>
+  <script src='/static/js/customers.js'></script>
+{% endblock %}

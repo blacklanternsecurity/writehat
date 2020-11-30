@@ -1,0 +1,29 @@
+{% extends 'layouts/base.html' %}
+{% block nav %}{% endblock %}
+{% block title %}Log In{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div class="card card-signin my-5">
+        <div class="card-body">
+          <form action="/login" method="post" class="form-signin">
+            <div class="form-label-group m-4">
+              <input type="username" class="form-control" name="username" placeholder="Username" required autofocus>
+            </div>
+
+            <div class="form-label-group m-4">
+              <input type="password" class="form-control" name="password" placeholder="Password" required>
+            </div>
+
+            <button class="btn btn-md btn-block btn-outline-success text-uppercase p-2" type="submit">Log In</button>
+            <hr class="my-4">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

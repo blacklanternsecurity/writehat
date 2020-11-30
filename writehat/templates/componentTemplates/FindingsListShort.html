@@ -1,0 +1,16 @@
+<section class="l{{ level }} component part{% if pageBreakBefore %} page-break{% endif %}">
+{% include 'componentTemplates/Heading.html' with classes="finding-heading-short" %}
+
+  {% if findingGroup.scoringType == 'PROACTIVE' %}
+    {% include 'componentTemplates/SeverityLegend.html' with proactive_only=True %}
+  {% else %}
+    {% include 'componentTemplates/SeverityLegend.html' with proactive=False %}
+  {% endif %}
+
+  {% for finding in findingGroup %}
+    {% if not report.finding_uuids or finding.id in report.finding_uuids %}
+      {% include finding.abridgedTemplate with finding=finding %}
+    {% endif %}
+  {% endfor %}
+
+</section>

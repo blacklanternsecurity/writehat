@@ -1,0 +1,18 @@
+<div class="card writehat-pane bg-transparent">
+  <div class="card-header">
+    Report Components
+  </div>
+  <form id="reportForm" class="d-inline">
+    <table class="writehat-form">
+      {{ report.form.as_table }}
+    </table>
+  </form>
+  <div class="card-body border border-primary rounded">
+    <div id="reportComponents" class="list-group p-0 flex-grow-1">
+      {% for component in report.components %}
+        {% include "snippets/singleComponent.html" with editControls=True %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<span id="page-info" page-name="{{ report.pageTemplate.name }}" page-id="{{ report.pageTemplateID }}" style="display: none;"></span>

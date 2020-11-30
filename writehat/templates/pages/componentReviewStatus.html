@@ -1,0 +1,61 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ report.name }} Review Status{% endblock %}
+
+{% block headerLeft %}
+    {% include 'snippets/textButton.html' with name='Back' id='backButton' type='chevron-left' class='btn-secondary' %}
+    {{ engagement.name }}: {{ report.name }}
+{% endblock %}
+
+{% block headerRight %}
+    <label id='displayToggleLabel' for='displayToggle'>Display: </label>
+    <select class="custom-select" id="displayToggle">
+        <option value="-1" selected="selected">All Components</option>
+        <option value="{{ currentUser.id }}">Assigned to me</option>
+        <option value="">Unassigned</option>
+    </select>
+{% endblock %}
+
+{% block fullPane %}
+
+<form>
+    <div class="status-container">
+        <div column="Not Started" status="unassigned" class="status-column container-fluid px-3 py-2 bg-light border border-secondary rounded"> 
+          {% for component in report.flattened_components %}
+            {% if component.reviewStatus == "unassigned" or not component.reviewStatus %}
+              {% include "snippets/singleComponentStatus.html" with editControls=True %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div column="Writing" status="red" class="status-column container-fluid px-3 py-2 bg-light border border-danger rounded"> 
+          {% for component in report.flattened_components %}
+            {% if component.reviewStatus == "red" %}
+              {% include "snippets/singleComponentStatus.html" with editControls=True %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div column="Needs Review" status="yellow" class="status-column container-fluid px-3 py-2 bg-light border border-warning rounded"> 
+          {% for component in report.flattened_components %}
+            {% if component.reviewStatus == "yellow" %}
+              {% include "snippets/singleComponentStatus.html" with editControls=True %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div column="Complete" status="green" class="status-column container-fluid px-3 py-2 bg-light border border-success rounded"> 
+          {% for component in report.flattened_components %}
+            {% if component.reviewStatus == "green" %}
+              {% include "snippets/singleComponentStatus.html" with editControls=True %}
+            {% endif %}
+          {% endfor %}
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block footer %}
+
+<script type='text/javascript' src='/static/js/componentReviewStatus.js'></script>
+<span id="engagement-info" engagement-id="{{ engagement.id }}" style="display: none;"></span>
+<span id="report-info" report-id="{{ report.id }}" style="display: none;"></span>
+{% endblock %}

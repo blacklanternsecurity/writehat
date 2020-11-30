@@ -1,0 +1,14 @@
+{% if href %}
+  <a href={{ href }} {% if id %}id='{{ id }}'{% endif %} class='{{ class }} btn btn-md writehat-textbutton' role='button' title='{{ title }}' {{ attrs }}>
+{% else %}
+  <button type='button' {% if id %}id='{{ id }}'{% endif %} class='{{ class }} btn btn-md writehat-textbutton' role='button' title='{{ title }}' {{ attrs }}>
+{% endif %}
+    <span>
+      <i class='fas fa-{{ type }}' style="margin: .5em; margin-top: .4em"></i>
+    </span>
+    <span class='mr-2'><strong class="textButton-text">{{ name }}</strong></span>
+{% if href %}
+  </a>
+{% else %}
+  </button>
+{% endif %}

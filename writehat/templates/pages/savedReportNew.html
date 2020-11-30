@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Create Report Template{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/textButton.html' with href='/templates' name='Back' id='backButton' type='chevron-left' class='btn-secondary' %}
+  Create Report Template
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with name='Save' id='reportCreate' type='save' class='btn-success' %}
+  {% include 'snippets/textButton.html' with name='Discard Changes' href='/templates' type='times' class='btn-danger' %}
+{% endblock %}
+
+{% block leftPane %}
+  {% include 'panes/reportBuilder.html' %}
+{% endblock %}
+
+{% block rightPane %}
+  {% include 'panes/availableComponents.html' %}
+{% endblock %}
+
+{% block footer %}
+  <script src="/static/js/reports.js"></script>
+  <script src="/static/js/reportNew.js"></script>
+  <script src="/static/js/reportEdit.js"></script>
+{% endblock %}

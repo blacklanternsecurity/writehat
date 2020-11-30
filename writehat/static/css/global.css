@@ -1,0 +1,332 @@
+/* form styles */
+@import url("/static/css/form.css");
+
+/* finding styles */
+@import url("/static/css/finding.css");
+
+/* component styles */
+@import url("/static/css/component.css");
+
+/* table styles */
+@import url("/static/css/table.css");
+
+/* sortable styles */
+@import url("/static/css/sortable.css");
+
+/* global color definitions */
+@import url("/static/css/colors.css");
+
+/* global severity colors (for CVSS, etc.) */
+@import url("/static/css/severity-colors.css");
+
+div::-webkit-scrollbar-track,iframe::-webkit-scrollbar-track
+{
+  background-color: transparent;
+}
+
+div::-webkit-scrollbar,iframe::-webkit-scrollbar
+{
+  width: 5px;
+  background-color: transparent;
+}
+
+div::-webkit-scrollbar-thumb,iframe::-webkit-scrollbar-thumb
+{
+  border-radius: 5px;
+  background-color: #555;
+  border: none;
+}
+
+.writehat-header {
+  /* Below the modal's index of 1050 but above everything else */
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  top: 0px;
+  height: 4rem;
+  width: calc(100% - 3rem);
+  position: fixed;
+  background-color: var(--light) !important;
+  border-bottom: 2px solid rgba(255,255,255,.1);
+  margin: 0px;
+  padding-right: .25rem;
+  padding-left: 1rem;
+  justify-content: space-between
+}
+
+#writehat-content {
+  margin: 0px;
+  padding: 0px;
+  margin-top: 4rem;
+  height: 100%;
+}
+
+#writehat-content .paneContent {
+  max-height: 85vh;
+}
+
+#writehat-content .paneContent .card-body {
+  overflow-y: scroll;
+}
+
+.writehat-header .header-right {
+  display: flex;
+  max-height: 6rem;
+  max-width: 75vw;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.writehat-header .header-left {
+  display: flex;
+  font-size: 1.3rem;
+  font-weight: bold;
+  align-items: center;
+}
+
+.writehat-header [role="button"] {
+  vertical-align: top;
+}
+
+.writehat-textbutton {
+  padding: .05rem;
+  margin: .25rem;
+  color: white;
+  align-items: center;
+}
+
+.writehat-header .header-right .writehat-textbutton {
+  display: flex;
+}
+
+.breadcrumb-link {
+    color: white;
+    text-decoration: none;
+}
+
+/* prevent scrolling under certain circumstances */
+body.disable-scroll {
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .writehat-header {
+    width: calc(100% - 2.7rem);
+  }
+}
+
+.writehat-pane {
+  margin: 0rem;
+  height: 85vh;
+}
+
+.writehat-pane .card-header {
+  text-align: center;
+  font-size: 1.20rem;
+  color: white;
+  padding: .5rem;
+  padding-top: 0rem;
+}
+
+.writehat-pane .card-body {
+  padding: .25rem;
+  display: flex;
+  flex-grow: 1;
+}
+
+.writehat-smallbutton {
+  padding: .25rem;
+}
+
+#reportComponents, #availableComponents {
+    overflow-y: scroll; 
+    /*max-height: 65vh;*/
+}
+
+.reportComponent {
+  padding: .4rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  margin-bottom: .2rem;
+}
+
+/* Figures */
+.figureItem {
+  padding: 1rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  display: flex;
+  align-items: center;
+  background-color: black;
+  border: 1px solid rgba(255,255,255,.4);
+}
+
+.figureItem .figure-caption {
+  cursor: text;
+}
+
+
+
+/* CVSS Info Modal */
+.cvssInfoModal th {
+  min-width: 10rem;
+  padding-left: 0px !important;
+}
+
+/* large form for searching, etc. */
+.large-input {
+  font-size: 1.3rem;
+  font-weight: bold;
+  background-color: rgb(255,255,255,.05);
+}
+
+input {
+  padding-left: .25rem;
+}
+
+
+/* marker.js */
+.markerjs-toolbar {
+  /* puts it above bootstrap's modal z-index of 1050 */
+  background-color: #000 !important;
+  z-index: 1051;
+}
+.markerjs-toolbar-button > svg {
+  fill: #fff !important;
+}
+div.markerjs-logo {
+  display: none !important;
+}
+/* fix for svg z-index glitch */
+div[style^="touch-action: none"] {
+  z-index: 1052;
+}
+
+
+/* Collapse icon toggling with pure CSS */
+*[aria-expanded=true] .icon-collapsed {
+   display: none;
+}
+*[aria-expanded=true] .icon-expanded {
+   display: inline-block;
+}
+*[aria-expanded=false] .icon-collapsed {
+   display: inline-block;
+}
+*[aria-expanded=false] .icon-expanded {
+   display: none;
+}
+
+
+
+/* extra-large modal */
+@media (min-width: 768px) {
+  .modal-xxl {
+    width: 90%;
+    height: 90%;
+    max-width:1200px;
+  }
+
+  .modal-xxl>.modal-content {
+    height: 100%;
+  }
+}
+
+.modal-xl {
+  width: 940px;
+}
+
+
+a.engagement-reports {
+  text-decoration: none;
+}
+
+/* dark select theme */
+
+textarea, input, select { 
+  background: #101011;
+  color: #f8f8f2;
+  border: 1px solid #555;
+  border-radius: 4px;
+}
+
+textarea {
+  font-family: monospace;
+}
+
+.custom-select {
+  width: 50%;
+  color: white;
+  background-color: var(--light);
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23bbb'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
+  background-size: 12px;
+  background-position: calc(100% - 20px) center;
+  background-repeat: no-repeat;
+  background-color: var(--light);
+}
+
+.writehat-form .custom-select.dropdown {
+    max-width: 65vh;
+}
+
+select:hover {
+  cursor: pointer;
+}
+
+#componentPreview {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    flex: 1;
+}
+
+#componentPreview > #preview-frame {
+    border: none;
+    width: max(1000px, 50vw);
+    flex: 1;
+}
+
+a.nav-button {
+    text-decoration: none
+}
+
+
+
+/* SPLIT PANE TABS */
+
+div#paneTabGroup {
+  display: flex;
+}
+
+div.paneTab {
+  padding: .2rem;
+  text-align: center;
+  width: 50%;
+  background-color: #333;
+  /*border-radius: .5rem .5rem 0rem 0rem;*/
+  color: white;
+  font-weight: bold;
+  /*border: 2px solid #444;*/
+}
+
+div.paneTab.active {
+  background-color: transparent;
+  border-bottom: none;
+}
+
+div.paneTab:hover {
+  background-color: #222;
+  cursor: pointer;
+}
+
+div#paneCenterTab {
+  width: 3rem;
+  margin-right: .5rem;
+  margin-left: .5rem;
+}
+
+span.modal-bold {
+  font-weight: bold;
+  color: white;
+}

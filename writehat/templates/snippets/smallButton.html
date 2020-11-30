@@ -1,0 +1,11 @@
+{% if href %}
+  <a href='{{ href }}' {% if id %}id='{{ id }}' {% endif %} class="{{ class }} writehat-smallbutton bg-transparent border-0" role='button' {% if title %} title="{{ title }}" {% endif %} {% if tooltip %} data-toggle="tooltip" data-original-title="{{ tooltip }}" data-placement="right" {% endif %} {{ attrs }}>
+{% else %}
+  <button {% if id %}id='{{ id }}' {% endif %} {% if name %}title='{{ name }}'{% endif %} class="{{ class }} writehat-smallbutton bg-transparent border-0" type="button" {% if title %} title="{{ title }}" {% endif %} {% if tooltip %} data-toggle="tooltip" data-original-title="{{ tooltip }}" {% endif %} {{ attrs }}>
+{% endif %}
+    {% include 'snippets/smallIcon.html' with type=type size=size class='' %}
+{% if href %}
+  </a>
+{% else %}
+  </button>
+{% endif %}

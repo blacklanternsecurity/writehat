@@ -1,0 +1,73 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Engagements{% endblock %}
+
+{% block headerLeft %}
+  Engagements
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with href='/engagements/new' name='New Engagement' type='plus' class='btn-info' %}
+{% endblock %}
+
+{% block fullPane %}
+
+  <div class="container-fluid px-3 py-2 bg-light border border-info rounded">
+    <table class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate">
+      <thead>
+        <tr>
+          <th><strong>Name</strong></th>
+          <th><strong>Findings</strong></th>
+          <th><strong>Customer</strong></th>
+          <th><strong>Created</strong></th>
+          <th><strong>Modified</strong></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="text-nowrap">
+        {% for engagement in engagements|dictsortreversed:"modifiedDate" %}
+          <tr engagement-id="{{ engagement.id }}" engagement-name="{{ engagement.name}}">
+            <td class="pl-2 engagementEdit">
+              <a href="/engagements/edit/{{ engagement.id }}">
+                {{ engagement.name }}
+              </a>
+            </td>
+
+            <td class="engagementEdit">
+              <a href="/engagements/edit/{{ engagement.id }}">
+                {{ engagement.totalFindings }}
+              </a>
+            </td>
+
+            <td class="engagementEdit">
+              <a href="/engagements/edit/{{ engagement.id }}">
+                {{ engagement.customer.shortName }}
+              </a>
+            </td>
+
+            <td class="engagementEdit" data-sort="{{ engagement.createdDate|date:"YmdHi" }}">
+              <a href="/engagements/edit/{{ engagement.id }}">
+                {{ engagement.createdDate }}
+              </a>
+            </td>
+
+            <td class="engagementEdit" data-sort="{{ engagement.modifiedDate|date:"YmdHi" }}">
+              <a href="/engagements/edit/{{ engagement.id }}">
+                {{ engagement.modifiedDate }}
+              </a>
+            </td>
+            <td>
+              <div class="floating float-right vertical-align-center mt-1">
+                {% include 'snippets/smallButton.html' with title='Delete Engagement' type='times-circle' class='text-danger engagementDelete' %}
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}
+{% block footer %}
+  <script src="/static/js/engagements.js"></script>
+{% endblock %}

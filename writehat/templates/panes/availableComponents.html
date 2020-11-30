@@ -1,0 +1,12 @@
+<div class="card writehat-pane bg-transparent">
+  <div class="card-header">
+    Available Components
+  </div>
+  <div class="card-body border border-secondary rounded">
+    <div id="availableComponents" class="list-group p-0 flex-grow-1" style="">
+      {% for component in componentsList %}
+        {% include "snippets/singleComponent.html" with component=component editControls=False %}
+      {% endfor %}
+    </div>
+  </div>
+</div style="">

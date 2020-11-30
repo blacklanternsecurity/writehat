@@ -1,0 +1,85 @@
+section > h1.finding-heading {
+  margin: 0px !important;
+}
+
+div.finding-short div.finding-content div > p { 
+  text-align: justify;
+  text-align-last: auto !important;
+  overflow: hidden;
+}
+
+div.finding-short {
+  --header-text-color: black;
+  --stripe-background-color: rgba(128,128,128,.1);
+
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 2px;
+}
+
+div.finding-short table {
+  page-break-inside: avoid;
+}
+
+div.finding-short div.finding-header, div.finding-short div.finding-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+div.finding-short div.finding-header div.finding-title {
+  flex-grow: 1;
+  font-weight: bold;
+  color: var(--header-text-color);
+  background-color: var(--severity-color-faded);
+  font-size: 1.2rem;
+  text-align: left;
+  padding: 0.5rem;
+  border-left: 2rem solid var(--severity-color);
+}
+
+div.finding-short div.finding-content {
+  position: relative;
+  border-left: 2rem solid var(--severity-color);
+}
+
+div.finding-short div.finding-content > div {
+  margin-left: 12rem;
+  overflow-wrap: break-word;
+  flex-grow: 1;
+}
+
+div.finding-short div.finding-content > div::before {
+  position: absolute;
+  background-color: rgba(192, 192, 192, 0.2); 
+  min-width: 10rem;
+  max-width: 10rem;
+  text-align: right;
+  padding: 0.5rem;
+  font-weight: bold;
+  display: inline-block;
+  left: 0;
+  bottom: 0;
+  top: 0;
+}
+
+div.finding-short div.finding-content > div.affected-resources::before { content: "Affected Resources" !important; }
+
+div.finding-short div.finding-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+div.finding-short div.finding-content ul li {
+  padding: 4px;
+  border: 1px solid #ddd;
+  background-color: rgba(240, 240, 240, 0.2);
+  border-radius: 5px;
+  margin: 4px;
+  min-width: 8rem;
+}

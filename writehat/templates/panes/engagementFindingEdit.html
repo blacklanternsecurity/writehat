@@ -1,0 +1,11 @@
+<div class="border border-warning rounded p-3">
+  <form id="findingForm" method="POST" action="/engagements/fgroup/finding/edit/{{ finding.id }}" autocomplete="off">
+    <table class="writehat-form">
+      {{ finding.form.as_table }}
+    </table>
+  </form>
+  {% include 'snippets/findingAdvancedCheckbox.html' %}
+</div>
+
+<!-- List of finding category options -->
+<datalist id="findingsCategoryOptions"></datalist>

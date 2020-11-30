@@ -1,0 +1,22 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Edit Finding Group{% endblock %}
+
+{% block body %}
+  <form>
+    <table class="writehat-form">
+      {{ EditFgroupForm.as_table }}
+      <tr>
+        <th>
+        </th>
+        <td>
+        </td>
+      </tr>
+    </table>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with name='Cancel' id='cancelEditFgroup' type='file-import' class='btn-light border border-warning' %}
+  {% include 'snippets/textButton.html' with name='Save' id='saveEditFgroup' type='save' class='btn-light border border-dark' %}
+{% endblock %}

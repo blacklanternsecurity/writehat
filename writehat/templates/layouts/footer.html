@@ -1,0 +1,3 @@
+{% block footer %}
+
+{% endblock %}

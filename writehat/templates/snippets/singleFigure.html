@@ -1,0 +1,11 @@
+{% load custom_tags %}
+<div {% if id %}id="{{ id }}"{% endif %} figure-id="{{ figure_id }}" class="figureItem sort-handle list-group-item {{ class }}" figure-size="{{ figure_size }}" {{ attrs }}>
+  <div style="width: 4rem">
+    <img class="mx-auto" {% if figure_id != 'dummyFigureID' %}src="/images/{{ figure_id }}"{% endif %} style="max-height: 2rem; max-width: 3rem; display: block; margin: auto">
+  </div>
+  <div class="figure-caption" style="color: white; font-size: 1rem">{{ figure_caption }}</div>
+  <div class="float-right" style="margin-left: auto">
+    {% include 'snippets/smallButton.html' with name='Edit Figure' type='pen' class='figureEdit text-dark' attrs='figure-id='|addstr:figure_id %}
+    {% include 'snippets/smallButton.html' with name='Delete Figure' type='times-circle' class='figureDelete text-danger' attrs='figure-id='|addstr:figure_id %}
+  </div>
+</div>

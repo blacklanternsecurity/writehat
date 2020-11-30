@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Edit Finding{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/breadcrumbs.html' with current=finding %}
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/riskBadge.html' with scoringType=finding.scoringType %}
+  <!--{% include 'snippets/textButton.html' with name='Approve' id='findingApprove' type='check-double' class='btn-light border border-success' %}-->
+  {% include 'snippets/textButton.html' with name='Save' id='findingSave' type='save' class='btn-success' %}
+  {% include 'snippets/textButton.html' with name='Delete' id='findingDelete' type='times' class='btn-danger' %}
+{% endblock %}
+
+{% block fullPane %}
+  {% include 'panes/findingEdit.html' %}
+{% endblock %}
+
+{% block footer %}
+  <!-- Hidden finding div for storing Finding Name, UUID, etc. -->
+  <span id="finding-info" finding-name="{{ finding.name }}" finding-id="{{ finding.id }}" category-id="{{ finding.categoryID }}" style="display: none;"></span>
+  <span id="timestamp-check" object-id="{{ finding.id }}" hint="database finding" button="findingSave"></span>
+  <script src='/static/js/findingEdit.js'></script>
+  <script src='/static/js/findingsBrowse.js'></script>
+{% endblock %}

@@ -1,0 +1,171 @@
+/* GENERIC, APPLIES TO ALL FINDING TYPES */
+
+section > h1.finding-heading {
+    margin: 0px !important;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+div.finding div.finding-content div > p { 
+    text-align: justify;
+    text-align-last: auto !important;
+    overflow: hidden;
+}
+
+.finding-severity {
+    font-weight: bold;
+    color: white;
+    font-size: 1.5em;
+    padding: 0px;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    text-align: center;
+}
+
+div.finding {
+    --header-text-color: black;
+    --stripe-background-color: rgba(128,128,128,.1);
+  
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+
+    display: flex;
+    flex-direction: column;
+    border-top: 3px solid var(--severity-color);
+    border-bottom: 3px solid var(--severity-color);
+}
+
+section.l1 div.first-finding-container { height: calc(100% - 30px - 2.3rem); }
+section.l2 div.first-finding-container { height: calc(100% - 30px - 2.2rem); }
+section.l3 div.first-finding-container { height: calc(100% - 26px - 2.0rem); }
+
+section.l1 div.first-finding-container[data-split-from], 
+section.l2 div.first-finding-container[data-split-from], 
+section.l3 div.first-finding-container[data-split-from] {
+    height: 100%;
+}
+
+div.finding table {
+    page-break-inside: avoid;
+}
+
+div.finding div.finding-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+div.finding div.finding-header div.finding-severity {
+    width: 11rem;
+    max-width: 11rem;
+    min-width: 11rem;
+}
+
+div.finding div.finding-header div.finding-title {
+    flex-grow: 1;
+    font-weight: bold;
+    line-height: 3.5rem;
+    color: var(--header-text-color);
+    background-color: var(--stripe-background-color);
+    font-size: 1.5rem;
+    text-align: left;
+    padding: 1.5rem;
+}
+
+div.finding div.finding-content {
+    position: relative;
+}
+
+div.finding div.finding-content:last-child {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+div.finding div.finding-content > div {
+    margin-left: 11rem;
+    padding: 1rem;
+    overflow-wrap: break-word;
+    flex-grow: 1;
+}
+
+div.finding div.finding-content > div > p:first-child {
+    margin-block-start: 0;
+} 
+
+div.finding div.finding-content > div > p:last-child {
+    margin-block-end: 0;
+}
+
+div.finding div.finding-content:nth-of-type(odd) > div {
+    background-color: var(--stripe-background-color);
+}
+
+div.finding div.finding-content > div::before {
+    position: absolute;
+    background-color: var(--severity-color-faded);
+    min-width: 9rem;
+    max-width: 9rem;
+    text-align: right;
+    padding: 1rem;
+    font-weight: bold;
+    display: inline-block;
+    left: 0;
+    bottom: 0;
+    top: 0;
+}
+
+/* DREAD Categories */
+
+div.finding.content > div.dread-category { 
+    display: flex;
+    align-items: stretch;
+}
+
+div.finding-content > div.dread-category > p {
+    display: table-cell;
+}
+
+div.finding-content > div.dread-category > p.dread-score { 
+    padding-right: 1rem;
+    vertical-align: middle;
+}
+
+div.finding-content > div.impact ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+div.finding-content > div.impact ul li {
+  padding: 4px;
+  border: 1px solid #ddd;
+  background-color: rgba(240, 240, 240, 0.2);
+  border-radius: 5px;
+  margin: 4px;
+}
+
+
+div.finding div.finding-content > div.category::before           { content: "Category" !important; }
+div.finding div.finding-content > div.affected-resources::before { content: "Affected Resources" !important; }
+div.finding div.finding-content > div.description::before        { content: "Description" !important; }
+div.finding div.finding-content > div.background::before         { content: "Background" !important; }
+div.finding div.finding-content > div.remediation::before        { content: "Remediation" !important; }
+div.finding div.finding-content > div.references::before         { content: "References" !important; }
+
+/* CVSS SPECIFIC */
+
+div.finding div.finding-content > div.tools-used::before         { content: "Tools Used" !important; }
+div.finding div.finding-content > div.poc::before                { content: "Proof of Concept" !important; }
+
+/* DREAD SPECIFIC */
+
+div.finding div.finding-content > div.dread-category::before     { content: attr(category) !important; }
+div.finding div.finding-content > div.impact::before             { content: "Impact" !important; }
+
+/* PROACTIVE SPECIFIC */

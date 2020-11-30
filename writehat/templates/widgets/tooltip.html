@@ -1,0 +1,13 @@
+{% load custom_tags %}
+{% include 'widgets/select.html' %}{% include 'snippets/smallButton.html' with class='tooltipSelect text-dark' id='tooltip-'|addstr:fieldName type='question-circle '%}
+<span id="tooltipText-{{ fieldName }}" style="display:none">
+  <p class="text-white" style="font-weight: bold">{{ tooltipText.name }}</p>
+  <table class="table text-dark">
+    {% for i in tooltipText.metrics %}  
+    <tr>
+      <th>{{ i.metric }}</th>
+      <td>{{ i.text }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</span>

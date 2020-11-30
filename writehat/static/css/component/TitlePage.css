@@ -1,0 +1,21 @@
+#title-page-div img#title-logo {
+    width: 256px; 
+    height: auto;
+    margin-top: 128px;
+    margin-bottom: 128px;
+}
+
+#title-page-div .report-title, #title-page-div .report-subtitle {
+    font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    font-size: 24pt;
+    font-variant: small-caps;
+}
+
+#title-page-div .report-subtitle {
+    font-weight: bold;
+}
+
+#title-page-div p {
+  line-height: 1.2em;
+  overflow-wrap: break-word;
+}

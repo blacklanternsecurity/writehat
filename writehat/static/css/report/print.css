@@ -1,0 +1,118 @@
+@media print { 
+    @page :first {
+        @bottom-right-corner {
+            content: none;
+        }
+    }
+
+    @page {
+        @bottom-right-corner {
+            content: counter(page);
+        }
+
+        @bottom-center {
+            content: element(footerContent);
+            white-space: pre-wrap;
+            text-align: center;
+            font-size: 10pt !important;
+        }
+
+        background-position: center center;
+        background-repeat: no-repeat;
+
+        margin: 0.5in 0.5in 1.0in 0.5in;
+    }
+
+    .page-break { 
+        break-before: page;
+    }
+
+    .hidden {
+        display: none;
+    }
+}
+
+@media screen {
+    div.pagedjs_pages > div.pagedjs_page {
+        background-color: white;
+    }
+
+    div.pagedjs_first_page {
+        margin-left: calc(var(--pagedjs-width-left) + var(--margin) * 3);
+    }
+
+    @media screen and (max-width: 1650px) {
+        div.pagedjs_first_page {
+            margin-left: calc(var(--margin));
+        }
+    }
+}
+
+div.footer-content {
+    position: running(footerContent);
+}
+
+html, body {
+    font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    font-size: 11pt;
+}
+
+.center { 
+    text-align: center;
+}
+
+.justify, div.markdown-align-justify > p { 
+    text-align: justify;
+}
+
+.red {
+    color: red; 
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.toc-padding {
+    margin-left: 1em;
+}
+
+/* Figure Captions */
+.figure figcaption {
+  counter-increment: figureNumber;
+}
+
+figcaption span.figure-counter::before { 
+    content: counter(figureNumber);
+}
+
+.tof-entry {
+    counter-increment: tofNumber;
+}
+
+.tof-counter::before {
+    content: counter(tofNumber);
+}
+
+/* Table Captions */
+div.table-caption {
+    counter-increment: tableNumber;
+}
+
+div.table-caption span.table-counter::before {
+    content: counter(tableNumber);
+}
+
+.tot-entry {
+    counter-increment: totNumber;
+}
+
+.tot-counter::before {
+    content: counter(totNumber);
+}
+
+a.reference-link {
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+}

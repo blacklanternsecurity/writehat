@@ -1,0 +1,9 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Add Link{% endblock %}
+
+{% block body %}
+  {% include 'snippets/textButton.html' with name='Report Component (Section)' id='componentReferenceSelect' type='save' class='btn-primary' %}
+  <br>
+  {% include 'snippets/textButton.html' with name='Finding' id='findingReferenceSelect' type='save' class='btn-warning' %}
+{% endblock %}

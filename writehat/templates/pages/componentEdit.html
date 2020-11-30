@@ -1,0 +1,30 @@
+{% extends 'layouts/base.html' %}
+ 
+{% block title %}Edit {{ component.type }}{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/breadcrumbs.html' with current=component %}
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with name='Save' id='componentUpdate' type='save' class='btn-success' %}
+{% endblock %}
+
+<!-- Headers -->
+
+{% block leftPane %}
+  {% include 'panes/componentForm.html' %}
+{% endblock %}
+
+{% block rightPane %}
+  {% include 'panes/previewComponent.html' %}
+{% endblock %}
+
+{% block footer %}
+  <span id="engagement-info" engagement-id="{{ component.engagementParent }}" style="display: none;"></span>
+  <span id="fgroup-info" fgroup-id="{{ component.findingGroup }}" style="display: none;"></span>
+  <span id="report-info" report-id="{{ component.report.id }}" style="display: none;"></span>
+  <span id="component-info" component-type="{{ component.type }}" component-id="{{ component.id }}" style="display: none;"></span>
+  <span id="timestamp-check" object-id="{{ component.id }}" hint="component" button="componentUpdate"></span>
+  <script src="/static/js/componentEdit.js"></script>
+{% endblock %}

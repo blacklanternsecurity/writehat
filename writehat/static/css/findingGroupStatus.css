@@ -1,0 +1,49 @@
+table.writehat-table {
+    table-layout: fixed;
+}
+
+div.status-container.dread table.writehat-table {
+    margin-right: 1.75rem;
+    margin-left: 1.75rem;
+}
+
+
+div.status-container {
+    width: 1024px;
+}
+
+div.status-container.proactive {
+    width: 624px;
+}
+
+.findingName { 
+    width: 26rem;
+}
+
+th.findingName {
+    vertical-align: bottom;
+}
+
+.findingAttr {
+    text-align: left;
+    display: none;
+}
+
+div.status-container.dread .findingAttr.dread,
+div.status-container.cvss .findingAttr.cvss,
+div.status-container.proactive .findingAttr.proactive {
+    display: table-cell;
+}
+
+th.findingAttr {
+    height: 10rem;
+    white-space: nowrap;
+}
+
+th.findingAttr > div {
+    transform: translate(-3px, 56px) rotate(290deg);
+}
+
+.text-danger { 
+    filter: brightness(200);
+}

@@ -1,0 +1,50 @@
+.tot-item {
+  padding-right: 1ch;
+}
+
+.tot-list a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.tot-entry {
+  display: flex;
+}
+
+.tot-entry .tot-item,
+.tot-entry .tot-pagenumber {
+  flex: 1 0 auto;
+}
+
+.tot-entry .tot-dots {
+  flex: 0 1 auto;
+  /*Allows too long content to be hidden.*/
+  overflow: hidden;
+}
+
+.tot-header {
+    font-weight: bold;
+}
+
+.tot-dots::before {
+  font-size: 15pt;
+  line-height: .8em;
+  text-align: right;
+  display: block;
+  height: 1em;
+  overflow: hidden;
+  text-overflow: clip;
+  content: 
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+
+}
+
+.tot-pagenumber::after {
+  content: target-counter(attr(target-component), page);
+  padding-left: 1ch;
+}
+

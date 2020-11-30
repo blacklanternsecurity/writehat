@@ -1,0 +1,12 @@
+<div class="m-0 p-0" style="min-width: 30rem">
+  <div id="manageFiguresSortable" class="list-group">
+    {% include 'snippets/singleFigure.html' with id='dummyFigureItem' attrs='style="display:none"' figure_id='dummyFigureID' figure_caption='' %}
+    {% for figure in finding.figures_ending %}
+      {% include 'snippets/singleFigure.html' with figure_id=figure.id figure_caption=figure.caption figure_size=figure.size %}
+    {% endfor %}
+  </div>
+  <div class="p-1 py-2">
+    {% include 'snippets/textButton.html' with name='Upload New Figure' id='figureNew' type='plus' class='btn-primary' %}
+  </div>
+  <div id="figure-destination" style="display: none"></div>
+</div>

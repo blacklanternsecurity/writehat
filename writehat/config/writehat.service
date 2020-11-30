@@ -1,0 +1,12 @@
+[Unit]
+Description=WriteHat
+Requires=docker.service
+After=docker.service
+
+[Service]
+WorkingDirectory=/opt/writehat
+ExecStart=/usr/local/bin/docker-compose up
+ExecStop=/usr/local/bin/docker-compose down
+
+[Install]
+WantedBy=multi-user.target

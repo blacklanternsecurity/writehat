@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx:/opt/writehat/nginx
+      - ./writehat/config/nginx.conf:/etc/nginx/conf.d/writehat.conf
+      - ./writehat/static:/opt/writehat/static
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - writehat
+
+  writehat:
+    build:
+      context: .
+      dockerfile: ./writehat/config/Dockerfile.app
+    command: bash -c "
+      sleep 2 &&
+      ./manage.py makemigrations writehat &&
+      ./manage.py migrate writehat &&
+      ./manage.py makemigrations &&
+      ./manage.py migrate &&
+      uwsgi --socket 0.0.0.0:8000 --plugin-dir=/usr/lib/uwsgi/plugins --plugin python3 -w writehat.wsgi:application --processes=4 --master --vacuum"
+    volumes:
+      - .:/opt/writehat
+    expose:
+      - 8000
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - mysql
+
+  mongo:
+    image: mongo
+    volumes:
+      - ./mongo/configdb:/data/configdb
+      - ./mongo/db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=FORTHELOVEOFGEEBUSPLEASECHANGETHIS
+    expose:
+      - 27017
+
+  mysql:
+    image: mysql
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: CHANGETHISIFYOUAREANINTELLIGENTHUMANBEING
+      MYSQL_DATABASE: writehat
+      MYSQL_USER: writehat
+      MYSQL_PASSWORD: CHANGETHISIFYOUAREANINTELLIGENTHUMANBEING
+    expose:
+      - 3306
+    restart: unless-stopped
+
+  chrome:
+    image: selenium/standalone-chrome:latest
+    expose:
+      - 4444
+    depends_on:
+      - writehat

@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Admin tools{% endblock %}
+
+{% block headerLeft %}
+  Admin Tools
+{% endblock %}
+
+{% block headerRight %}
+{% endblock %}
+
+{% block fullPane %}
+
+  {% include 'panes/admin.html' %}
+
+{% endblock %}
+{% block footer %}
+  <script src="/static/js/admin.js"></script>
+{% endblock %}

@@ -1,0 +1,12 @@
+<div class="card writehat-pane bg-transparent">
+  <div class="card-header">
+    {{ component.name }}
+  </div>
+  <div class="card-body border border-primary rounded p-3">
+    <form method="POST" action="/components/{{ component.id }}/update">
+      <table class="writehat-form">
+        {{ component.form.as_table }}
+      </table>
+    </form>
+  </div>
+</div>

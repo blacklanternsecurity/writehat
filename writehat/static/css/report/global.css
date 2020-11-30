@@ -1,0 +1,77 @@
+@import url("/static/css/colors.css");
+@import url("/static/css/report/list.css");
+@import url("/static/css/report/table.css");
+@import url("/static/css/report/figure.css");
+@import url("/static/css/report/footer.css");
+@import url("/static/css/severity-colors.css");
+@import url("/static/css/report/highlight.css");
+
+/* severity legend */
+div.severity-legend {
+  display: flex;
+  margin-top: 1rem;
+  margin-left: auto;
+  justify-content: center;
+  margin: 2em;
+}
+
+div.severity-legend div.severity {
+  background-color: rgb(var(--severity-rgba));
+  line-height: 0;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: .5em;
+  margin-right: .5em;
+  display: inline-block;
+  color: white;
+  font-weight: bold;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  text-shadow: 0 0 10px rgba(0,0,0,.3);
+}
+
+
+/*  */
+h1.toc-member {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+p, div > ul, div > ol {
+  line-height: 1.6em;
+  overflow-wrap: break-word;
+}
+
+/* all code */
+code {
+  font-family: monospace;
+  overflow-wrap: break-word;
+}
+
+/* inline code only */
+:not(pre) > code {
+  --text-rgb: 0,120,0;
+  --highlight-rgb: 0,255,0;
+  --highlight-opacity: .1;
+}
+
+/* code block only */
+pre > code {
+  font-size: .8em;
+  width: 100%;
+  padding: 1rem;
+  border-radius: .5rem;
+  color: rgb(150,255,150);
+  background-color: rgb(0,0,0,.65);
+  white-space: pre-wrap;
+  display: block;
+  text-align: left;
+}
+
+div.finding-content > div > pre > code, 
+div.finding-content > div > pre {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    max-height: calc(100% - 2em);
+}

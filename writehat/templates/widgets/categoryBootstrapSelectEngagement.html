@@ -1,0 +1,9 @@
+<div class="container ml-0" >
+  <div class="row-fluid">
+    <select class="selectpicker" name="{{ widget.name }}" id="id_{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} data-live-search="true" data-width="fit">
+      {% for selectRow in selectRows %}
+        <option value="{{ selectRow.id }}">{{ selectRow.name }}</option>
+      {% endfor %}
+    </select>
+    {% include 'snippets/smallButton.html' with id='categoryAdd' name='New Category' type='plus' class='btn-light border border-dark categoryAddButton' %}
+</div>

@@ -1,0 +1,17 @@
+{% load custom_tags %}
+<html>
+  <head>
+    {% include 'reportTemplates/reportDependencies.html' with report=report %}
+  </head>
+
+  <body id='report-body'>
+    <div class="center footer-content">
+      {% markdown footer %}
+    </div>
+    {% autoescape off %}
+      {% for component in components %}
+        {{ component }}
+      {% endfor %}
+    {% endautoescape %}
+  </body>
+</html>

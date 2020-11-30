@@ -1,0 +1,9 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Confirm?{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with name='Cancel' type='times' class='promptModalLeftButton btn-light border border-success' %}
+
+  {% include 'snippets/textButton.html' with name='Confirm' type='check' class='promptModalRightButton btn-light border border-danger' %}
+{% endblock %}

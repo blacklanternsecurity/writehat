@@ -1,0 +1,18 @@
+div.figure {
+  width: 100%;
+}
+
+div.figure img {
+  display: block;
+  margin: 0 auto;
+}
+
+.figure figcaption {
+  margin: 1rem;
+  text-align: center;
+}
+
+span.figureCaptionLabel {
+  font-weight: bold;
+}
+

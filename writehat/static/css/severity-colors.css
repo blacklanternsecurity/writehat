@@ -1,0 +1,45 @@
+/*** severity colors ***/
+[finding-severity="Critical"] {
+  --severity-rgba: var(--purple-rgba);
+}
+[finding-severity="High"] {
+  --severity-rgba: var(--red-rgba);
+}
+[finding-severity="Medium"], [finding-severity="Moderate"] {
+  --severity-rgba: var(--orange-rgba);
+}
+[finding-severity="Low"] {
+  --severity-rgba: var(--yellow-rgba);
+}
+[finding-severity="Informational"] {
+  --severity-rgba: var(--faded-blue-rgba);
+}
+[finding-severity="Proactive"] {
+  --severity-rgba: var(--green-rgba);
+}
+
+[finding-severity] {
+  --severity-color: rgba(var(--severity-rgba), 1);
+  --severity-color-faded: rgba(var(--severity-rgba), .25);
+}
+
+.color-severity {
+  background-color: var(--severity-color);
+}
+
+.background-color-severity {
+  background-color: var(--severity-color);
+}
+
+.color-severity-faded {
+  background-color: var(--severity-color-faded);
+}
+
+.background-color-severity-faded {
+  background-color: var(--severity-color-faded);
+}
+
+.right-border-color-severity {
+  font-weight: bold;
+  border-right: .5rem solid var(--severity-color) !important;
+}

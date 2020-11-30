@@ -1,0 +1,146 @@
+/* WRITEHAT FORM */
+
+form {
+  width: 100%;
+}
+
+table.writehat-form {
+  width: 100%;
+}
+
+table.writehat-form tr th {
+  padding: .75rem;
+  padding-top: .65rem;
+  text-align: left;
+  vertical-align: top;
+  font-weight: bold;
+  white-space: nowrap;
+  width: 1px;
+}
+
+table.writehat-form tr td {
+  vertical-align: center;
+  padding: .5rem;
+  width: 100%;
+}
+
+table.writehat-form tr td input[type="text"] {
+  width: 100%;
+  max-width: 50vw;
+}
+
+table.writehat-form .CodeMirror:not(.CodeMirror-fullscreen),
+table.writehat-form .editor-toolbar,
+table.writehat-form .editor-statusbar {
+  max-width: 50vw;
+  margin-right: auto;
+}
+
+table.writehat-form label {
+  font-size: 1.15rem;
+  margin: 0rem;
+}
+
+table.writehat-form .container {
+  padding: 0px;
+}
+
+#manageFiguresSortable .figure-caption {
+  width: 70%;
+}
+
+table.writehat-form .btn-group {
+  width: calc(30vh + 10rem);
+}
+
+table.writehat-form .btn-group button.n1 { width: 100%; }
+table.writehat-form .btn-group button.n2 { width: 50%; }
+table.writehat-form .btn-group button.n3 { width: 33%; }
+table.writehat-form .btn-group button.n3:last-child { width: 34%; }
+table.writehat-form .btn-group button.n4 { width: 25%; }
+table.writehat-form .btn-group button.n5 { width: 20%; }
+table.writehat-form .btn-group button.n11 { width: 8%; }
+table.writehat-form .btn-group button.n11:last-child { width: 12%;}
+
+
+.tooltipSelect{
+  margin-left: 2%;
+}
+
+/* checkboxes */
+table.writehat-form div.large-checkbox .custom-control-label::before,
+table.writehat-form div.large-checkbox .custom-control-label::after,
+table.writehat-form input[type="checkbox"] {
+  top: 0rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+}
+
+.custom-control.custom-checkbox :hover {
+  cursor: pointer;
+}
+
+#findingForm tr:first-child label,
+#findingForm tr:first-child input, th.largeLabel,
+#pageTemplateForm tr:first-child label,
+#pageTemplateForm tr:first-child input, th.largeLabel
+{
+  font-size: 1.6rem !important;
+}
+
+#findingForm tr:first-child input {
+  width: 100%;
+  max-width: 50vw;
+}
+
+table.writehat-form .imageSelect {
+  width: 90%;
+  cursor: pointer;
+}
+
+table.writehat-form .imageContainer:hover .imageSelectIcon,
+table.writehat-form .imageContainer:hover .imageSelect,
+table.writehat-form .imageContainer:hover .imagePlaceholder {
+  opacity: .7;
+  cursor: pointer;
+}
+
+table.writehat-form .imageDeleteIcon {
+  margin-left: .5rem;
+}
+
+table.writehat-form .imageContainer {
+  position: relative;
+  width: 25rem;
+  min-height: 15rem;
+  overflow-y: hidden;
+  overflow-x: visible;
+}
+
+table.writehat-form .imageSelectIcon {
+  opacity: 0;
+  position: absolute;
+  z-index: 9999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+  padding: 3rem;
+  color: white;
+  font-size: 5rem;
+}
+
+table.writehat-form tr th.smaller-column {
+  white-space: normal;
+}
+
+table.writehat-login-form {
+  font-size: 1.4em;
+}
+
+table.writehat-login-form label {
+  margin: .5em;
+  margin-left: 0px;
+}

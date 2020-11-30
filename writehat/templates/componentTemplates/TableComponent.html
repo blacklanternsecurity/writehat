@@ -1,0 +1,15 @@
+{% load custom_tags %}
+<section class="l{{ level }} component{% if pageBreakBefore %} page-break{% endif %}" id="container_{{ id }}">
+{% include 'componentTemplates/Heading.html' %}
+<p>
+<div class='generated-table'>
+{% markdown text %}
+</div>
+{% if caption %}
+<div class='table-caption' id='caption_{{ id }}'>
+  <span class='table-number'>Table <span class='table-counter'></span>.</span> 
+  {{ caption }}
+</div>
+{% endif %}
+</p>
+</section>

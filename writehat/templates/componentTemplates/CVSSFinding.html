@@ -1,0 +1,71 @@
+{% load custom_tags %}
+<div id="finding-{{ finding.id }}" scoring-type="CVSS" class="finding container" finding-severity="{{ finding.severity }}">
+    <div class='finding-header'>
+        <div class='finding-severity background-color-severity'>
+            {{ finding.score }}
+            <br />
+            {{ finding.severity }}
+        </div>
+        <div class='finding-title'>
+            {% if showFindingNumbers %}[{{ finding.number }}] {% endif %}{{ finding.name }}
+        </div>
+    </div>
+    <div class='finding-content'>
+        <div class='category' style='font-weight: bold'>
+            {{ finding.categoryFull }}
+        </div>
+    </div>
+    {% if finding.affectedResources %}
+        <div class='finding-content'>
+            <div class='affected-resources'>
+                {% markdown finding.affectedResources %}
+            </div>
+        </div>
+    {% endif %}
+    {% if finding.description %}
+        <div class='finding-content'>
+            <div class='description'>
+                {% markdown finding.description %}
+            </div>
+        </div>
+    {% endif %}
+    {% if finding.background %}
+        <div class='finding-content'>
+            <div class='background'>
+                {% markdown finding.background %}
+            </div>
+        </div>
+    {% endif %}
+    {% if finding.toolsUsed %}
+        <div class='finding-content'>
+            <div class='tools-used'>
+                {% markdown finding.toolsUsed %}
+            </div>
+        </div>
+    {% endif %}
+    {% if finding.proofOfConcept %}
+        <div class='finding-content'>
+            <div class='poc'>
+                {% markdown finding.proofOfConcept %}
+            </div>
+        </div>
+    {% endif %}
+    {% if finding.remediation %}
+        <div class='finding-content'>
+            <div class='remediation'>
+                {% markdown finding.remediation %}
+            </div>
+        </div>
+    {% endif %}
+    {% if finding.references %}
+        <div class='finding-content'>
+            <div class='references'>
+                {% markdown finding.references %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% for figure in finding.figures_ending %}
+  {% include 'reportTemplates/figure.html' with figure=figure %}
+{% endfor %}
+

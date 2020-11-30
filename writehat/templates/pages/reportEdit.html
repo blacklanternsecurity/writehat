@@ -1,0 +1,36 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ report.name }}{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/breadcrumbs.html' with current=report %}
+{% endblock %}
+
+{% block headerRight %}
+
+  {% include 'snippets/textButton.html' with name='PDF' id='reportGeneratePdf' type='file-pdf' class='btn-light border-danger' %}
+  {% include 'snippets/textButton.html' with name='HTML' id='reportGenerate' type='file-code' class='btn-light border border-warning' %}
+  {% include 'snippets/textButton.html' with name='Save to Template' id='saveToTemplate' type='copy' class='btn-light border border-primary' %}
+  {% include 'snippets/textButton.html' with name='Select Findings' id='findingSelectButton' type='search' class='btn-warning' %}
+  {% include 'snippets/textButton.html' with name='Save' id='reportUpdate' type='save' class='btn-success' %}
+  {% include 'snippets/textButton.html' with name='Delete' id='reportDelete' type='times' class='btn-danger' %}
+
+{% endblock %}
+
+{% block leftPane %}
+  {% include 'panes/reportComponents.html' %}
+{% endblock %}
+
+{% block rightPane %}
+  {% include 'panes/availableComponents.html' %}
+{% endblock %}
+
+{% block footer %}
+  <!-- Hidden report div for storing Report Name, UUID, etc. -->
+  <span id="report-info" report-name="{{ report.name }}" report-id="{{ report.id }}" style="display: none;"></span>
+  <span id="engagement-info" engagement-id="{{ report.engagementParent }}" style="display: none;"></span>
+  <span id="timestamp-check" object-id="{{ report.id }}" hint="report" button="reportUpdate"></span>
+  <script src="/static/js/reports.js"></script>
+  <script src="/static/js/checkbox.js"></script>
+  <script src="/static/js/reportEdit.js"></script>
+{% endblock %}

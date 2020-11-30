@@ -1,0 +1,10 @@
+<div class="border border-warning rounded p-3">
+  <form id="findingForm" method="POST" autocomplete="off">
+    <table class="writehat-form">
+      {{ findingsForm.as_table }}
+    </table>
+  </form>
+  {% include 'snippets/findingAdvancedCheckbox.html' %}
+</div>
+
+<span id="finding-info" category-id="{{ categoryID }}" style="display: none;"></span>

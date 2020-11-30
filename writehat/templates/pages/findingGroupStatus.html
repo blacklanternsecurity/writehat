@@ -1,0 +1,247 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ fgroup.name }} Status{% endblock %}
+
+{% block headerLeft %}
+    {% include 'snippets/textButton.html' with name='Back' id='backButton' type='chevron-left' class='btn-secondary' %}
+    {{ engagement.name }}: {{ fgroup.name }} 
+{% endblock %}
+
+{% block fullPane %}
+
+<div class="{{ fgroup.scoringType|lower }} status-container container-fluid px-3 py-2 bg-light border border-info rounded">
+    <table class="writehat-table container-fluid table-light table-striped table-hover overflow-auto">
+      <thead>
+        <tr>
+          <th class='cvss dread proactive findingName'><strong>Finding Name</strong></th>
+          <th class='cvss dread proactive findingAttr'><div>Description</div></th>
+          <th class='cvss dread proactive findingAttr'><div>Affected Resources</div></th>
+          <th class='dread findingAttr'><div>Impact</div></th>
+          <th class='cvss dread proactive findingAttr'><div>Background</div></th>
+          <th class='cvss findingAttr'><div>Proof of Concept</div></th>
+          <th class='cvss findingAttr'><div>Tools Used</div></th>
+          <th class='cvss dread findingAttr'><div>Remediation</div></th>
+          <th class='cvss dread proactive findingAttr'><div>References</div></th>
+          <th class='cvss findingAttr'><div>Attack Vector</div></th>
+          <th class='cvss findingAttr'><div>Attack Complexity</div></th>
+          <th class='cvss findingAttr'><div>Privileges Required</div></th>
+          <th class='cvss findingAttr'><div>User Interaction</div></th>
+          <th class='cvss findingAttr'><div>Scope</div></th>
+          <th class='cvss findingAttr'><div>Confidentiality</div></th>
+          <th class='cvss findingAttr'><div>Integrity</div></th>
+          <th class='cvss findingAttr'><div>Availability</div></th>
+          <th class='dread findingAttr'><div>Damage</div></th>
+          <th class='dread findingAttr'><div>Damage Detail</div></th>
+          <th class='dread findingAttr'><div>Reproducibility</div></th>
+          <th class='dread findingAttr'><div>Reproducibility Detail</div></th>
+          <th class='dread findingAttr'><div>Exploitability</div></th>
+          <th class='dread findingAttr'><div>Exploitability Detail</div></th>
+          <th class='dread findingAttr'><div>Affected Users</div></th>
+          <th class='dread findingAttr'><div>Affected Users Detail</div></th>
+          <th class='dread findingAttr'><div>Discoverability</div></th>
+          <th class='dread findingAttr'><div>Discoverability Detail</div></th>
+        </tr>
+      </thead>
+      <tbody class="text-nowrap">
+        {% for finding in fgroup.findings %}
+          <tr>
+              <td class='findingName'>
+                  <a href="/engagements/fgroup/finding/edit/{{ finding.id}}">
+                      {{ finding.name }}
+                  </a>
+              </td>
+              <td class='cvss dread proactive findingAttr'>
+                  {% if finding.description %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss dread proactive findingAttr'>
+                  {% if finding.affectedResources %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.impact %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss dread proactive findingAttr'>
+                  {% if finding.background %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.proofOfConcept %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.toolsUsed %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss dread findingAttr'>
+                  {% if finding.remediation %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss dread proactive findingAttr'>
+                  {% if finding.references %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.cvss.dict.cvssAV %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.cvss.dict.cvssAC %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.cvss.dict.cvssPR %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.cvss.dict.cvssUI %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.cvss.dict.cvssS %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.cvss.dict.cvssC %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.cvss.dict.cvssI %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='cvss findingAttr'>
+                  {% if finding.cvss.dict.cvssA %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.dread.dict.dreadDamage %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.descDamage %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.dread.dict.dreadReproducibility %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.descReproducibility %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.dread.dict.dreadExploitability %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.descExploitability %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.dread.dict.dreadAffectedUsers %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.descAffectedUsers %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.dread.dict.dreadDiscoverability %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+              <td class='dread findingAttr'>
+                  {% if finding.descDiscoverability %}
+                      <i class="text-muted fa fa-check"></i>
+                  {% else %}
+                      <i class="text-danger fas fa-md fa-times-circle"></i>
+                  {% endif %}
+              </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+    <span id="engagement-info" engagement-id="{{ engagement.id }}" style="display: none;"></span>
+    <script src="/static/js/findingEdit.js"></script>
+    <link rel="stylesheet" href="/static/css/findingGroupStatus.css" />
+{% endblock %}

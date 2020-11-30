@@ -1,0 +1,59 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Customers{% endblock %}
+
+{% block headerLeft %}
+  Customers
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with id='customerNew' name='New Customer' type='plus' class='btn-yellow text-light' %}
+{% endblock %}
+
+{% block fullPane %}
+
+  <div class="container-fluid px-3 py-2 bg-light border border-yellow rounded">
+    <table class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate">
+      <thead>
+        <tr>
+          <th><strong>Name</strong></th>
+          <th><strong>Created</strong></th>
+          <th><strong>Modified</strong></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="text-nowrap">
+        {% for customer in customers|dictsortreversed:"modifiedDate" %}
+          <tr customer-id="{{ customer.id }}" customer-name="{{ customer.name}}">
+            <td class="pl-2 customerEdit">
+              <a href="/customers/{{ customer.id }}/edit">
+                {{ customer.name }}
+              </a>
+            </td>
+
+            <td class="customerEdit" data-sort="{{ customer.createdDate|date:"YmdHi" }}">
+                <a href="/customers/{{ customer.id }}/edit">
+                    {{ customer.createdDate }}
+                </a>
+            </td>
+
+            <td class="customerEdit" data-sort="{{ customer.modifiedDate|date:"YmdHi" }}">
+                <a href="/customers/{{ customer.id }}/edit">
+                    {{ customer.modifiedDate }}
+                </a>
+            </td>
+            <td>
+              <div class="floating float-right vertical-align-center mt-1">
+                {% include 'snippets/smallButton.html' with title='Delete Customer' type='times-circle' class='text-danger customerListDelete' %}
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}
+{% block footer %}
+  <script src="/static/js/customers.js"></script>
+{% endblock %}

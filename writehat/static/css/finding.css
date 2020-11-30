@@ -1,0 +1,21 @@
+/* Findings */
+.findingItem {
+  display: flex;
+  background-color: rgba(255,255,255,.1);
+}
+
+.findingItem > a {
+  color: white;
+  width: 100%;
+  text-decoration: none;
+  padding: .5rem;
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+}
+
+.findingItem > .findingIcons {
+  margin-left: auto;
+  padding: .5rem;
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+}

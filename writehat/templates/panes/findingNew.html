@@ -1,0 +1,19 @@
+<style>
+  .finding-database-exclude{
+    display:none;
+  }
+</style>
+<div class="border border-warning rounded p-3">
+  <form id="findingForm" method="POST" action="/findings/create" autocomplete="off">
+  	<input type="hidden" id="id_scoringType" name="scoringType" value="{{ form.scoringType }}">
+    <table class="writehat-form">
+      {{ form.as_table }}
+
+    </table>
+  </form>
+  {% include 'snippets/findingAdvancedCheckbox.html' %}
+</div>
+
+<!-- List of finding category options -->
+<datalist id="findingsCategoryOptions"></datalist>
+<span id="finding-info" category-id="{{ categoryID }}" style="display: none;"></span>

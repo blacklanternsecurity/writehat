@@ -1,0 +1,7 @@
+{% for finding in fgroup %}
+  {% if not report.finding_uuids or finding.id in report.finding_uuids %}
+    <p class="findings-summary-entry background-color-severity-faded" finding-severity="{{ finding.severity }}">
+        <a href="#finding-{{ finding.id }}">[{{ finding.number }}] {{ finding.name }}</a>
+    </p>
+  {% endif %}
+{% endfor %}

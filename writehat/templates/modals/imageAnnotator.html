@@ -1,0 +1,15 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Annotate Image{% endblock %}
+
+{% block class %}modal-xxl{% endblock %}
+
+{% block body %}
+  <div id="annotate-img" class="modal-centered text-center"></div>
+{% endblock %}
+
+{% block header %}
+  {% include 'snippets/textButton.html' with name='Back: Crop' type='arrow-left' class='load-crop-modal btn-secondary' %}
+  {% include 'snippets/textButton.html' with name='Apply' type='check' class='apply-annotation btn-primary' %}
+  {% include 'snippets/textButton.html' with name='Next: Scale' type='arrow-right' class='load-scale-modal btn-secondary' %}
+{% endblock %}

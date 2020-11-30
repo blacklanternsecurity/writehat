@@ -1,0 +1,51 @@
+.tof-item {
+  padding-right: 1ch;
+}
+
+.tof-list a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.tof-entry {
+  display: flex;
+}
+
+.tof-entry .tof-item,
+.tof-entry .tof-pagenumber {
+  flex: 1 0 auto;
+}
+
+.tof-entry .tof-dots {
+  flex: 0 1 auto;
+  /*Allows too long content to be hidden.*/
+  overflow: hidden;
+}
+
+.tof-header {
+    font-weight: bold;
+}
+
+.tof-dots::before {
+  font-size: 15pt;
+  line-height: .8em;
+  text-align: right;
+  display: block;
+  height: 1em;
+  overflow: hidden;
+  text-overflow: clip;
+  content: 
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+
+}
+
+.tof-pagenumber::after {
+  content: target-counter(attr(target-component), page);
+  padding-left: 1ch;
+}
+
+

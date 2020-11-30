@@ -1,0 +1,16 @@
+<div class="card writehat-pane bg-transparent">
+  <div class="card-header">
+    Report Components
+  </div>
+  <div>
+    <form id="reportForm" class="d-inline">
+      <table class="writehat-form">
+        {{ report.formClass.as_table }}
+      </table>
+    </form>
+  </div>
+  <div class="card-body border border-primary rounded">
+    <div id="reportComponents" class="list-group p-0 flex-grow-1"></div>
+  </div>
+</div>
+<span id="page-info" page-name="{{ report.pageTemplate.name }}" page-id="{{ report.pageTemplateID }}" style="display: none;"></span>

@@ -1,0 +1,11 @@
+toml
+bleach
+django
+pymongo
+PyMySQL
+markdown
+openpyxl
+selenium
+mongo-tools
+cryptography
+django-python3_ldap

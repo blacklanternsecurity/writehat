@@ -1,0 +1,50 @@
+<link href="/static/css/nav/nav.css" rel="stylesheet">
+<nav class="navbar navbar-expand-md navbar-dark fixed-left p-0">
+
+  {% include 'snippets/navLogo.html' %}
+
+  <div id="writehatNavBar">
+
+    <div class="nav-item navstyle-user" navcolor='--dark'>
+
+      <div class="dropright show">
+        {% include 'snippets/smallButton.html' with id='navUserDropdown' type='user' class='btn text-dark dropdown-toggle' attrs='data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"' %}
+
+        <div class="dropdown-menu" aria-labelledby="navUserDropdown">
+          {% include 'snippets/navProfile.html' %}
+        </div>
+      </div>
+
+    </div>
+
+    <!--
+    <div class="nav-item navstyle-home" navcolor='--success'>
+      {% include 'snippets/smallButton.html' with href='/engagements' type='home' class='text-success' tooltip='Home'%}
+    </div>
+    -->
+
+    <div class="nav-item navstyle-engagements" navcolor='--info'>
+      {% include 'snippets/smallButton.html' with href='/engagements' type='chess-rook' class='text-info' tooltip='Engagements' %}
+    </div>
+
+    <div class="nav-item navstyle-findings" navcolor='--warning'>
+      {% include 'snippets/smallButton.html' with href='/findings' type='search' class='text-warning' tooltip='Findings Database' %}
+    </div>
+
+    <div class="nav-item navstyle-templates" navcolor='--primary'>
+      {% include 'snippets/smallButton.html' with href='/templates' type='copy' class='text-primary' tooltip='Report Templates' %}
+    </div>
+
+    <div class="nav-item navstyle-customers" navcolor='--yellow'>
+      {% include 'snippets/smallButton.html' with href='/customers' type='id-card-alt' class='text-yellow' tooltip='Customers' %}
+    </div>
+
+    {% if request.user.is_superuser %}
+      <div class="nav-item navstyle-admintools" navcolor='--danger'>
+        {% include 'snippets/smallButton.html' with href='/admintools' type='user-shield' class='text-danger' tooltip='Admin Tools' %}
+      </div>
+    {% endif %}
+
+  </div>
+
+</nav>

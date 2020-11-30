@@ -1,0 +1,24 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Edit Page Template{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/breadcrumbs.html' with current=page %}
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with name='Save' id='pageTemplateSave' type='save' class='btn-success' %}
+  {% include 'snippets/textButton.html' with name='Delete' id='pageTemplateDelete' type='times' class='btn-danger' %}
+{% endblock %}
+
+{% block fullPane %}
+
+  {% include 'panes/pageTemplateEdit.html' %}
+
+{% endblock %}
+
+{% block footer %}
+  <span id="page-info" page-name="{{ page.name }}" page-id="{{ page.id }}" image-id="{{ page.backgroundImageID }}" style="display: none;"></span>
+  <script src="/static/js/reports.js"></script>
+  <script src="/static/js/pageTemplates.js"></script>
+{% endblock %}

@@ -1,0 +1,22 @@
+<section class="l{{ level }} component part {% if pageBreakBefore %} page-break {% endif %}" id="tof">
+{% include 'componentTemplates/Heading.html' with name="Table of Figures" %}
+  <div id="table-of-figures">
+    <ul class="tof-list">
+      {% for figure in report.figures %}
+        <a href='#figure_{{ figure.id }}'>
+          <li class="tof-entry">
+            <span class="tof-item">
+                <span class="tof-header">
+                    Figure <span class="tof-counter" target-component='#figure_{{ figure.id }}'></span>. 
+                </span>
+                {{ figure.caption }}
+            </span>
+            <span class="tof-dots"></span>
+            <span class="toc-pagenumber" target-component='#figure_{{ figure.id }}'></span>
+          </li>
+        </a>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+

@@ -1,0 +1,22 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}New Finding Group{% endblock %}
+
+{% block body %}
+  <form>
+    <table class="writehat-form">
+      {{ NewFgroupForm.as_table }}
+      <tr>
+        <th>
+        </th>
+        <td>
+        </td>
+      </tr>
+    </table>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with name='Cancel' id='cancelNewFgroup' type='file-import' class='btn-light border border-danger' %}
+  {% include 'snippets/textButton.html' with name='Save' id='saveNewFgroup' type='save' class='btn-light border border-success' %}
+{% endblock %}

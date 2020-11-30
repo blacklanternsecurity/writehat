@@ -1,0 +1,45 @@
+{% for categoryID, category in findingsTree.items %}
+
+  <div class="p-0 category" category-name="{{ category.name }}" category-id="{{ categoryID }}">
+    
+    <div class="d-flex m-1 p-0 text-left text-white btn btn-sm font-weight-bold" style="width: 100%;background-color:black;border: 1px solid #444">
+
+      <div class="d-flex p-1 mr-auto {% if not category.categoryChildren and not category.findings %}text-dark{% endif %}" data-toggle="collapse" data-target="#contents_{{ categoryID }}" aria-expanded="true" aria-controls="contents_{{ categoryID }}" style="width:100%;background-color:transparent;cursor:pointer">
+
+        <div class="icon-collapsed m-2">{% include 'snippets/smallIcon.html' with type='plus' class='text-dark' %}</div>
+        <div class="icon-expanded m-2">{% include 'snippets/smallIcon.html' with type='minus' class='icon-expanded text-dark' %}</div>
+
+        <div class="d-flex" style="font-size: 1.2rem;align-items:center">
+          {{ category.name }}
+        </div>
+
+      </div>
+      <div class="p-2 d-flex" style="align-items:center">
+        {% if user.is_superuser %}
+          {% include 'snippets/smallButton.html' with name='Edit Category' type='pen' class='categoryEdit text-dark' %}
+        {% endif %}
+      </div>
+    </div>
+    
+
+    <div class="pl-3 text-dark collapse show" id="contents_{{ categoryID }}">
+
+      <div class="pl-3">
+        {% for findingID, finding in category.findings.items|dictsort:"1.name" %}
+          <div class="findingItem borderleft-{{ finding.scoringType|lower }}" finding-name="{{ finding.name }}" id="finding_{{ findingID }}">
+            <a href='/findings/edit/{{ findingID }}'>
+              <div class="ml-1">{{ finding.name }}</div>
+            </a>
+            <div class="findingIcons">
+              <!--{% include 'snippets/smallIcon.html' with type='check-double' size='sm' class='text-success' %}-->
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% include 'snippets/categoryBrowse.html' with findingsTree=category.categoryChildren %}
+
+    </div>
+  </div>
+
+{% endfor %}

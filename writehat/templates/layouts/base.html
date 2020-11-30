@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <title>WH - {% block title %}{% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Board the Write Hat Hype Train and Chomp the Reporting Chain">
+    <meta name="author" content="Black Lantern Security">
+
+    <link rel="shortcut icon" type="image/png" href="/static/favicon.ico" />
+
+    {% include 'snippets/webAppDependencies.html' %}
+
+  </head>
+
+  <body style="font-size: 1.0rem">
+
+    <!-- Navigation Bar -->
+    {% block nav %}
+      {% include 'layouts/nav.html' %}
+    {% endblock %}
+
+    <!-- Main View -->
+    <div class="container-fluid m-0 p-0">
+
+      <!-- Header -->
+      {% block header %}
+        <div class="writehat-header container-fluid text-white bg-transparent">
+          <div class="header-left">
+            {% block headerLeft %}{% endblock %}
+          </div>
+          <div class="header-right">
+            {% block headerRight %}{% endblock %}
+          </div>
+        </div>
+      {% endblock %}
+      
+      <!-- Page Content -->
+      <div id="writehat-content">
+        <!-- Full Pane -->
+        <div id="fullPane" class="pane container-fluid m-0 p-2">
+          {% block fullPane %}{% endblock %}
+        </div>
+
+        <!-- Split Pane -->
+        <div id="paneTabGroup" style="display: none">
+          <div id="paneLeftTab" class="paneTab"></div>
+          <div id="paneCenterTab" class="paneTab active"><i class="fas fa-columns"></i></div>
+          <div id="paneRightTab" class="paneTab"></div>
+        </div>
+        <div class="row p-0 m-0 h-md-100 paneContent">
+          <div id="leftPane" class="pane col-md-6 h-md-100 p-1 justify-content-center">
+            {% block leftPane %}{% endblock %}
+          </div>
+          <div id="rightPane" class="pane col-md-6 h-md-100 p-1 justify-content-center">
+            {% block rightPane %}{% endblock %}
+          </div>
+        </div>
+
+        <!-- Modals -->
+        <div id="modalPane">
+          {% include 'modals/prompt.html' with modalName='prompt' %}
+          {% block modals %}
+          {% endblock %}
+        </div>
+
+        <!-- Footer -->
+        <div id="pageFooter">
+          {% block footer %}{% endblock %}
+        </div>
+
+        <!-- page-specific Javascript goes here -->
+        {% include 'layouts/footer.html' %}
+      </div>
+    </div>
+
+    <script>
+      loadMarkdown();
+      var csrftoken = '{{ csrf_token }}';
+    </script>
+
+  </body>
+
+</html>

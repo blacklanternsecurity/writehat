@@ -1,0 +1,38 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Select Components{% endblock %}
+
+{% block body %}
+  <table class="writehat-form" id="component-select-{{ fgroup.id }}">
+    <thead>
+      <tr>
+        <th>
+          <div class="custom-control custom-checkbox large-checkbox">
+            <input type="checkbox" class="custom-control-input" id="select-all-components-checkbox">
+            <label class="custom-control-label" for="select-all-components-checkbox" style="padding-left: 1rem"></label>
+          </div>
+        </th>
+        <th></th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for component in report.flattened_components %}
+        <tr component-id="{{ component.id }}">
+          <th>
+            <div class="custom-control custom-checkbox large-checkbox">
+              <input type="checkbox" class="custom-control-input" id="{{ component.id }}-checkbox" >
+              <label class="custom-control-label" for="{{ component.id }}-checkbox"></label>
+            </div>
+          </th>
+          <th><i class="{{ component.iconType }}" style="color: {% if component.iconColorDynamic %}{{ component.iconColorDynamic }}{% else %}{{ component.iconColor }}{% endif %}"></i></th>
+          <th style="width: 100%">{{ component.name }}</th>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with name='Save' id='componentSelectSaveButton' type='save' class='btn-success' %}
+{% endblock %}

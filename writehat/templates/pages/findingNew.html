@@ -1,0 +1,25 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}New Finding{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/textButton.html' with href='/findings' name='Back' id='backButton' type='chevron-left' class='btn-secondary' %}
+  New Finding
+{% endblock %}
+
+{% block headerRight %}
+{% include 'snippets/riskBadge.html' with scoringType=scoringType %}
+{% include 'snippets/textButton.html' with name='Save' id='findingSave' type='save' class='btn-success' %}
+
+{% endblock %}
+
+{% block fullPane %}
+  {% include 'panes/findingNew.html' %}
+{% endblock %}
+
+{% block footer %}
+  <!-- Hidden finding div for storing Finding Name, UUID, etc. -->
+  <span id="finding-info" finding-name="{{ finding.name }}" finding-id="{{ finding.id }}" style="display: none;"></span>
+  <script src='/static/js/findingEdit.js'></script>
+  <script src='/static/js/findingsBrowse.js'></script>
+{% endblock %}

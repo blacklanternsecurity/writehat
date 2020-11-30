@@ -1,0 +1,47 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Select Findings{% endblock %}
+
+{% block body %}
+  {% for fgroup in engagement.fgroups %}
+    <div class="border-{{ fgroup.scoringType|lower }} p-2 m-2">
+      <h4>{{ fgroup.name }} ({{ fgroup.scoringType }})</h4>
+      <table class="writehat-form" id="finding-select-{{ fgroup.id }}">
+        <thead>
+          <tr>
+            <th>
+              <div class="custom-control custom-checkbox large-checkbox">
+                <input type="checkbox" class="custom-control-input" id="select-all-findings-{{ finding.id }}-checkbox">
+                <label class="custom-control-label" for="select-all-findings-checkbox" style="padding-left: 1rem"></label>
+              </div>
+            </th>
+            <th>Severity</th>
+            <th>Name</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for finding in fgroup.findings %}
+            <tr finding-id="{{ finding.id }}" finding-severity="{{ finding.severity }}">
+              <th>
+                <div class="custom-control custom-checkbox large-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="{{ finding.id }}-checkbox" >
+                  <label class="custom-control-label" for="{{ finding.id }}-checkbox"></label>
+                </div>
+              </th>
+              <th class="right-border-color-severity background-color-severity-faded">
+                {{ finding.score }} {{ finding.severity }}
+              </th>
+              <th style="min-width: 15em" class="smaller-column">{{ finding.name }}</th>
+              <td>{{ finding.createdDate }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endfor %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with name='Save' id='findingSelectSaveButton' type='save' class='btn-success' %}
+{% endblock %}

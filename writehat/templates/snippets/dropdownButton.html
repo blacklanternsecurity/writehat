@@ -1,0 +1,10 @@
+<div class='drop{% if direction %}{{ direction }}{% else %}down{% endif %} d-flex'>
+  {% include 'snippets/textButton.html' with id=id href=href name=name type=type class=class attrs='data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"' %}
+  <div {% if contentID %}id="{{ contentID }}"{% endif %} class='{% if contentClass %}{{ contentClass }}{% endif %} dropdown-menu rounded p-2' aria-labelledby='{{ id }}'>
+    <div class='dropdown-content' style='min-width: 10rem'>
+      {% if contents %}
+        {% include contents %}
+      {% endif %}
+    </div>
+  </div>
+</div>

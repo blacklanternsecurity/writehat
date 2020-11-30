@@ -1,0 +1,20 @@
+<section class="l{{ level }} component {% if pageBreakBefore %} page-break{% endif %}">
+{% include 'componentTemplates/Heading.html' with name=name %}
+{% include 'componentTemplates/SeverityLegend.html' with proactive=True %}
+
+  {% for fgroup in report.ordered_fgroups %}
+
+    <!-- Only include the title if there are findings -->
+    {% if fgroup.findings %}
+
+      <div class='finding-group-name'>
+        {{ fgroup.name }}
+      </div>
+
+      {% include fgroup.findingClass.summaryTemplate with fgroup=fgroup report=report %}
+
+    {% endif %}
+
+  {% endfor %}
+
+</section>

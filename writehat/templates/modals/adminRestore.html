@@ -1,0 +1,48 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Restore Database from file{% endblock %}
+
+{% block body %}
+<div id="warningDiv">
+<p>Warning! This will wipe out everything currently in the database. Make sure you have a backup before proceeding</p>
+</div>
+<div id="challengeDiv1" class="d-none"><p> Sorry, we need to be really sure you are awake before you do this...</p></div>
+<div id="challengeDiv2" class="d-none"></div>
+<div id="challengeDiv3" class="d-none">
+<form>
+  <p id="question"></p>
+  <label for="answer">Answer</label><br>
+  <input type="text" id="answer" name="answer"><br>
+  <button id="challengeButton" type="button" class="btn btn-warning mt-3">I'm awake!</button>
+</form>
+</div>
+
+
+
+{% endblock %}
+
+
+
+{% block footer %}
+
+<div id="inProgressDiv" class="d-none"> 
+  <div class="container">
+    <div class="row">
+      <div class="col-11"><p style="display:inline">Restore in progress. Please wait, this process may take a few minutes. </p></div>
+      <div class="col-1"><div class="spinner-border text-dark" role="status"></div><span class="sr-only">Loading...</span></div>
+    </div>
+  </div>
+</div>
+
+  <input type="file" id="backupUpload" class="d-none"/> 
+
+  {% include 'snippets/textButton.html' with id='restoreFromBackupReal' name='I really want to do it!' type='save' class='btn-light border border-danger d-none' %}
+
+  {% include 'snippets/textButton.html' with id='restoreFromBackupFake' name='Restore from file' type='save' class='btn-light border border-danger' %}
+
+{% endblock %}
+
+
+
+
+

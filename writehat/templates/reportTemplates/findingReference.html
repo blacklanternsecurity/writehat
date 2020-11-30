@@ -1,0 +1,3 @@
+<a class='finding-ref reference-link' href='#finding-{{ finding.id }}'>
+  <span class='bold severity-highlight' {% if severity %}finding-severity='{{ finding.severity }}'{% endif %}>{% if number or index %}[{{ finding.number }}] {% endif %}{% if name %}{{ finding.name }}{% endif %}</span>
+</a>

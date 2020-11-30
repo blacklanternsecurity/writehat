@@ -1,0 +1,16 @@
+
+
+
+
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Export database{% endblock %}
+
+{% block body %}
+<p>Export the entire database to a GZIP archive which can later be used to fully restore the current state</p>
+
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with id='saveToBackup' name='Export to file' type='download' class='btn-light border border-success' %}
+{% endblock %}

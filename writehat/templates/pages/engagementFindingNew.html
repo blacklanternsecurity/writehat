@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}New Engagement Finding{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/breadcrumbs.html' with current=fgroup %}
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/riskBadge.html' with scoringType=fgroup.scoringType %}
+  {% include 'snippets/dropdownButton.html' with name='Figures' id='manageFigures' contentID='manageFiguresContent' type='images' class='btn-light border border-primary'%}
+  {% include 'snippets/textButton.html' with name='Save' id='findingSave' type='save' class='btn-success' %}
+{% endblock %}
+
+{% block fullPane %}
+  <div id='formDiv' style="display:none">
+    {% include 'panes/engagementFindingNew.html' %}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <span id="engagement-info" engagement-name="{{ engagement.name }}" engagement-id="{{ engagement.id }}" style="display: none;"></span>
+
+  <span id="fgroup-info" fgroup-type="{{ fgroup.scoringType }}" fgroup-name="{{ fgroup.name }}" fgroup-id="{{ fgroup.id }}" style="display: none;"></span>
+  <script src='/static/js/findingEdit.js'></script>
+  <script src='/static/js/findingsBrowse.js'></script>
+{% endblock %}

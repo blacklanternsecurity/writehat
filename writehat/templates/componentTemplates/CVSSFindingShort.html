@@ -1,0 +1,15 @@
+{% load custom_tags %}
+<div id="finding-{{ finding.id }}" class="finding-short container" finding-severity="{{ finding.severity }}">
+    <div class='finding-header'>
+        <div class='finding-title'>
+            {% if showFindingNumbers %}[{{ finding.number }}] {% endif %}{{ finding.name }}
+        </div>
+    </div>
+    {% if finding.affectedResources %}
+        <div class='finding-content'>
+            <div class='affected-resources'>
+                {% markdown finding.affectedResources %}
+            </div>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,12 @@
+<div class='severity-legend'>
+  {% if not proactive_only %}
+    <div class='severity' finding-severity='Critical'>Critical</div>
+    <div class='severity' finding-severity='High'>High</div>
+    <div class='severity' finding-severity='Medium'>Medium</div>
+    <div class='severity' finding-severity='Low'>Low</div>
+    <div class='severity' finding-severity='Informational'>Informational</div>
+  {% endif %}
+  {% if proactive or proactive_only %}
+    <div class='severity' finding-severity='Proactive'>Proactive</div>
+  {% endif %}
+</div>

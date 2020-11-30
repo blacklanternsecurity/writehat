@@ -1,0 +1,7 @@
+<div class="border border-yellow rounded p-3">
+  <form id="customerForm" method="POST" action="/customers/{{ customer.id }}/edit" autocomplete="off">
+    <table class="writehat-form">
+      {{ customer.form.as_table }}
+    </table>
+  </form>
+</div>

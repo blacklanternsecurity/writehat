@@ -1,0 +1,4 @@
+.sort-handle:not(.sort-handle-exclude) {
+    cursor: move;
+    cursor: -webkit-grabbing;
+}

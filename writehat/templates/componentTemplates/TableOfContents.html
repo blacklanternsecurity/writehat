@@ -1,0 +1,17 @@
+<section class="part{% if pageBreakBefore %} page-break{% endif %}" id="toc">
+{% include 'componentTemplates/Heading.html' with name="Table of Contents" %}
+  <div id="table-of-contents">
+    <ul class="toc-list">
+      {% for component in toc_components %}
+        {{ component.spacer|safe }}
+        <a href='#component_{{ component.id }}'>
+          <li class="toc-entry">
+            <span style='margin-left: {{ component.level }}em;' class="toc-item"><span class='bold'>{{ component.index }} {{ component.name }}</span></span>
+            <span class="toc-dots"></span>
+            <span class="toc-pagenumber" target-component='#component_{{ component.id }}'></span>
+          </li>
+        </a>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

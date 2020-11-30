@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Findings{% endblock %}
+
+{% block headerLeft %}
+  <form class="d-inline">
+    {% include 'snippets/largeInput.html' with id='searchFindings' placeholder='Search Findings Database' %}
+  </form>
+{% endblock %}
+
+{% block headerRight %}
+  {% include 'snippets/textButton.html' with id='categoryAdd' name='New Category' type='plus' class='btn-light border border-dark categoryAddButton' %}
+  {% include 'snippets/textButton.html' with href='/findings/proactive/new' name='New Proactive Finding' type='plus' class='bg-proactive' %}
+  {% include 'snippets/textButton.html' with href='/findings/cvss/new' name='New CVSS Finding' type='plus' class='bg-cvss' %}
+  {% include 'snippets/textButton.html' with href='/findings/dread/new' name='New DREAD Finding' type='plus' class='bg-dread' %}
+{% endblock %}
+
+{% block footer %}
+  <script src='/static/js/findingsBrowse.js'></script>
+{% endblock %}

@@ -1,0 +1,42 @@
+/* WRITEHAT TABLE */
+.writehat-table td {
+  padding: 0px;
+  padding-left: .3rem;
+}
+.writehat-table th {
+  padding: .3rem;
+}
+.writehat-table td > a {
+    display: block;
+    text-decoration: none;
+    color: unset;
+    padding: .3rem;
+}
+
+table.writehat-table.dataTable tbody tr {
+    background-color: inherit;
+}
+
+table.writehat-table.dataTable tbody tr.odd {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+table.writehat-table.dataTable tbody th, table.writehat-table.dataTable tbody td {
+    padding: inherit;
+}
+
+table.writehat-table.dataTable.no-footer {
+    border-bottom: inherit;
+}
+
+table.writehat-table.dataTable thead th {
+    cursor: pointer;
+}
+
+.dataTables_wrapper .dataTables_length select, .dataTables_wrapper input[type=search] {
+    background: #101011 !important;
+}
+
+.dataTables_wrapper {
+    background: #222;
+}

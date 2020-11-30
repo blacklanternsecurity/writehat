@@ -1,0 +1,18 @@
+{% extends 'layouts/modal.html' %}
+
+{% block title %}Crop Image{% endblock %}
+
+{% block class %}modal-xxl{% endblock %}
+
+{% block body %}
+  <style>
+  </style>
+  <div id="crop-img" class="modal-centered text-center">
+    <img id="figure-source" src="" style="max-width: 100%; max-height: 80vh; height: auto; width: auto">
+  </div>
+{% endblock %}
+
+{% block header %}
+  {% include 'snippets/textButton.html' with name='Crop' type='crop' class='crop-figure btn-primary' %}
+  {% include 'snippets/textButton.html' with name='Next: Annotate' type='arrow-right' class='load-annotate-modal btn-secondary' %}
+{% endblock %}

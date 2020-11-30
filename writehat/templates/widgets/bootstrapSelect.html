@@ -1,0 +1,9 @@
+<div class="container ml-1" >
+  <div class="row-fluid">
+    <select class="selectpicker" name="{{ widget.name }}" id="id_{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} data-live-search="true" data-width="fit">
+      {% for selectRow in selectRows %}
+        <option value="{{ selectRow.id }}">{{ selectRow.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>

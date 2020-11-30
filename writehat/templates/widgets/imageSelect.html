@@ -1,0 +1,9 @@
+<div class="imageSelectContainer">
+  <div class="imageContainer">
+    <img class="imageSelect" src="/images/{{ imageID }}" {% if not imageID %}style="display: none"{% endif %}>
+    <div class="imagePlaceholder" style="width: 100%; height: 100%; background-color: white; {% if imageID %}display: none{% endif %}"></div>
+    <input type="text" name="{{ name }}" value="{% if imageID %}{{ imageID }}{% endif %}" style="display: none"/>
+    <i class="imageSelectIcon fas fa-pen fa-md "></i>
+    <i class="imageDeleteIcon fas fa-close fa-md" style="color: red; position: absolute; font-size: 2rem; cursor: pointer; {% if not imageID %}display: none{% endif %}"></i>
+  </div>
+</div>

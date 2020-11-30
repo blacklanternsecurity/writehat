@@ -1,0 +1,117 @@
+div.cvss-risk-diagram-container {
+  display: flex;
+}
+
+div.cvss-risk-diagram {
+  zoom: 0.75;
+}
+
+.cvss-diagram-figure-caption {
+  margin: 2rem;
+  text-align: center;
+}
+
+.cvss-risk-diagram table {
+  padding: 3rem;
+}
+
+.cvss-risk-diagram table td[finding-severity] {
+  background-color: rgba(var(--severity-rgba), .9);
+  width: 8em;
+  height: 8em;
+  color: white;
+  font-weight: bold;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+.cvss-risk-diagram span.label-text {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.cvss-risk-diagram div.rotate {
+  transform: rotate(-90deg);
+}
+
+.cvss-risk-diagram div.rotate span {
+  top: 0;
+}
+
+.cvss-risk-diagram div.normal span {
+  bottom: 0;
+}
+
+
+/* LABELS */
+
+.cvss-risk-diagram div.diagram-label {
+  height: 40em;
+  width: 39rem;
+  position: absolute;
+}
+.cvss-risk-diagram div.diagram-label span.diagram-label-content {
+  font-size: 1.6rem;
+  font-weight: bold;
+  display: inline-block;
+  width: 19em;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+/* ARROW */
+.cvss-risk-diagram div.arrow {
+  width: 280px;
+  display: inline-block;
+}
+
+.cvss-risk-diagram div.line {
+  margin-top: 5px;
+  width: 250px;
+  background: black;
+  height: 4px;
+  float: left;
+}
+
+.cvss-risk-diagram div.point {
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 30px solid black;
+  float: right;
+}
+
+
+/* CVSS LEGEND */
+table.cvss-risk-diagram-legend {
+  margin: 2em;
+  height: 10rem;
+  transform: translateY(7rem);
+}
+
+table.cvss-risk-diagram-legend tr.severity {
+  line-height: 0;
+  font-weight: bold;
+  height: 2em;
+  text-align: left;
+  align-items: center;
+}
+
+table.cvss-risk-diagram-legend th, table.cvss-risk-diagram-legend td {
+  padding-left: .5em;
+  padding-right: .5em;
+  width: 6.5rem;
+}
+
+table.cvss-risk-diagram-legend th {
+  text-align: right;
+  border-right: .5rem solid rgba(var(--severity-rgba), 1);
+}
+
+table.cvss-risk-diagram-legend td {
+  background-color: rgba(var(--severity-rgba), .3);
+  text-align: left;
+}
