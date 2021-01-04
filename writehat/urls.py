@@ -82,6 +82,7 @@ urlpatterns = [
     path('engagements/new', views.engagementNew),
     path('engagements/create', views.engagementCreate),
     url(rf'^engagements/edit/{uuid}$', views.engagementEdit),
+    url(rf'^engagements/clone/{uuid}$', views.engagementClone),
     url(rf'^engagements/delete/{uuid}$', views.engagementDelete),
 
 

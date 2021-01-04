@@ -181,6 +181,11 @@ function addReportLinks(editor) {
 
     referenceSelectModal.modal('show');
 
+    $('.userTemplateInsertButton').off().click(function() {
+      var keyword = $(this).text();
+      editor.codemirror.replaceSelection(`{ ${keyword} }`);
+    })
+
     // component
     $('#componentReferenceSelect').off().click(function() {
       referenceSelectModal.modal('hide');

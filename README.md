@@ -2,6 +2,8 @@
 **WriteHat** is a reporting tool which removes Microsoft Word (and many hours of suffering) from the reporting process.  **Markdown** --> **HTML** --> **PDF**.  Created by penetration testers, for penetration testers - but can be used to generate any kind of report.  Written in Django (Python 3).
 
 
+
+
 ## Features:
 - **Effortlessly generate beautiful pentest reports**
 - **On-the-fly drag-and-drop report builder**
@@ -64,6 +66,7 @@ Note: Don't forget to lock down the permissions on `writehat/config/writehat.con
     ~~~
     Note: If using a VPN, you need to be disconnected from the VPN the first time you run bring up the services with `docker-compose`.  This is so docker can successfully create the virtual network.
 1. **Install and Activate the Systemd Service**:
+
     This will start WriteHat automatically upon boot
     ~~~
     $ sudo cp writehat/config/writehat.service /etc/systemd/system/
@@ -74,6 +77,7 @@ Note: Don't forget to lock down the permissions on `writehat/config/writehat.con
     $ sudo journalctl -xefu writehat.service
     ~~~
 1. **Create Users**
+
     Browse to https://127.0.0.1/admin after logging in with the admin user specified in `writehat/config/writehat.conf`
     Note: There are some actions which only an admin can perform (e.g. database backups)  An admin user is automatically created from the username and password in `writehat/config/writehat.conf`, but you can also promote an LDAP user to admin:
     ~~~
@@ -161,6 +165,14 @@ class Component(BaseComponent):
     # This is just eye candy in the web app
     iconType = 'fas fa-stream'
     iconColor = 'var(--blue)'
+
+    # the "preprocess" function is executed when the report is rendered
+    # use this to perform any last-minute operations on its data
+    def preprocess(self, context):
+
+        # for example, to uppercase the entire "summary" field:
+        #   context['summary'] = context['summary'].upper()
+        return context
 ~~~
 Note that fields *must* share the same name in both the component class and its form.  All components must either inherit from `BaseComponent` or another component.  Additionally, each component has built-in fields for `name`, `pageBreakBefore` (whether to start on a new page), and `showTitle` (whether or not to display the `name` field as a header).  So it's not necessary to add those.
 

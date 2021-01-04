@@ -644,13 +644,6 @@ def reportGenerate(request,uuid):
         # remove the page break since we're just previewing
         component.pageBreakBefore = False
 
-        # instantiate the finding group if there is one
-        try:
-            if component.findingGroup:
-                component._model['findingGroup'] = BaseFindingGroup.get_child(id=component.findingGroup)
-        except AttributeError:
-            pass
-
         # Instantiate the component's report, then remove all other components
         try:
             report = Report.get(id=component.reportParent)
@@ -1226,6 +1219,23 @@ def engagementEdit(request,uuid):
 
 
 @csrf_protect
+def engagementClone(request,uuid):
+
+    log.debug(f'engagementClone called, Cloning: {uuid}')
+
+    try:
+        engagement = Engagement.get(id=uuid)
+        engagementClone = engagement.clone()
+        engagementClone.save()
+
+    except Engagement.DoesNotExist:
+        log.debug(f'engagementClone called, failed for  UUID: {p.id} (DOES NOT EXIST)')
+        raise EngagementError("Specified Engagement does not exist")
+
+    return HttpResponseRedirect("/engagements")
+
+
+@csrf_protect
 def engagementDelete(request,uuid):
     try:
         p = Engagement.get(id=uuid)
@@ -1683,6 +1693,7 @@ def reportSaveToTemplate(request,uuid):
     report = Report.objects.get(id=uuid)
     log.debug(f"reportSaveToTemplate; report.id: {report.id}")
     savedReport = report.clone(destinationClass=SavedReport)
+    savedReport.simpleRedact(report.engagement.customer)
     savedReport.save()
 
     return HttpResponse(savedReport.id)

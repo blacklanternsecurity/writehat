@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from writehat.components.base import *
 from writehat.lib.findingGroup import *
@@ -80,6 +81,63 @@ class Engagement(WriteHatBaseModel):
 
         return findings
 
+
+
+    def clone(self, templatableOnly=False):
+
+        # keeps track of old and new UUIDs so we can find-and-replace in-text references
+        changedIDs = dict()
+
+        # clone engagement
+        clonedEngagement = super().clone()
+        clonedEngagement.save(updateTimestamp=False)
+
+        # clone finding groups
+        for fgroup in self.fgroups:
+            clonedFgroup = fgroup.clone(name=fgroup.name)
+            clonedFgroup.engagementParent = clonedEngagement.id
+            clonedFgroup.save(updateTimestamp=False)
+            changedIDs.update({str(fgroup.id).lower(): str(clonedFgroup.id).lower()})
+
+            # clone findings
+            for finding in fgroup:
+                clonedFinding = finding.clone(name=finding.name)
+                clonedFinding.findingGroup = clonedFgroup.id
+                clonedFinding.save(updateTimestamp=False)
+                changedIDs.update({str(finding.id).lower(): str(clonedFinding.id).lower()})
+
+        # replace misc UUID references in findings
+        clonedEngagement._fgroup_objects = None
+        for fgroup in clonedEngagement.fgroups:
+            for finding in fgroup:
+                for old_id, new_id in changedIDs.items():
+                    finding.find_and_replace(old_id, new_id, caseSensitive=False)
+                finding.save(updateTimestamp=False)
+
+        # clone reports
+        for report in self.reports:
+            clonedReport = report.clone(name=report.name, templatableOnly=templatableOnly)
+            clonedReport.engagementParent = clonedEngagement.id
+            clonedReport.save(updateTimestamp=False)
+
+            for component in clonedReport:
+
+                # replace misc UUID references in components
+                for old_id, new_id in changedIDs.items():
+                    component.find_and_replace(old_id, new_id, caseSensitive=False)
+
+                # replace old findingGroup IDs
+                if 'findingGroup' in component._model and component._model['findingGroup']:
+                    findingGroupID = uuid.UUID(str(component.findingGroup))
+                    if str(findingGroupID).lower() in changedIDs:
+                        component._model['findingGroup'] = uuid.UUID(changedIDs[str(findingGroupID).lower()])
+
+                component.save(updateTimestamp=False)
+
+        clonedEngagement.save()
+
+        return clonedEngagement
+
     
     @property
     def pageTemplate(self):
@@ -97,7 +155,7 @@ class Engagement(WriteHatBaseModel):
 
     def delete(self):
         log.debug(f"{self.className}.delete() cascading reports delete sequence intiated for engagement UUID: {self.id}")
-        for report in self.reports():
+        for report in self.reports:
             log.debug(f"{report.className}.delete() deleting fgroup with UUID: {report.id}")
             report.delete()
 
@@ -126,7 +184,9 @@ class Engagement(WriteHatBaseModel):
         return customer
 
 
+    @property
     def reports(self):
+
         if self._report_objects is None:
             from writehat.lib.report import Report
             self._report_objects = list(Report.objects.filter(engagementParent=self.id).order_by('-modifiedDate'))
@@ -147,7 +207,7 @@ class Engagement(WriteHatBaseModel):
             'url': '/engagements',
             'name': 'Engagements'
         }
-    
+
 
 
 class EngagementForm(ModelForm):

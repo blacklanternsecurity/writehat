@@ -29,6 +29,7 @@ class Component(BaseComponent):
 
     def __init__(self, *args, **kwargs):
 
+        self._fgroup_object = None
         super().__init__(*args, **kwargs)
 
         # populate finding groups in the form
@@ -36,6 +37,28 @@ class Component(BaseComponent):
             attrs={'required': 'true'},
             engagementId=self.engagementParent
         )
+
+
+    def preprocess(self, context):
+
+        context['findingGroup'] = self.getFindingGroup
+
+        return super().preprocess(context)
+
+
+
+    @property
+    def getFindingGroup(self):
+
+        from writehat.lib.errors import EngagementFgroupError
+        from writehat.lib.findingGroup import BaseFindingGroup
+        if self._fgroup_object is None:
+            try:
+                self._fgroup_object = BaseFindingGroup.get_child(id=self.findingGroup)
+            except EngagementFgroupError:
+                pass
+
+        return self._fgroup_object
 
 
     @property
@@ -47,12 +70,12 @@ class Component(BaseComponent):
 
             fgroupID = None
             try:
-                fgroupID = self.findingGroup.id
+                fgroupID = self.getFindingGroup.id
             except AttributeError:
                 try:
                     fgroupID = UUID(str(self.findingGroup))
                 except ValueError:
-                    pass    
+                    pass
 
             for finding in self.report.findings:
                 findingFgroupID = None
@@ -75,9 +98,9 @@ class Component(BaseComponent):
     def iconColorDynamic(self):
     
         try:
-            if self.findingGroup.scoringType == 'DREAD':
+            if self.getFindingGroup.scoringType == 'DREAD':
                 return 'var(--dread-color)'
-            elif self.findingGroup.scoringType == 'PROACTIVE':
+            elif self.getFindingGroup.scoringType == 'PROACTIVE':
                 return 'var(--proactive-color)'
         except AttributeError:
             pass

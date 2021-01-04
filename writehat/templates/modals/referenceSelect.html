@@ -1,9 +1,20 @@
 {% extends 'layouts/modal.html' %}
 
-{% block title %}Add Link{% endblock %}
+{% block title %}Add Link/Reference{% endblock %}
 
 {% block body %}
-  {% include 'snippets/textButton.html' with name='Report Component (Section)' id='componentReferenceSelect' type='save' class='btn-primary' %}
+  {% include 'snippets/textButton.html' with name='Report Component (Section)' id='componentReferenceSelect' type='file' class='btn-primary' %}
   <br>
-  {% include 'snippets/textButton.html' with name='Finding' id='findingReferenceSelect' type='save' class='btn-warning' %}
+  {% include 'snippets/textButton.html' with name='Finding' id='findingReferenceSelect' type='search' class='btn-warning' %}
+  <br>
+  <div class="userTemplateInsertButton">customer.name</div>
+  <div class="userTemplateInsertButton">customer.shortName</div>
+  <div class="userTemplateInsertButton">customer.domain</div>
+  <div class="userTemplateInsertButton">customer.website</div>
+  <div class="userTemplateInsertButton">customer.address</div>
+  <div class="userTemplateInsertButton">customer.email</div>
+  <div class="userTemplateInsertButton">customer.POC</div>
+  <div class="userTemplateInsertButton">customer.phone</div>
+  <div class="userTemplateInsertButton">report.name</div>
+  <div class="userTemplateInsertButton">engagement.name</div>
 {% endblock %}

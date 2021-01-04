@@ -87,7 +87,7 @@ class BaseFindingGroup(WriteHatBaseModel):
 
 
     def delete(self):
-        log.debug(f"{self.className}.delete() cadcading delete sequence intiated for fgroup with UUID: {self.id}")
+        log.debug(f"{self.className}.delete() cascading delete sequence intiated for fgroup with UUID: {self.id}")
         for finding in self.findings:
             log.debug(f"{finding.className}.delete() deleting finding with UUID: {finding.id}")
             finding.delete()
@@ -177,6 +177,9 @@ class BaseFindingGroup(WriteHatBaseModel):
     @property
     def url(self):
         return f"/engagements/fgroup/status/{self.id}"
+
+
+
 
 class CVSSFindingGroup(BaseFindingGroup):
 

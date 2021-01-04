@@ -13,7 +13,7 @@
 {% block fullPane %}
 
   <div class="container-fluid px-3 py-2 bg-light border border-info rounded">
-    <table class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate">
+    <table id="writehat-engagements" class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate">
       <thead>
         <tr>
           <th><strong>Name</strong></th>
@@ -21,6 +21,7 @@
           <th><strong>Customer</strong></th>
           <th><strong>Created</strong></th>
           <th><strong>Modified</strong></th>
+          <th></th>
           <th></th>
         </tr>
       </thead>
@@ -55,6 +56,11 @@
               <a href="/engagements/edit/{{ engagement.id }}">
                 {{ engagement.modifiedDate }}
               </a>
+            </td>
+            <td>
+              <div class="floating float-right mt-1">
+                {% include 'snippets/smallButton.html' with title='Clone Engagement' type='copy' class='engagementClone text-white' %}
+              </div>
             </td>
             <td>
               <div class="floating float-right vertical-align-center mt-1">

@@ -1,3 +1,4 @@
+import re
 import uuid
 import logging
 from django.db import models
@@ -84,18 +85,9 @@ class WriteHatBaseModel(models.Model):
             yield model
 
 
-    def save(self, *args, **kwargs):
-        '''
-        Validates all fields before saving to database
-        '''
-        log.debug(f'{self.className}.save() called')
-        self.clean_fields()
-        super().save(*args, **kwargs)
-
-
     def clone(self, name=None, destinationClass=None):
 
-        excludedFieldNames = ['id', '_id', 'createdDate', 'modifiedDate']
+        excludedFieldNames = ['id', '_id']
 
         log.debug(f'{self.className}.clone() called')
 
@@ -118,6 +110,9 @@ class WriteHatBaseModel(models.Model):
                 setattr(destinationObject, fieldName, fieldValue)
 
         destinationObject.name = name
+
+        destinationObject.id = None
+        destinationObject.pk = None
         return destinationObject
 
 
@@ -245,7 +240,7 @@ class WriteHatBaseModel(models.Model):
         Returns list of valid field names in model
         '''
 
-        return [f.name for f in self._meta.get_fields()]
+        return [f.name for f in self._meta.get_fields() if not f.name.endswith('_ptr')]
 
 
     @property
@@ -270,6 +265,64 @@ class WriteHatBaseModel(models.Model):
         except TypeError:
             log.error(f'Failed to initialize {self.className}.formClass: please define it in the class or pass into updateFromPostData()')
             raise
+
+
+    def save(self, *args, **kwargs):
+        '''
+        Validates all fields before saving to database
+        '''
+
+        updateTimestamp = kwargs.pop('updateTimestamp', True)
+        log.debug(f'{self.className}.save() called')
+        self.clean_fields()
+
+        if updateTimestamp:
+            return super().save(*args, **kwargs)
+        else:
+            #super().save(update_fields=[])
+            excluded_fields = ['modifiedDate']
+            update_fields = [f.name for f in self._meta.fields if f.name not in excluded_fields and not f.auto_created and not f.primary_key]
+            return super().save(*args, update_fields=update_fields, **kwargs)
+
+
+
+    def find_and_replace(self, str1, str2, caseSensitive=True, markdownOnly=True):
+        '''
+        Replace all occurrences of str1 with str2
+        NOTE: uses regex, do not expose directly to user
+        '''
+
+        if str1 and str2 and type(str1) == str and type(str2) == str:
+            if caseSensitive:
+                r = re.compile(str1)
+            else:
+                r = re.compile(str1, re.IGNORECASE)
+
+            for f in self._meta.fields:
+                try:
+                    k = f.name
+                    v = self.getattr(k)
+                    markdown = getattr(f, 'markdown', False)
+                    if not (markdownOnly and not markdown):
+                        try:
+                            setattr(self, k, r.sub(str2, v))
+                        except AttributeError:
+                            pass
+                except (AttributeError, TypeError):
+                    pass
+
+
+    def simpleRedact(self, customer):
+        '''
+        Given a customer object, replace all instances of customer information with generic template keywords
+        '''
+        for f in customer._meta.fields:
+            v = getattr(customer, f.name, '')
+            if v:
+                try:
+                    self.find_and_replace(re.escape(v), '{ ' + f'customer.{f.name}' + ' }', markdownOnly=False)
+                except TypeError:
+                    pass
 
 
     @property

@@ -1,3 +1,4 @@
+import re
 import uuid
 import logging
 from enum import Enum
@@ -101,7 +102,6 @@ class BaseComponent():
 
         # set initial field values to their defaults
         default_values = {k: v.defaultValue for k,v in componentClass.fieldList.items()}
-        log.critical(f'DEFAULT VALUES: {default_values}')
         componentModel.update({
             k: v.defaultValue for k,v in componentClass.fieldList.items()
         })
@@ -171,17 +171,18 @@ class BaseComponent():
             self.showTitle = self._model.showTitle
 
 
-    def save(self):
+    def save(self, updateTimestamp=True):
         log.debug(f"{self.className}.save() called")
         #[ log.debug("  {0}: {1}".format(k, v)) for k,v in self._model.items() ]
 
         # save the component model itself
-        self._model.save()
+        self._model.save(updateTimestamp=updateTimestamp)
         log.debug("Component saved")
 
         # update modifiedDate property of report
-        log.debug("Updating Report modified date")
-        self.setReportModifiedDate()
+        if updateTimestamp:
+            log.debug("Updating Report modified date")
+            self.setReportModifiedDate()
 
 
     def clone(self, name=None, reportParent=None, templatableOnly=True):
@@ -196,6 +197,27 @@ class BaseComponent():
 
         clonedComponent = BaseComponent.get(clonedComponentModel.id)
         return clonedComponent
+
+
+    def find_and_replace(self, str1, str2, caseSensitive=True, markdownOnly=True):
+        '''
+        Replace all occurrences of str1 with str2
+        NOTE: uses regex, do not expose directly to user
+        '''
+
+        if str1 and str2 and type(str1) == str and type(str2) == str:
+            if caseSensitive:
+                r = re.compile(str1)
+            else:
+                r = re.compile(str1, re.IGNORECASE)
+
+            validFields = self.validFields()
+            validFields.update(self._model.startingFields)
+            for k,v in self._model.items():
+                field = validFields.get(k, '')
+                markdown = getattr(field, 'markdown', False)
+                if field and type(v) == str and not (markdownOnly and not markdown):
+                    self._model[k] = r.sub(str2, v)
 
 
     def getattr(self, attr, default=''):

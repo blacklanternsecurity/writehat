@@ -119,12 +119,19 @@ def match_references(markdown_text, name, context, constructor, template, regex,
                     continue
 
         uuid = match_context.get('id', '').lower()
+        obj = None
         if constructor is not None:
             if uuid:
-                obj = constructor(id=uuid)
+                try:
+                    obj = constructor(id=uuid)
+                except Exception as e:
+                    log.error(e)
                 match_context.update({name: obj})
             else:
-                obj = constructor(context)
+                try:
+                    obj = constructor(context)
+                except Exception as e:
+                    log.error(e)
                 try:
                     uuid = obj.id
                 except AttributeError:
@@ -217,6 +224,8 @@ def user_template_replace(markdown_text, context):
         keyword = dict(match.groupdict()).get('keyword', '').lower().replace('.', '')
         value = user_context.get(keyword, '')
         if keyword:
+            if not value:
+                value = ''
             match_text = markdown_text[match.span()[0]:match.span()[-1]]
             new_markdown_text = new_markdown_text.replace(match_text, value)
 

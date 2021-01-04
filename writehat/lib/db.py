@@ -223,10 +223,11 @@ class JSONModel(attr_dict):
         return clone
 
 
-    def save(self):
+    def save(self, updateTimestamp=True):
 
         log.debug(f'db.save() called')
-        self['modifiedDate'] = datetime.now()
+        if updateTimestamp:
+            self['modifiedDate'] = datetime.now()
         result = self._mongo_op(self.collection.update, {'_id': self.id}, self, upsert=True)
         log.debug(f'result: {result}')
 

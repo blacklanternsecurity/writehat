@@ -1,6 +1,7 @@
 function postFigureMetadata(findingID) {
   if (inEngagements()) {
     let figureMetadata = [];
+    let forceUpdate = false;
     $('.figureItem').each(function() {
       if ( $(this).attr('id') != 'dummyFigureItem' ) {
         let figureID = $(this).attr('figure-id');
@@ -11,12 +12,15 @@ function postFigureMetadata(findingID) {
           'size': figureSize,
           'caption': figureCaption
         })
+      } else if ($(this).attr('id') === 'dummyFigureItem' && $(this).prop('forceUpdate') === true) {
+        forceUpdate = true
       } else {
         // continue
         return;
       }
     })
-    if (figureMetadata && figureMetadata.length) {
+    if ((figureMetadata && figureMetadata.length) ||
+        (figureMetadata.length === 0 && forceUpdate)) {
       $.ajax({
         url: `/images/finding/${findingID}/edit`,
         type:'post',
@@ -130,6 +134,13 @@ function loadFigureSortable() {
   $('.figureDelete').off().click(function(e) {
     e.stopPropagation();
     $(this).closest('.figureItem').remove();
+    if ($('.figureItem').length === 1) {
+      const dummy = $('.figureItem').first()
+      if (dummy.prop("id") === "dummyFigureItem") {
+        console.debug("Last figure deleted; setting forceUpdate on dummy item")
+        dummy.prop("forceUpdate", true)
+      }
+    }
   })
 
   // figure edit

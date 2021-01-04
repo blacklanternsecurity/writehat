@@ -171,7 +171,7 @@ class BaseDatabaseFinding(WriteHatBaseModel):
         # then the other ones
         for figure in ImageModel.objects.filter(findingParent=self.id).order_by('order'):
             log.debug('  figure found (after finding): ' + figure.caption)
-            yield figure    
+            yield figure
 
 
     @property

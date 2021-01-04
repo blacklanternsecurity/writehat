@@ -330,3 +330,21 @@ span.modal-bold {
   font-weight: bold;
   color: white;
 }
+
+div.userTemplateInsertButton {
+  display: inline-block;
+  margin-left: .2em;
+  margin-bottom: .3em;
+  padding: .3em;
+  padding-left: .5em;
+  padding-right: .5em;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: rgba(255,255,255,.1);
+}
+
+div.userTemplateInsertButton:hover {
+  background-color: rgba(0,0,0,.1);
+}

@@ -1,3 +1,4 @@
+import re
 import logging
 from uuid import UUID
 from django import forms
@@ -295,12 +296,11 @@ class BaseReport(WriteHatBaseModel):
             if self._ordered_fgroups_populated == False:
                 try:
                     fgroup_id = component._model['findingGroup']
-                    findingGroup = BaseFindingGroup.get_child(id=component.findingGroup)
+                    findingGroup = component.getFindingGroup
 
-                    if findingGroup not in self._ordered_fgroups and findingGroup.engagementParent == self.engagementParent:
+                    if findingGroup and findingGroup not in self._ordered_fgroups and findingGroup.engagementParent == self.engagementParent:
                         findingGroup._report_object = self
                         self._ordered_fgroups.append(findingGroup)
-                    component._model['findingGroup'] = findingGroup
 
                 except (KeyError, EngagementFgroupError):
                     pass
@@ -340,12 +340,17 @@ class BaseReport(WriteHatBaseModel):
         return componentIDs
 
 
-    def cloneComponents(self, reportParent, componentJSON=None, templatableOnly=True):
+    def cloneComponents(self, reportParent, componentJSON=None, componentIdMappings=None, templatableOnly=True):
 
         log.debug("report.cloneComponents() called")
 
         if componentJSON is None:
             componentJSON = json.loads(self._components)
+
+        # keeps track of old and new component IDs (if later find-and-replacing is required)
+        # used to prevent references to other components from breaking
+        if componentIdMappings is None:
+            componentIdMappings = dict()
 
         clonedJSON = []
 
@@ -356,11 +361,12 @@ class BaseReport(WriteHatBaseModel):
             clonedComponent = BaseComponent.get(component['uuid']).clone(reportParent=reportParent, templatableOnly=templatableOnly)
             clonedComponent = {'uuid': str(clonedComponent.id), 'type': component['type']}
             if 'children' in component.keys():
-                clonedComponent['children'] = self.cloneComponents(reportParent, component['children'])
+                clonedComponent['children'] = self.cloneComponents(reportParent, component['children'], componentIdMappings)[0]
 
             clonedJSON.append(clonedComponent)
+            componentIdMappings.update({component['uuid']: clonedComponent['uuid']})
 
-        return clonedJSON
+        return (clonedJSON, componentIdMappings)
 
 
     def clone(self, name=None, destinationClass=None, templatableOnly=True):
@@ -372,12 +378,25 @@ class BaseReport(WriteHatBaseModel):
             destinationClass = self.__class__
         
         clonedReport = super(BaseReport, self).clone(name=name, destinationClass=destinationClass)
-        clonedReport.save()
+        clonedReport.save(updateTimestamp=False)
 
         log.debug(clonedReport.id)
-        clonedComponents = self.cloneComponents(reportParent=clonedReport.id, templatableOnly=templatableOnly)
+        clonedComponents, componentIdMappings = self.cloneComponents(reportParent=clonedReport.id, templatableOnly=templatableOnly)
         clonedReport._components = json.dumps(clonedComponents)
-        clonedReport.save()
+        clonedReport._component_objects = None
+
+        # replace in-text references with new UUIDs
+        for component in clonedReport.flattened_components:
+            for old_id, new_id in componentIdMappings.items():
+                component.find_and_replace(str(old_id), str(new_id), caseSensitive=False)
+            #try:
+            #    component._model['findingGroup'] = component.getFindingGroup.id
+            #except AttributeError:
+            #    pass
+            component.save(updateTimestamp=False)
+
+        clonedReport.save(updateTimestamp=False)
+        clonedReport._component_objects = None
 
         log.debug(f' Saved UUID: {clonedReport.id}')
 
@@ -448,6 +467,16 @@ class BaseReport(WriteHatBaseModel):
         return num_components
 
 
+    def find_and_replace(self, str1, str2, caseSensitive=True, updateTimestamp=True, markdownOnly=True):
+        '''
+        Replace all occurrences of str1 with str2
+        '''
+
+        super().find_and_replace(str1, str2, caseSensitive=caseSensitive, markdownOnly=markdownOnly)
+
+        for component in self.flattened_components:
+            component.find_and_replace(str1, str2, caseSensitive=caseSensitive, markdownOnly=markdownOnly)
+            component.save(updateTimestamp=updateTimestamp)
 
 
     def delete(self):

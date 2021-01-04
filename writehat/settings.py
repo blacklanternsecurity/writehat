@@ -97,7 +97,7 @@ INSTALLED_APPS = [
     'django_python3_ldap'
 ]
 
-AUTHENTICATION_BACKENDS =('django_python3_ldap.auth.LDAPBackend', 'django.contrib.auth.backends.ModelBackend')
+AUTHENTICATION_BACKENDS =('django.contrib.auth.backends.ModelBackend', 'django_python3_ldap.auth.LDAPBackend')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
