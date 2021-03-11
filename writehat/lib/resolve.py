@@ -92,8 +92,8 @@ def resolve_filter(*args, **kwargs):
 
     if hints:
         # check for an exact match
-        if len(hints) == 1 and hint[0] in allModels:
-            for match in allModels[hint].objects.filter(*args, **kwargs):
+        if len(hints) == 1 and hints[0] in allModels:
+            for match in allModels[hints[0]].objects.filter(*args, **kwargs):
                 results.append(match)
 
         # see if the hints match more than one, and try each    
@@ -118,5 +118,5 @@ def resolve_filter(*args, **kwargs):
                 except modelCandidate.DoesNotExist:
                     pass
 
-    log.debug(f"resolve_filter() found {len(results):,} models using the provided hint: {hint}")
+    log.debug(f"resolve_filter() found {len(results):,} models using the provided hint: {hints[0]}")
     return results
