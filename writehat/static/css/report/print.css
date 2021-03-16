@@ -10,6 +10,13 @@
             content: counter(page);
         }
 
+        @top-center {
+            content: element(headerContent);
+            white-space: pre-wrap;
+            text-align: center;
+            font-size: 10pt !important;
+        }
+
         @bottom-center {
             content: element(footerContent);
             white-space: pre-wrap;
@@ -50,6 +57,10 @@
 
 div.footer-content {
     position: running(footerContent);
+}
+
+div.header-content {
+    position: running(headerContent);
 }
 
 html, body {
