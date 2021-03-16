@@ -19,6 +19,8 @@ class PageTemplate(WriteHatBaseModel):
     backgroundImageID = models.UUIDField(editable=False, null=True)
     # page background image
     logoImageID = models.UUIDField(editable=False, null=True)
+    # report header
+    header = MarkdownField(max_length=30000, null=True, blank=True)
     # report footer
     footer = MarkdownField(max_length=30000, null=True, blank=True)
     # whether it's set as the default config
@@ -53,6 +55,27 @@ class PageTemplate(WriteHatBaseModel):
         if self.default == True:
             clonedPage.default = False
         return clonedPage
+
+
+    def renderHeader(self):
+
+        if self.header:
+            header = str(self.header)
+        else:
+            header = ''
+
+        try:
+            header = render_markdown(
+                header,
+                context={
+                    'engagement': self.report.engagement,
+                    'report': self.report
+                }
+            )
+            return header
+        except AttributeError as e:
+            return ''
+
 
 
     def renderFooter(self):
@@ -123,6 +146,13 @@ class PageTemplateForm(forms.Form):
         ),
         max_length=100,
         required=True
+    )
+
+    header = forms.CharField(
+        label='Page Header',
+        widget=forms.Textarea(),
+        max_length=30000,
+        required=False
     )
 
     footer = forms.CharField(

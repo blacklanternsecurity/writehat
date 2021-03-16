@@ -1,0 +1,7 @@
+.header-content br {
+  display: none;
+}
+
+.header-content p {
+  line-height: 1.5;
+}
