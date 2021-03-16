@@ -3,6 +3,9 @@
         @bottom-right-corner {
             content: none;
         }
+        @top-center {
+            content: none;
+        }
     }
 
     @page {
