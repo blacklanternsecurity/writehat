@@ -150,7 +150,6 @@ div.finding-content > div.impact ul li {
   margin: 4px;
 }
 
-
 div.finding div.finding-content > div.category::before           { content: "Category" !important; }
 div.finding div.finding-content > div.affected-resources::before { content: "Affected Resources" !important; }
 div.finding div.finding-content > div.description::before        { content: "Description" !important; }
@@ -160,6 +159,7 @@ div.finding div.finding-content > div.references::before         { content: "Ref
 
 /* CVSS SPECIFIC */
 
+div.finding div.finding-content > div.vector::before             { content: "CVSS3 Vector" !important; }
 div.finding div.finding-content > div.tools-used::before         { content: "Tools Used" !important; }
 div.finding div.finding-content > div.poc::before                { content: "Proof of Concept" !important; }
 
