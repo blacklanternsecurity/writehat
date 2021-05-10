@@ -6,6 +6,6 @@ openpyxl
 selenium
 mongo-tools
 cryptography
-django==3.1.7
+django~=3.1.0
 PyMySQL==1.0.2
 django-python3_ldap==0.11.4
