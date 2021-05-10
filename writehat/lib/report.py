@@ -409,7 +409,7 @@ class BaseReport(WriteHatBaseModel):
 
         master_template = get_template('reportTemplates/reportBase.html')
         #page_footer = get_template('reportTemplates/reportPageFooter.html')
-        rendered = master_template.render({ 'report': self, 'components': rendered_components, 'footer': self.pageTemplate.renderFooter() })
+        rendered = master_template.render({ 'report': self, 'components': rendered_components, 'footer': self.pageTemplate.renderFooter(), 'header': self.pageTemplate.renderHeader() })
 
         return rendered
 
@@ -523,7 +523,8 @@ class Report(BaseReport):
         rendered = master_template.render({ 
             'components': rendered_components,
             'report': self,
-            'footer': self.pageTemplate.renderFooter()
+            'footer': self.pageTemplate.renderFooter(),
+            'header': self.pageTemplate.renderHeader(),
         })
 
         return rendered
