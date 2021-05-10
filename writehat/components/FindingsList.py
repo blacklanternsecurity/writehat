@@ -10,7 +10,8 @@ class FindingsListForm(ComponentForm):
 
     findingGroup = forms.UUIDField(label='Finding Group', required=False)
     showFindingNumbers = forms.BooleanField(label='Show Finding Numbers', required=False)
-    field_order = ['name', 'findingGroup', 'pageBreakBefore', 'showTitle', 'showFindingNumbers']
+    showVector = forms.BooleanField(label='Show Scoring Vector', required=False)
+    field_order = ['name', 'findingGroup', 'pageBreakBefore', 'showTitle', 'showFindingNumbers', 'showVector']
 
 
 
@@ -23,7 +24,8 @@ class Component(BaseComponent):
     formClass = FindingsListForm
     fieldList = {
         'findingGroup': UUIDField(),
-        'showFindingNumbers': BoolField(templatable=True, default=True)
+        'showFindingNumbers': BoolField(templatable=True, default=True),
+        'showVector': BoolField(templatable=True, default=False)
     }
 
 

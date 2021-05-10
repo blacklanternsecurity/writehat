@@ -10,11 +10,13 @@
             {% if showFindingNumbers %}[{{ finding.number }}] {% endif %}{{ finding.name }}
         </div>
     </div>
-    <div class='finding-content'>
-        <div class='vector'>
-            {{ finding.vector }}
+    {% if showVector %}
+        <div class='finding-content'>
+            <div class='vector'>
+                {{ finding.cvss.vector }}
+            </div>
         </div>
-    </div>
+    {% endif %}
     <div class='finding-content'>
         <div class='category' style='font-weight: bold'>
             {{ finding.categoryFull }}
