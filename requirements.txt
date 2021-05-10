@@ -1,11 +1,11 @@
 toml
 bleach
-django
 pymongo
-PyMySQL
 markdown
 openpyxl
 selenium
 mongo-tools
 cryptography
-django-python3_ldap
+django==3.1.7
+PyMySQL==1.0.2
+django-python3_ldap==0.11.4

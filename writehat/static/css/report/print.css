@@ -3,11 +3,21 @@
         @bottom-right-corner {
             content: none;
         }
+        @top-center {
+            content: none;
+        }
     }
 
     @page {
         @bottom-right-corner {
             content: counter(page);
+        }
+
+        @top-center {
+            content: element(headerContent);
+            white-space: pre-wrap;
+            text-align: center;
+            font-size: 10pt !important;
         }
 
         @bottom-center {
@@ -50,6 +60,10 @@
 
 div.footer-content {
     position: running(footerContent);
+}
+
+div.header-content {
+    position: running(headerContent);
 }
 
 html, body {

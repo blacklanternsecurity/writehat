@@ -147,7 +147,7 @@ class CVSS:
 
         return '/'.join(
             ['CVSS:3.1'] + [
-                f'{k}:{v}' for k,v in self._vector.items() if v != 'X'
+                f'{k}:{v}' for k,v in self._vector.items() if v[0].lower() != 'x'
             ]
         )
 
@@ -268,8 +268,10 @@ class CVSS:
             try:
                 cvss_attr = attr.lstrip('_').rstrip('v')
                 s = self._vector.get(cvss_attr, 'X')
-                if cvss_attr == 'MS' and s == 'X':
-                    s = self._vector.get('S')
+
+                # if the "modified" value isn't set, use the non-modified one
+                if cvss_attr.startswith('M') and s == 'X':
+                    s = self._vector.get(cvss_attr[1:])
 
                 if not attr.endswith('v'):
                     return s
@@ -281,11 +283,7 @@ class CVSS:
                     else:
                         result = self.default_fields[cvss_attr][s]
 
-                    # if the "modified" value isn't set, use the non-modified one
-                    if cvss_attr.startswith('M') and result is None:
-                        return self.default_fields[cvss_attr][self._vector[cvss_attr[1:]]]
-
-                    return self.default_fields[cvss_attr][s]
+                    return result
 
             except KeyError as e:
                 pass
