@@ -35,7 +35,7 @@ services:
       - mysql
 
   mongo:
-    image: mongo
+    image: mongo:4.4
     volumes:
       - ./mongo/configdb:/data/configdb
       - ./mongo/db:/data/db

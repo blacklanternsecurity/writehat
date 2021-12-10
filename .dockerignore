@@ -1,2 +1,3 @@
-./mongo
-./mysql
+nginx/
+mysql/
+mongo/
