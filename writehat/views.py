@@ -3,6 +3,7 @@
 import json
 import base64
 import logging
+from sqlite3 import DatabaseError
 import uuid as uuidlib
 
 # django
@@ -22,6 +23,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 # WRITEHAT
 
 from writehat import validation
+from writehat.lib.finding import DREADDatabaseFinding, ProactiveDatabaseFinding
 
 from writehat.lib.util import *
 from writehat.lib.dread import *
@@ -1087,9 +1089,16 @@ def findingCategoryDelete(request, uuid):
 
     # Check and see if this category has children. If it does, deny the deletion
     categoryChildren = DatabaseFindingCategory.objects.filter(categoryParent=uuid)
+    cvssFinding = CVSSDatabaseFinding.objects.filter(categoryID=uuid)
+    dreadFinding = DREADDatabaseFinding.objects.filter(categoryID=uuid)
+    proactiveFinding = ProactiveDatabaseFinding.objects.filter(categoryID=uuid)
+
     if categoryChildren.exists():
-        response = HttpResponse("Cannot remove categories with children")
-        response.status = 400
+        response = HttpResponse("Cannot remove categories with child categories", status=400)
+        return response
+
+    if cvssFinding.exists() or dreadFinding.exists() or proactiveFinding.exists():
+        response = HttpResponse("Cannot remove categories with child findings", status=400)
         return response
 
     # actually remove the category
