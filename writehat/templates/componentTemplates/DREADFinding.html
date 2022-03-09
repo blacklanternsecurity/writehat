@@ -50,35 +50,35 @@
     {% if finding.descDamage %}
         <div class='finding-content'>
             <div class='dread-category' category='Damage'>
-                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadDamage }}</span>: {{ finding.descDamage }}</p>
+                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadDamage }}</span>: {% markdown finding.descDamage %}</p>
             </div>
         </div>
     {% endif %}
     {% if finding.descReproducibility %}
         <div class='finding-content'>
             <div class='dread-category' category='Reproducibility'>
-                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadReproducibility }}</span>: {{ finding.descReproducibility }}</p>
+                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadReproducibility }}</span>: {% markdown finding.descReproducibility %}</p>
             </div>
         </div>
     {% endif %}
     {% if finding.descExploitability %}
         <div class='finding-content'>
             <div class='dread-category' category='Exploitability'>
-                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadExploitability }}</span>: {{ finding.descExploitability }}</p>
+                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadExploitability }}</span>: {% markdown finding.descExploitability %}</p>
             </div>
         </div>
     {% endif %}
     {% if finding.descAffectedUsers %}
         <div class='finding-content'>
             <div class='dread-category' category='Affected Users'>
-                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadAffectedUsers }}</span>: {{ finding.descAffectedUsers }}</p>
+                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadAffectedUsers }}</span>: {% markdown finding.descAffectedUsers %}</p>
             </div>
         </div>
     {% endif %}
     {% if finding.descDiscoverability %}
         <div class='finding-content'>
             <div class='dread-category' category='Discoverability'>
-                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadDiscoverability }}</span>: {{ finding.descDiscoverability }}</p>
+                <p class='dread-score'><span class='bold'>{{ finding.dread.dict.dreadDiscoverability }}</span>: {% markdown finding.descDiscoverability %}</p>
             </div>
         </div>
     {% endif %}
