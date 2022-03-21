@@ -74,7 +74,7 @@ markdown_attrs = {
     'a': ['href', 'alt', 'title'],
     'th': ['align'],
     'td': ['align', 'finding-severity'],
-    'hl': ['purple', 'red', 'orange', 'yellow', 'green', 'blue'], # custom color highlights
+    'hl': ['purple', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'gray', 'mono'], # custom color highlights
 }
 
 
@@ -285,7 +285,7 @@ def render_markdown(markdown_text, context=None):
     # replace user-defined variables
     markdown_text = user_template_replace(markdown_text, context)
 
-    rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists'])
+    rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists', 'codehilite'])
     cleaned = bleach.clean(rendered, tags=markdown_tags, attributes=markdown_attrs)
 
     for render_placeholder, rendered_obj in temp_placeholders:

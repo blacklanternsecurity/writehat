@@ -6,6 +6,8 @@ from writehat.validation import isValidName
 from django.template.loader import render_to_string
 from writehat.lib.errors import WriteHatValidationError
 
+from django_currentuser.middleware import get_current_authenticated_user
+
 log = logging.getLogger(__name__)
 
 
@@ -271,18 +273,54 @@ class WriteHatBaseModel(models.Model):
         '''
         Validates all fields before saving to database
         '''
-
         updateTimestamp = kwargs.pop('updateTimestamp', True)
-        log.debug(f'{self.className}.save() called')
-        self.clean_fields()
+        isComponent = kwargs.pop('isComponent',False)
+
 
         if updateTimestamp:
-            return super().save(*args, **kwargs)
+            savedModel = super().save(*args, **kwargs)
         else:
             #super().save(update_fields=[])
             excluded_fields = ['modifiedDate']
             update_fields = [f.name for f in self._meta.fields if f.name not in excluded_fields and not f.auto_created and not f.primary_key]
-            return super().save(*args, update_fields=update_fields, **kwargs)
+            savedModel = super().save(*args, update_fields=update_fields, **kwargs)
+
+
+        from writehat.lib.revision import Revision
+        log.debug(f'{self.className}.save() called')
+        self.clean_fields()
+
+        for f in self._meta.fields:
+
+            fieldType = type(f).__name__
+            if fieldType == "MarkdownField":
+
+                # look to see if there are existing revisions
+
+                needsUpdate = False
+
+                try:
+                    # check to see if previous revisions exist
+                    mostRecent = Revision.getMostRecent(parentId=self.id,isComponent=isComponent,fieldName=f.name)
+
+                    # determine if this save is different than the last revision
+                    if mostRecent.fieldText != getattr(self,f.name):
+                        needsUpdate = True
+                except Revision.DoesNotExist:
+                    fieldContent = getattr(self,f.name)
+                    needsUpdate = fieldContent is not None
+          
+                # create a new revision
+                if needsUpdate == True:
+
+
+                    log.debug(f'{f.name} field has changed on record {self.id}, generating new Revision')
+                    r = Revision.new(owner=get_current_authenticated_user(), componentID=self.id, fieldName=f.name, isComponent=isComponent, fieldText=getattr(self,f.name))
+                    r.save()
+
+        return savedModel
+
+
 
 
 
@@ -316,13 +354,14 @@ class WriteHatBaseModel(models.Model):
         '''
         Given a customer object, replace all instances of customer information with generic template keywords
         '''
-        for f in customer._meta.fields:
-            v = getattr(customer, f.name, '')
-            if v:
-                try:
-                    self.find_and_replace(re.escape(v), '{ ' + f'customer.{f.name}' + ' }', markdownOnly=False)
-                except TypeError:
-                    pass
+        if customer is not None:
+            for f in customer._meta.fields:
+                v = getattr(customer, f.name, '')
+                if v:
+                    try:
+                        self.find_and_replace(re.escape(v), '{ ' + f'customer.{f.name}' + ' }', markdownOnly=False)
+                    except TypeError:
+                        pass
 
 
     @property

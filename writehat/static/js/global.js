@@ -524,8 +524,17 @@ $(document).ready(function() {
 
   $(".paginate").DataTable({
       "pagingType": "full_numbers",
+      "stateSave": true,
       "order": []
   });
+
+  $(".paginate-large").DataTable({
+      "pagingType": "full_numbers",
+      "iDisplayLength": 25,
+      "stateSave": true,
+      "order": []
+  });
+
 });
 
 
