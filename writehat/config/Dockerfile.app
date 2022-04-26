@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:20.04
 
 # set environment variables
 ENV PYTHONUNBUFFERED 1
@@ -11,7 +11,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update
 
 # Make sure locale is set to UTF-8
-RUN apt-get update
 RUN apt-get install -y locales locales-all
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
