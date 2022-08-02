@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:20.04
 
 # set environment variables
 ENV PYTHONUNBUFFERED 1
