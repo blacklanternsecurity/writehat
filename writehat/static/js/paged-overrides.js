@@ -27,7 +27,7 @@ class ElementCleaner extends Paged.Handler {
     }
 
     afterParsed(parsed) {
-        $("body#report-body > div.pagedjs_pages").css("justify-content", "center");
+        $("#report-body > div.pagedjs_pages").css("justify-content", "center");
     }
 
     afterPageLayout(pageFragment, page) {
@@ -134,5 +134,31 @@ Paged.registerHandlers(ElementCleaner);
 
 let t0 = performance.now();
 $().ready( function() { 
-    window.PagedPolyfill.preview();
+	let flowText = document.querySelector("#report-body");
+    let t0 = performance.now();
+    let paged = new Paged.Previewer()
+	paged.preview(flowText.content).then((flow) => {
+        let t1 = performance.now();
+        console.log("Rendering " + flow.total + " pages took " + (t1 - t0) + " milliseconds.");
+    })
+
+//  let resizer = () => {
+//    let pages = document.querySelector(".pagedjs_pages");
+
+//    if (pages) {
+//      let scale = ((window.innerWidth * .9 ) / pages.offsetWidth);
+//      if (scale < 1) {
+//        pages.style.transform = `scale(${scale}) translate(${(window.innerWidth / 2) - ((pages.offsetWidth * scale / 2) ) }px, 0)`;
+//      } else {
+//        pages.style.transform = "none";
+//      }
+//    }
+//  };
+//  resizer();
+
+//  window.addEventListener("resize", resizer, false);
+
+//  paged.on("rendering", () => {
+//    resizer();
+//  });
 });

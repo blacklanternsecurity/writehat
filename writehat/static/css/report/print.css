@@ -46,16 +46,6 @@
     div.pagedjs_pages > div.pagedjs_page {
         background-color: white;
     }
-
-    div.pagedjs_first_page {
-        margin-left: calc(var(--pagedjs-width-left) + var(--margin) * 3);
-    }
-
-    @media screen and (max-width: 1650px) {
-        div.pagedjs_first_page {
-            margin-left: calc(var(--margin));
-        }
-    }
 }
 
 div.footer-content {
@@ -130,3 +120,14 @@ a.reference-link {
     color: black;
     display: inline;
 }
+
+.footnote {
+  float: footnote;
+}
+
+@page {
+  @footnote {
+    float: bottom;
+  }
+}
+
