@@ -122,7 +122,18 @@ class ElementCleaner extends Paged.Handler {
                         last_node = table;
                     } else {
                         last_node = sc;
-                        last_tr = sc.closest("tr");
+                        try {
+                            last_tr = sc.closest("tr");
+                        } catch (e) {
+                            if (e instanceof TypeError &&
+                                e.toString() === "TypeError: sc.closest is not a function" &&
+                                sc.nodeType == Node.TEXT_NODE
+                            ) {
+                                last_tr = sc.parentNode.closest("tr")
+                            } else {
+                                throw e
+                            }
+                        }
                     }
                 }
             }
