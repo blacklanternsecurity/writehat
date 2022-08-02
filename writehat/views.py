@@ -277,11 +277,12 @@ def reportCreate(request, uuid=None, fromTemplate=False):
         reportName = decodedJson['name']
         log.debug(f"reportName: {reportName}")
         reportComponents = decodedJson['reportComponents']
+
         # Everything is validated, lets instantiate the report
         report = None
         if uuid:
             log.debug(f"saving report (with engagementParent) reportComponents: {reportComponents}")
-            report = Report.new(name=reportName, components=reportComponents,engagementParent=uuid)
+            report = Report.new(name=reportName, components=reportComponents, engagementParent=uuid)
         #    report.engagementParent = uuid
        #     report.save()
         else:

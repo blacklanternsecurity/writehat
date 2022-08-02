@@ -2,16 +2,20 @@ from writehat import views
 from writehat.lib.finding import *
 #WRITEHAT URL Configuration
 
-from django.urls import path
+from django.urls import include, path
 from django.contrib import admin
 from django.conf.urls import url
 from django.contrib.auth.views import LoginView,LogoutView
+from writehat_api import urls as writehat_urls
 
 uuid = r'(?P<uuid>[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12})'
 fgroup = r'(?P<fgroup>[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12})'
 gtype = r'(?P<gtype>[a-z]{4,9})'
 
 urlpatterns = [
+
+    # API
+    path('api/', include(writehat_urls)),
 
     # Authentication URLS
     path('login', LoginView.as_view(), name='login'),
