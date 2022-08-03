@@ -1178,6 +1178,7 @@ def engagementNew(request):
 def engagementCreate(request):
     
     p = Engagement.new(request.POST)
+    p.name = request.POST.getlist("name")[0]
     p.save()
     response = HttpResponse(escape(p.name))
     response.status_code = 200
