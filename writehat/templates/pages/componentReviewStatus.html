@@ -3,8 +3,7 @@
 {% block title %}{{ report.name }} Review Status{% endblock %}
 
 {% block headerLeft %}
-    {% include 'snippets/textButton.html' with name='Back' id='backButton' type='chevron-left' class='btn-secondary' %}
-    {{ engagement.name }}: {{ report.name }}
+    {% include 'snippets/breadcrumbs.html' with current=report %}
 {% endblock %}
 
 {% block headerRight %}

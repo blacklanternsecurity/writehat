@@ -19,7 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Don't append forward-slash to end of URLs:
 APPEND_SLASH = False
-
 LOGIN_URL = '/login'
 LOGOUT_URL = '/'
 LOGIN_REDIRECT_URL = '/home'
@@ -30,6 +29,7 @@ LOGOUT_REDIRECT_URL = '/'
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 SECRET_KEY = writehat_config['writehat']['secret']
 DEBUG = writehat_config['writehat']['debug']
+
 ALLOWED_HOSTS = writehat_config['writehat']['allowed_hosts']
 CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 
@@ -107,7 +107,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'writehat.lib.LoginRequiredMiddleware.LoginRequiredMiddleware'
+    'writehat.lib.LoginRequiredMiddleware.LoginRequiredMiddleware',
+    'django_currentuser.middleware.ThreadLocalUserMiddleware'
 ]
 
 
@@ -241,7 +242,7 @@ LOGGING = {
     },
 }
 
-MAX_REVISIONS = 5
+MAX_REVISIONS = 250
 
 from django import template
 

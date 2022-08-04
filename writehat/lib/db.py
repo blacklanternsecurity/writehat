@@ -6,6 +6,8 @@ from django.db import models
 from datetime import datetime
 from django.conf import settings
 
+
+
 log = logging.getLogger(__name__)
 
 class BaseField():
@@ -223,6 +225,30 @@ class JSONModel(attr_dict):
         return clone
 
 
+    # revisions hook
+
+    def updateRevision(self):
+        from writehat.lib.revision import Revision
+        from django_currentuser.middleware import get_current_authenticated_user
+        needsUpdate = False
+        try:
+            # check to see if previous revisions exist
+            mostRecent = Revision.getMostRecent(parentId=self.id,isComponent=True,fieldName="text")
+
+            # determine if this save is different than the last revision
+            if mostRecent.fieldText != self['text']:
+                needsUpdate = True
+        except Revision.DoesNotExist:
+            needsUpdate = True
+  
+        # create a new revision
+        if needsUpdate == True:
+            log.debug(f'component has changed on record with componentID: {self.id}, generating new Revision')
+            r = Revision.new(owner=get_current_authenticated_user(),componentID=self.id, isComponent=True,fieldName="text", fieldText=self['text'])
+            r.save()
+
+
+
     def save(self, updateTimestamp=True):
 
         log.debug(f'db.save() called')
@@ -232,10 +258,20 @@ class JSONModel(attr_dict):
         log.debug(f'result: {result}')
 
 
-    def delete(self):
+        if self['type'] == "MarkdownComponent":
+            self.updateRevision()
 
+
+
+    def delete(self):
+        from writehat.lib.revision import Revision
         self._mongo_op(self.collection.delete_one, {'_id': self.id})
 
+        log.debug(f"component.delete() cascading Revision delete initiated {self.id}")
+        revisions = Revision.objects.filter(parentId=self.id)
+        for revision in revisions:
+            log.debug(f"Revision.delete() deleting Revision with UUID: {revision.id}")
+            revision.delete()
 
 
     def fetch(self):
@@ -266,7 +302,9 @@ class JSONModel(attr_dict):
                 self['name'] = 'Undefined'
 
 
+
     def update(self, dictionary, templatableOnly=False):
+
 
         log.debug(f"db.update() called")
         for key,value in dictionary.items():

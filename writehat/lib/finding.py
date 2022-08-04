@@ -8,6 +8,7 @@ from writehat.lib.figure import *
 from writehat.lib.markdown import *
 from writehat.lib.findingForm import *
 from writehat.lib.findingCategory import *
+from writehat.lib.revision import Revision
 
 
 log = logging.getLogger(__name__)
@@ -41,6 +42,16 @@ class BaseDatabaseFinding(WriteHatBaseModel):
         finding.updateFromPostData(postData)
         finding.clean_fields()
         return finding
+
+
+    def delete(self):
+        log.debug(f"{self.className}.delete(): cascading Revision delete initiated {self.id}")
+        revisions = Revision.objects.filter(parentId=self.id)
+        for revision in revisions:
+            log.debug(f"{revision.className}.delete() deleting Revision with UUID: {revision.id}")
+            revision.delete()
+        log.debug(f"{self.className}.deleting finding with UUID: {self.id}")
+        super().delete()
 
 
     def __init__(self, *args, **kwargs):

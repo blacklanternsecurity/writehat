@@ -5,6 +5,9 @@
   /* purple */
   --purple-rgba: 166, 0, 255;
   --purple: rgba(var(--purple-rgba), 1);
+  /* pink */
+  --pink-rgba: 255,0,208;
+  --pink: rgba(var(--pink-rgba), 1);
   /* red */
   --red-rgba: 255, 0, 0;
   --red: rgba(var(--red-rgba), 1);
@@ -25,6 +28,9 @@
   /* green */
   --green-rgba: 54, 201, 94;
   --green: rgba(var(--green-rgba), 1);
+  /* gray */
+  --gray-rgba: 150,150,150;
+  --gray: rgba(var(--gray-rgba), 1);
 
   /* dread */
   --dread-color: rgba(224, 0, 101, 1);
@@ -53,7 +59,7 @@
 
 /* foregrounds */
 
-/* cyborg theme doesn't have yellow for some reason */
+/* cyborg theme doesn't have these colors */
 .text-yellow {
   color: var(--yellow);
 }
@@ -65,6 +71,15 @@
 }
 .border-yellow {
   border-color: var(--yellow) !important;
+}
+.pink, .editor-toolbar a.pink {
+  color: var(--pink) !important;
+}
+.gray, .editor-toolbar a.gray {
+  color: var(--gray) !important;
+}
+.editor-toolbar a.text-white {
+  color: white !important;
 }
 
 .fg-cvss {

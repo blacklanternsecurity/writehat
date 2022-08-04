@@ -1,0 +1,31 @@
+
+
+<div class="d-flex flex-row bd-highlight mb-3">
+  <div class="w-50 m-2">
+    <label for="trackChangeCompareFrom">Source</label>
+    <select id="trackChangeCompareFrom" class="selectpicker trackChangeVersion"  data-size="6" data-width="fit">
+    </select>
+    {% include 'snippets/textButton.html' with id='loadInEditor' name='Load In Editor' type='load' class='btn-light border border-success' %}
+  </div>
+  <div class="w-50 m-2">
+    <label for="trackChangeCompareTo">Destination</label>
+    <select id="trackChangeCompareTo" class="selectpicker trackChangeVersion" data-size="6" data-width="fit">
+    </select>
+  </div>
+</div>
+<div class="d-flex flex-row bd-highlight">
+  <div class="w-50 ml-2">
+    <div id="owningUserLeft"></div>
+  </div>
+  <div class="w-50 ml-2">
+    <div id="owningUserRight"></div>
+  </div>
+</div>
+<div class="d-flex flex-row bd-highlight">
+  <div class="w-100 m-2">
+    <div id="diff2html">
+    </div>
+    <textarea readonly id="trackChangeActual" style="display:none;"></textarea>
+  </div>
+</div>
+

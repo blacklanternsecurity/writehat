@@ -219,15 +219,33 @@ div[style^="touch-action: none"] {
 
 
 
+/* make prompt modal appear above any other modals */
+#prompt-modal {
+  z-index: 2000;
+}
+
+
+
 /* extra-large modal */
 @media (min-width: 768px) {
   .modal-xxl {
-    width: 90%;
-    height: 90%;
+    width: 90vw;
+    height: 90vh;
     max-width:1200px;
   }
 
   .modal-xxl>.modal-content {
+    height: 90%;
+    min-height:400px;
+  }
+
+  .modal-xxxl {
+    width: 90%;
+    height: 90%;
+    max-width:1450px;
+  }
+
+  .modal-xxxl>.modal-content {
     height: 100%;
   }
 }
@@ -347,4 +365,29 @@ div.userTemplateInsertButton {
 
 div.userTemplateInsertButton:hover {
   background-color: rgba(0,0,0,.1);
+}
+
+
+div.d2h-file-wrapper{
+  background:white !important;
+}
+
+div.d2h-file-wrapper table{
+  color: #333 !important;
+}
+
+.modal-body {
+    max-width: 1450px;
+}
+
+
+
+
+.trackChangeVersion div.dropdown-menu.open{
+  max-height: 314px !important;
+  overflow: hidden;
+}
+.trackChangeVersion ul.dropdown-menu.inner{
+  max-height: 260px !important;
+  overflow-y: auto;
 }
