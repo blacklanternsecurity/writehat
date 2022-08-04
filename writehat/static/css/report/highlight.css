@@ -24,8 +24,8 @@ hl[orange], [finding-severity="Moderate"].severity-highlight, [finding-severity=
 hl[yellow], [finding-severity="Low"].severity-highlight {
   /*--text-rgb: 255, 145, 0;*/
   --text-rgb: 0,0,0;
-  --highlight-rgb: 255, 255, 69;
-  --highlight-opacity: .9;
+  --highlight-rgb: var(--yellow-rgba);
+  --highlight-opacity: .6;
 }
 
 hl[green], [finding-severity="Proactive"].severity-highlight {
@@ -42,8 +42,55 @@ hl[blue], [finding-severity="Informational"].severity-highlight {
   --highlight-opacity: .3;
 }
 
+hl[gray], hl[grey] {
+  --text-rgb: 0,0,0;
+  --highlight-rgb: 0,0,0;
+  --highlight-opacity: .09;
+}
+
+hl[pink] {
+  --text-rgb: 0,0,0;
+  --highlight-rgb: 255,0,208;
+  --highlight-opacity: .3;
+}
+
+hl[mono] {
+  font-family: monospace;
+  font-weight: 550;
+  padding-left: .3em;
+  padding-right: .3em;
+}
+
+/* all code */
+code {
+  font-family: monospace;
+  overflow-wrap: break-word;
+  color: #f8f8f2;
+  background-color: rgb(0,0,0,.85);
+}
+
+/* inline code only */
+:not(pre) > code {
+  color: black;
+  word-break: break-all;
+  background-color: rgb(0,0,0,.09);
+  padding-left: .4em;
+  padding-right: .4em;
+}
+
+/* code block only */
+pre > code {
+  font-size: .9rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: .5rem;
+  white-space: pre-wrap;
+  display: block;
+  text-align: left;
+}
+
 /* inline code is also highlighted */
-hl, :not(pre) > code, .severity-highlight {
+hl:not(hl[mono]), :not(pre) > code, .severity-highlight {
 
   --text-color: rgba(var(--text-rgb), 1);
   --border-color: rgba(var(--highlight-rgb), .3);
@@ -54,8 +101,11 @@ hl, :not(pre) > code, .severity-highlight {
   padding-top: .2em;
   padding-bottom: .2em;
   border-radius: .3em;
-  color: var(--text-color);
-  background-color: var(--background-color);
   font-weight: bold;
 
+}
+
+hl:not(hl[mono]), .severity-highlight {
+  color: var(--text-color);
+  background-color: var(--background-color);
 }

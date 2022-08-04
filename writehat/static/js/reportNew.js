@@ -31,7 +31,7 @@ $(document).ready(function() {
       contentType: "application/json; charset=utf-8",
       success: function(result) {
         var uuid = result.responseText;
-        var reportName = $('#reportName').val();
+        var reportName = $('#reportForm #id_name').val();
         successRedirect(redirectURL, `Successfully created report: "${reportName}"`);
       },
       error: function(result) {

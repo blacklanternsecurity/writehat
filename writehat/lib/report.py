@@ -374,6 +374,7 @@ class BaseReport(WriteHatBaseModel):
         log.debug('Calling report.log()')
         log.debug(f' Current UUID: {self.id}')
 
+
         if destinationClass is None:
             destinationClass = self.__class__
         

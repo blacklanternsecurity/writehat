@@ -72,7 +72,7 @@ function deleteComponent(e) {
 
 function cloneComponent(e) {
   var component = $(e.currentTarget).closest('.reportComponent');
-  var componentName = component.find('.componentName').text();
+  var componentName = component.find('div.componentName').first().text().trim();
 
   promptModal(
     confirm_callback=function() {

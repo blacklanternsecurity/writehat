@@ -1,0 +1,14 @@
+{% extends 'layouts/modal.html' %}
+{% block class %}modal-xxl{% endblock %}
+
+{% block title %}Track Changes{% endblock %}
+
+{% block body %}
+<div class="scroll-tree">
+  {% include 'panes/trackChanges.html' %}
+</div>
+{% endblock %}
+
+{% block footer %}
+  {% include 'snippets/textButton.html' with name='Cancel' id='cancelTrackChanges' type='times-circle' class='btn-light border border-warning' %}
+{% endblock %}

@@ -189,7 +189,7 @@ loadSortable = function() {
 $( document ).ready(function() {
 
   // clone report button
-  $('.reportClone').click(function(e) {
+  $('.writehat-reports').on('click', '.reportClone', function(e) {
 
     var reportName = $(e.currentTarget).closest('tr').attr('report-name');
     var reportID = $(e.currentTarget).closest('tr').attr('report-id');
@@ -221,7 +221,7 @@ $( document ).ready(function() {
   })
 
   // for deleting from the report edit page
-  $('#reportDelete').click(function(e){
+  $('.writehat-reports').on('click', '#reportDelete', function(e){
 
     var reportID = $('#report-info').attr('report-id');
     var reportName = $('#report-info').attr('report-name');
@@ -241,7 +241,7 @@ $( document ).ready(function() {
 
 
   // for deleting from a list
-  $('.reportDelete').click(function(e) {
+  $('.writehat-reports').on('click', '.reportDelete', function(e) {
 
     var reportID = $(e.currentTarget).closest('tr').attr('report-id');
     var reportName = $(e.currentTarget).closest('tr').attr('report-name');
@@ -260,7 +260,7 @@ $( document ).ready(function() {
   })
 
 
-  $('.reportEdit').click(function(e) {
+  $('.writehat-reports').on('click', '.reportEdit', function(e) {
     reportID = $(e.currentTarget).closest('tr').attr('report-id');
     if (inTemplates()) {
       var url = '/templates/edit/' + reportID;
@@ -313,13 +313,13 @@ $( document ).ready(function() {
   */
 
   // page edit button
-  $('.pageEdit').click(function(e) {
+  $('#writehat-pagetemplates').on('click', '.pageEdit', function(e) {
     var pageID = $(e.currentTarget).closest('tr').attr('page-id');
     window.location.href = `/pages/edit/${pageID}`;
   });
 
   // page delete button (list)
-  $('.pageDelete').click(function(e) {
+  $('#writehat-pagetemplates').on('click', '.pageDelete', function(e) {
 
     var pageID = $(e.currentTarget).closest('tr').attr('page-id');
     var pageName = $(e.currentTarget).closest('tr').attr('page-name');
@@ -337,7 +337,7 @@ $( document ).ready(function() {
   })
 
   // clone page button
-  $('.pageClone').click(function(e) {
+  $('#writehat-pagetemplates').on('click', '.pageClone', function(e) {
 
     var pageID = $(e.currentTarget).closest('tr').attr('page-id');
     var pageName = $(e.currentTarget).closest('tr').attr('page-name');
