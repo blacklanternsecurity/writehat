@@ -9,7 +9,7 @@ services:
       - ./writehat/config/nginx.conf:/etc/nginx/conf.d/writehat.conf
       - ./writehat/static:/opt/writehat/static
     ports:
-      - 8001:80
+      - 80:80
       - 443:443
     restart: unless-stopped
     depends_on:
