@@ -70,6 +70,12 @@ var default_toolbar_icons = [
     title: 'Highlight Purple',
   },
   {
+    name: 'pink',
+    action: highlightPink,
+    className: 'fa fa-exclamation pink',
+    title: 'Highlight Pink',
+  },
+  {
     name: 'red',
     action: highlightRed,
     className: 'fa fa-exclamation red',
@@ -99,11 +105,185 @@ var default_toolbar_icons = [
     className: 'fa fa-exclamation blue',
     title: 'Highlight Blue',
   },
+  {
+    name: 'gray',
+    action: highlightGray,
+    className: 'fa fa-exclamation gray',
+    title: 'Highlight Gray',
+  },
+  {
+    name: 'mono',
+    action: highlightMono,
+    className: 'fa fa-exclamation text-white',
+    title: 'Monospace',
+  },
   '|',
   'preview',
+  '|',
+  {
+    name: 'track-changes',
+    action: trackChanges,
+    className: 'fa fa-code-branch',
+    title: 'Track Changes'
+  },
+
   //'side-by-side',
   //'fullscreen',
 ]
+
+
+
+
+/* CHANGE TRACKING FUNCTIONS */
+
+/* identify which component or findings / field is being accessed */
+function trackChangesIdentify(parentElement)
+{
+    // determine if we are in a component or finding
+    if (window.location.pathname.includes('/components'))
+    {
+       var isComponent = true;
+       var trackID = window.location.pathname.split("/")[2];
+       var trackField = 'text';
+    }
+    else
+    {
+      
+       var isComponent = false;
+       var trackID = window.location.pathname.split("/").slice(-1)[0];
+       var trackField = parentElement.name;
+    }
+    return [trackID,isComponent,trackField]
+}
+
+function loadInEditor(version,fieldName,editor,trackChangesModal){
+
+    promptModal(
+      confirm_callback=function(e) {
+        editor.codemirror.setValue($("#trackChangeActual").text());
+        trackChangesModal.modal('hide');
+      },
+      title='Load in editor?',
+      body=`Are you sure you want to load Revision ${version} of field **${fieldName}** into the editor? Unsaved contents will be lost!`,
+      leftButtonName='Cancel',
+      rightButtonName='Load in Editor',
+      danger=true
+    );
+
+}
+
+
+function diff2HtmlGenerate(unifiedDiff){
+  var diffHtml = Diff2Html.html(unifiedDiff,{drawFileList: false, matching: 'words', outputFormat: 'line-by-line',});
+  var jHtmlObject = jQuery(diffHtml);
+  jHtmlObject.find(".d2h-file-header").remove();
+  var diffHtmlNew = jHtmlObject.html();
+  return diffHtmlNew
+}
+
+function trackChangesAjax(editor,id,currentText,isComponent,fieldName,fromVersion,toVersion){
+
+    $.ajax({
+    url: `/revisions/compare`,
+    type: 'POST',
+    data: {
+      'uuid': id,
+      'currentText': currentText,
+      'isComponent': isComponent,
+      'fieldName': fieldName,
+      'fromVersion': fromVersion,
+      'toVersion': toVersion,
+    },
+    success: function(data) {
+      //$('#trackChangeViewer').html(diff2HtmlGenerate(data));
+      var fromText = atob(data.fromText.replace(/_/g, '/').replace(/-/g, '+'));
+      var unifiedDiff = atob(data.unifiedDiff.replace(/_/g, '/').replace(/-/g, '+'));
+      $('#diff2html').html(diff2HtmlGenerate(unifiedDiff));
+      var currentUser = $.trim($('.nav-username').text());
+
+      if (fromVersion == "-1"){
+        $('#owningUserLeft').text("Modified by: " + currentUser);  
+      }
+      else{
+        $('#owningUserLeft').text("Modified by: " + $("#trackChangeCompareFrom option:selected" ).attr("data-owner"));
+      }
+ 
+
+      if (toVersion == "-1"){
+        $('#owningUserRight').text("Modified by: " + currentUser);
+      }
+      else{
+        $('#owningUserRight').text("Modified by: " + $("#trackChangeCompareTo option:selected" ).attr("data-owner"));
+      }
+      
+      $("#trackChangeActual").text(fromText);
+    },
+    error: function(data) {
+      error('Error loading revisions: ' + data.responseText);
+    }
+  })
+}
+
+function populateDropDown(data){
+  //var array = JSON.parse(JSON.stringify(data));
+
+  $('.trackChangeVersion').empty();
+  $('#trackChangeCompareFrom').append('<option value="-1">Current Text</option>');
+  $('#trackChangeCompareTo').append('<option value="-1">Current Text</option>');
+  Object.keys(data).slice().reverse().forEach(function(key){
+      $('.trackChangeVersion').append(`<option value="${key}" data-owner="${data[key][1]}">Revision ${key} (${data[key][0]})</option>`);
+  });
+  $('.selectpicker').selectpicker();
+}
+
+function populateTextViewer(editor){
+    $("#trackChangeActual").text(editor.codemirror.getValue());
+}
+
+
+function trackChanges(editor){
+  var parentElement = editor.codemirror.getWrapperElement().closest('td').children[0];
+  trackArray = trackChangesIdentify(parentElement);
+  loadModal('trackChanges', function(trackChangesModal) {
+
+    $.ajax({
+    url: `/revisions/list`,
+    type: 'POST',
+    data: {
+      'uuid': trackArray[0],
+      'isComponent': trackArray[1],
+      'field': trackArray[2],
+    },
+    success: function(data) {
+      populateDropDown(data);
+      populateTextViewer(editor);
+      trackChangesModal.modal('show');
+      $('#cancelTrackChanges').off().click(function() {
+        trackChangesModal.modal('hide');
+      })
+      $('#loadInEditor').off().click(function() {
+        loadInEditor(version=$('#trackChangeCompareFrom').val(),fieldName=trackArray[2],editor=editor,trackChangesModal=trackChangesModal);
+      })
+
+
+      $( ".trackChangeVersion" ).change(function() {
+      
+          trackChangesAjax(editor,trackArray[0],editor.codemirror.getValue(),trackArray[1],trackArray[2],$('#trackChangeCompareFrom').val(),$('#trackChangeCompareTo').val());
+        
+      });
+      
+    },
+    error: function(data) {
+      error('Error loading revisions: ' + data.responseText);
+    }
+  })
+
+    
+
+   
+
+  })
+}
 
 /* HIGHLIGHTING FUNCTIONS */
 
@@ -117,6 +297,9 @@ function highlightMarkdown(editor, color) {
 }
 function highlightPurple(editor) {
   highlightMarkdown(editor, 'purple');
+}
+function highlightPink(editor) {
+  highlightMarkdown(editor, 'pink');
 }
 function highlightRed(editor) {
   highlightMarkdown(editor, 'red');
@@ -132,6 +315,12 @@ function highlightGreen(editor) {
 }
 function highlightBlue(editor) {
   highlightMarkdown(editor, 'blue');
+}
+function highlightGray(editor) {
+  highlightMarkdown(editor, 'gray');
+}
+function highlightMono(editor) {
+  highlightMarkdown(editor, 'mono');
 }
 
 

@@ -13,11 +13,10 @@
 {% block fullPane %}
 
   <div class="container-fluid px-3 py-2 bg-light border border-info rounded">
-    <table id="writehat-engagements" class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate">
+    <table id="writehat-engagements" class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate-large">
       <thead>
         <tr>
           <th><strong>Name</strong></th>
-          <th><strong>Findings</strong></th>
           <th><strong>Customer</strong></th>
           <th><strong>Created</strong></th>
           <th><strong>Modified</strong></th>
@@ -31,12 +30,6 @@
             <td class="pl-2 engagementEdit">
               <a href="/engagements/edit/{{ engagement.id }}">
                 {{ engagement.name }}
-              </a>
-            </td>
-
-            <td class="engagementEdit">
-              <a href="/engagements/edit/{{ engagement.id }}">
-                {{ engagement.totalFindings }}
               </a>
             </td>
 

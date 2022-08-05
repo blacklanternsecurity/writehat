@@ -11,6 +11,7 @@ services:
     ports:
       - 8001:80
       - 443:443
+    restart: unless-stopped
     depends_on:
       - writehat
 
