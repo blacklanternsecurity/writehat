@@ -18,8 +18,8 @@ class Engagement(WriteHatBaseModel):
     companyPOC = models.CharField(verbose_name="Company Point of Contact", max_length=1000, null=True, blank=True)
     companyEmail = models.EmailField(verbose_name="Contact Email Address", blank=True)
     companyPhone = models.CharField(verbose_name="Contact Phone Number", max_length=100, null=True, blank=True)
-    customerID = models.UUIDField(verbose_name="Customer", null=True, blank=True)
-    pageTemplateID = models.UUIDField(verbose_name="Page Template", null=True, blank=True)
+    customerID = models.ForeignKey("writehat.Customer", related_name="engagements", on_delete=models.CASCADE, verbose_name="Customer", null=True, blank=True)
+    pageTemplateID = models.ForeignKey("writehat.PageTemplate", on_delete=models.CASCADE, verbose_name="Page Template", null=True, blank=True)
 
 
     @classmethod
@@ -173,15 +173,7 @@ class Engagement(WriteHatBaseModel):
 
     @property
     def customer(self):
-
-        customer = None
-        if self.customerID:
-            try:
-                customer = Customer.get(id=self.customerID)
-            except Customer.DoesNotExist:
-                pass
-
-        return customer
+        return self.customerID
 
 
     @property

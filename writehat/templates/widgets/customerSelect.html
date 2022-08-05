@@ -7,3 +7,10 @@
     </select>
     {% include 'snippets/smallButton.html' with id='customerAdd' name='New Customer' type='plus' class='btn-light border border-dark customerAddButton' %}
 </div>
+<script type="text/javascript">
+    $().ready( function() {
+        let e = $("select#id_customerID.selectpicker")
+        e.prop("value", "{{ widget.value }}")
+        $(e).selectpicker("refresh")
+    })
+</script>
