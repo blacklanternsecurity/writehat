@@ -51,7 +51,10 @@ $(document).on('modalLoaded-categoryEdit', function(e, modalDiv) {
         $('#categoryEdit-modal').modal('hide');
       },
       error: function(data) {
-        error('Failed to delete category');
+        let msg = 'Failed to delete category'
+        if (data.responseText !== null)
+          msg = `${msg}: ${data.responseText}`
+        error(msg)
       }
     })
   })

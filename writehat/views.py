@@ -3,7 +3,6 @@
 import json
 import base64
 import logging
-from sqlite3 import DatabaseError
 import uuid as uuidlib
 
 # django
@@ -23,7 +22,6 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 # WRITEHAT
 
 from writehat import validation
-from writehat.lib.finding import DREADDatabaseFinding, ProactiveDatabaseFinding
 
 from writehat.lib.util import *
 from writehat.lib.dread import *
