@@ -1,8 +1,10 @@
 # todo/todo_api/views.py
+import logging
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from itertools import chain
-from rest_framework import status
+from rest_framework import status, viewsets
 from writehat.lib.engagement import Engagement
 from writehat.lib.pageTemplate import PageTemplate
 from writehat.lib.customer import Customer
@@ -13,180 +15,21 @@ from .serializers import EngagementSerializer, CustomerSerializer, ReportSeriali
 from drf_yasg.utils import swagger_auto_schema
 from writehat.lib.startup import *
 
-class EngagementListApiView(APIView):
-    @swagger_auto_schema(operation_summary="Get all engagements")
-    def get(self, request, *args, **kwargs):
-        engagements = Engagement.objects.all()
-        serializer = EngagementSerializer(engagements, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+log = logging.getLogger(__name__)
 
-    @swagger_auto_schema(operation_summary="Create an engagement", request_body=EngagementSerializer)
-    def post(self, request, *args, **kwargs):      
-        serializer = EngagementSerializer(data=request.data)
-        if serializer.is_valid():
-            e = Engagement.new(serializer.data)
-            # check if the customer exists
-            if e.customerID:
-                try:
-                    Customer.objects.get(id=e.customerID)
-                except Customer.DoesNotExist:
-                    return Response(
-                        {"status": "customer id does not exist"},
-                        status=status.HTTP_400_BAD_REQUEST)               
-            
-            # check if the page template exists
-            if e.pageTemplateID:
-                try:
-                    PageTemplate.objects.get(id=e.pageTemplateID)
-                except PageTemplate.DoesNotExist:
-                        return Response(
-                            {"status": "page template id does not exist"},
-                            status=status.HTTP_400_BAD_REQUEST)
+class EngagementViewSet(viewsets.ModelViewSet):
+    serializer_class = EngagementSerializer
+    queryset = EngagementSerializer.Meta.model.objects.all()
 
-            e.save()
-            return Response(
-                {
-                    "status": "object created",
-                    "id":e.id
-                },
-                status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        if 'customer_pk' in self.kwargs:
+            customer = get_object_or_404(Customer, pk=self.kwargs['customer_pk'])
+            return self.queryset.filter(customerID=customer.id)
+        return super().get_queryset()
 
-class EngagementDetailApiView(APIView):    
-    def get_object(self, engagement_id):
-        try:
-            return Engagement.objects.get(id=engagement_id)
-        except Engagement.DoesNotExist:
-            return None
-
-    @swagger_auto_schema(operation_summary="Get engagement details")
-    def get(self, request, engagement_id, *args, **kwargs):
-        engagement = self.get_object(engagement_id)
-        if not engagement:
-            return Response(
-                {"status": "object with engagement id does not exists"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = EngagementSerializer(engagement)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @swagger_auto_schema(operation_summary="Update an engagement", request_body=EngagementSerializer)
-    def put(self, request, engagement_id, *args, **kwargs):
-        engagement = self.get_object(engagement_id)
-        if not engagement:
-            return Response(
-                {"status": "object with engagement id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = EngagementSerializer(instance = engagement, data=request.data, partial = True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "status":"object updated",
-                    "id":engagement_id
-                }, 
-                status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @swagger_auto_schema(operation_summary="Delete an engagement")
-    def delete(self, request, engagement_id, *args, **kwargs):
-        engagement = self.get_object(engagement_id)
-        if not engagement:
-            return Response(
-                {"status": "object with engagement id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        engagement.delete()
-        return Response(
-                {
-                    "status":"object deleted",
-                    "id":engagement_id
-                }, 
-                status=status.HTTP_200_OK)
-
-class CustomerListApiView(APIView):
-    @swagger_auto_schema(operation_summary="Get all customers")
-    def get(self, request, *args, **kwargs):
-        customers = Customer.objects.all()
-        serializer = CustomerSerializer(customers, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @swagger_auto_schema(operation_summary="Create a customer",request_body=CustomerSerializer)
-    def post(self, request, *args, **kwargs):
-        serializer = CustomerSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            c = Customer()
-            c.updateFromPostData(serializer.data)
-            c.save()
-            return Response(
-                {
-                    "status":"object created",
-                    "id":c.id
-                },
-                status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class CustomerDetailApiView(APIView):
-    def get_object(self, customer_id):
-        try:
-            return Customer.objects.get(id=customer_id)
-        except Customer.DoesNotExist:
-            return None
-
-    @swagger_auto_schema(operation_summary="Get customer details")
-    def get(self, request, customer_id, *args, **kwargs):
-        customer = self.get_object(customer_id)
-        if not customer:
-            return Response(
-                {"status": "object with customer id does not exists"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = CustomerSerializer(customer)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    @swagger_auto_schema(operation_summary="Update a customer", request_body=CustomerSerializer)
-    def put(self, request, customer_id, *args, **kwargs):
-        customer = self.get_object(customer_id)
-        if not customer:
-            return Response(
-                {"status": "object with customer id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = CustomerSerializer(instance = customer, data=request.data, partial = True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "status":"object updated",
-                    "id":customer_id
-                }, 
-                status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @swagger_auto_schema(operation_summary="Delete a customer")
-    def delete(self, request, customer_id, *args, **kwargs):
-        customer = self.get_object(customer_id)
-        if not customer:
-            return Response(
-                {"status": "object with customer id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        customer.delete()
-        return Response(
-                {
-                    "status":"object deleted",
-                    "id":customer_id
-                }, 
-                status=status.HTTP_200_OK)
+class CustomerViewSet(viewsets.ModelViewSet):
+    serializer_class = CustomerSerializer
+    queryset = CustomerSerializer.Meta.model.objects.all()
 
 class ReportListApiView(APIView):
 
@@ -324,7 +167,6 @@ class ReportDetailApiView(APIView):
         for c in components:
             del c["uuid"]
             newComponents.append(c)
-        log.debug(newComponents)
         newReport["_components"] = newComponents
 
         return Response(newReport, status=status.HTTP_200_OK)

@@ -2,14 +2,13 @@ from django.conf.urls import url
 from django.urls import path, include, re_path
 from rest_framework.documentation import include_docs_urls
 from rest_framework import permissions
+from rest_framework_nested import routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from .views import (
-    EngagementListApiView,
-    EngagementDetailApiView,
-    CustomerListApiView,
-    CustomerDetailApiView,
+    EngagementViewSet,
+    CustomerViewSet,
     FindingGroupDetailApiView,
     ReportListApiView,
     ReportDetailApiView,
@@ -29,16 +28,23 @@ schema_view = get_schema_view(
    permission_classes=[permissions.AllowAny],
 )
 
+router = routers.SimpleRouter()
+router.register("engagements", EngagementViewSet)
+router.register("customers", CustomerViewSet)
+
+customerRouter = routers.NestedSimpleRouter(router, r'customers', lookup='customer')
+customerRouter.register(r'engagements', EngagementViewSet, basename='customer-engagements')
+
 urlpatterns = [
 
     # Documentation
-    
+
     url('docs', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
-    # Engagement APIs
-    
-    path('engagements', EngagementListApiView.as_view()),
-    path('engagements/<str:engagement_id>', EngagementDetailApiView.as_view()),
+    # Viewset URLs
+
+    path(r'', include(router.urls)),
+    path(r'', include(customerRouter.urls)),
 
     # Finding Group APIs
 
@@ -49,11 +55,6 @@ urlpatterns = [
 
     path('engagements/<str:engagement_id>/reports', ReportListApiView.as_view()),
     path('engagements/<str:engagement_id>/reports/<str:report_id>', ReportDetailApiView.as_view()),
-
-    # Customer APIs
-
-    path('customers', CustomerListApiView.as_view()),
-    path('customers/<str:customer_id>', CustomerDetailApiView.as_view()),
 
     # Templates API
 

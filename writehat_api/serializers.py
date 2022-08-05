@@ -27,7 +27,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, max_length=1000, validators=[isValidName])
     class Meta:
         model = Customer
-        fields = ['id','name','createdDate','modifiedDate','shortName','domain','website','address','POC','email','phone']
+        fields = '__all__'
 
 class PageTemplateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,9 +36,9 @@ class PageTemplateSerializer(serializers.ModelSerializer):
 
 class FindingGroupSerializer(serializers.ModelSerializer):
     scoringTypes = ( 
-    ("CVSS"), 
-    ("DREAD"), 
-    ("PROACTIVE")
+        ("CVSS"), 
+        ("DREAD"), 
+        ("PROACTIVE")
     )
 
     scoringType = serializers.ChoiceField(required=True, choices=scoringTypes)

@@ -16,4 +16,4 @@ coreapi
 drf-yasg
 drf-yasg[validation]
 django-currentuser
-django-python3_ldap==0.11.4
+drf-nested-routers
