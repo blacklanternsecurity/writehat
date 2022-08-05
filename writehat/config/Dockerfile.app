@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:20.04
 
 # set environment variables
 ENV PYTHONUNBUFFERED 1
@@ -8,6 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Make sure locale is set to UTF-8
+
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
