@@ -9,7 +9,7 @@ services:
       - ./writehat/config/nginx.conf:/etc/nginx/conf.d/writehat.conf
       - ./writehat/static:/opt/writehat/static
     ports:
-      - 80:80
+      - 8001:80
       - 443:443
     depends_on:
       - writehat
@@ -24,7 +24,7 @@ services:
       ./manage.py migrate writehat &&
       ./manage.py makemigrations &&
       ./manage.py migrate &&
-      uwsgi --socket 0.0.0.0:8000 --plugin-dir=/usr/lib/uwsgi/plugins --plugin python3 -w writehat.wsgi:application --processes=4 --master --vacuum"
+      uwsgi --py-autoreload=1 --socket 0.0.0.0:8000 --plugin-dir=/usr/lib/uwsgi/plugins --plugin python3 -w writehat.wsgi:application --processes=4 --master --vacuum"
     volumes:
       - .:/opt/writehat
     expose:
@@ -36,6 +36,10 @@ services:
 
   mongo:
     image: mongo:4.4
+    command:
+      - '--logpath'
+      - '/dev/null'
+      - '--quiet'
     volumes:
       - ./mongo/configdb:/data/configdb
       - ./mongo/db:/data/db
