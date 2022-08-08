@@ -131,7 +131,7 @@ div.nav-item:hover {
 }
 
 .nav-profile-buttons a {
-  margin: 0px !important;
+  margin: 5px !important;
   width: 100%;
   background-color: #444;
 }
@@ -146,4 +146,12 @@ div.nav-item:hover {
 
 .nav-logout i {
   color: red;
+}
+
+.nav-changepassword span {
+  color: white;
+}
+
+.nav-changepassword i {
+  color: green;
 }

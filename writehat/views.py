@@ -10,8 +10,10 @@ from django.conf import settings
 from django.shortcuts import render
 from django.utils.html import escape
 from django.core.exceptions import ValidationError
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.forms import PasswordChangeForm
 from django.views.decorators.http import require_http_methods
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -131,8 +133,28 @@ def validationDREAD(request):
         'score': dread.score,
     })
 
+@require_http_methods(['GET'])
+def password(request):
+    form = PasswordChangeForm(request.user)
+    return render(request, 'pages/passwordChange.html', {
+        'form': form
+    })    
 
-
+@require_http_methods(['POST'])
+@csrf_protect
+def passwordChange(request):
+    form = PasswordChangeForm(request.user, request.POST)
+    log.debug(f"passwordChange() called")
+    if form.is_valid():
+        user = form.save()
+        update_session_auth_hash(request, user)
+        response = HttpResponse("Successfully changed password")
+        response.status_code = 200
+    else:
+        response = HttpResponse("Failed to change password!")
+        response.status_code = 400
+    
+    return response
 
 # Given a reportID, get the JSON object containing the list of associated components
 @require_http_methods(['GET'])
@@ -193,7 +215,6 @@ def componentEdit(request,uuid,form=None):
 @csrf_protect
 @require_http_methods(['POST'])
 def componentSave(request,uuid):
-
     log.debug("componentSave() called; UUID: {0}".format(uuid))
     log.debug("Form data: {0}".format(request.POST))
 
@@ -255,7 +276,6 @@ def componentStatusUpdate(request,uuid):
 @csrf_protect
 @require_http_methods(['POST'])
 def reportCreate(request, uuid=None, fromTemplate=False):
-
 
     log.debug(f"reportCreate with engagementParent uuid: {uuid}")
 
@@ -764,7 +784,6 @@ def findingEdit(request,uuid):
 
     elif request.method == 'POST':
         finding.updateFromPostData(request.POST)
-        log.debug(f'views.py finding edit save...')
         finding.save()
         return HttpResponse(finding.id)
 
@@ -1090,16 +1109,9 @@ def findingCategoryDelete(request, uuid):
 
     # Check and see if this category has children. If it does, deny the deletion
     categoryChildren = DatabaseFindingCategory.objects.filter(categoryParent=uuid)
-    cvssFinding = CVSSDatabaseFinding.objects.filter(categoryID=uuid)
-    dreadFinding = DREADDatabaseFinding.objects.filter(categoryID=uuid)
-    proactiveFinding = ProactiveDatabaseFinding.objects.filter(categoryID=uuid)
-
     if categoryChildren.exists():
-        response = HttpResponse("Cannot remove categories with child categories", status=400)
-        return response
-
-    if cvssFinding.exists() or dreadFinding.exists() or proactiveFinding.exists():
-        response = HttpResponse("Cannot remove categories with child findings", status=400)
+        response = HttpResponse("Cannot remove categories with children")
+        response.status = 400
         return response
 
     # actually remove the category
@@ -1148,71 +1160,34 @@ def revisionLoad(request):
     fieldName = request.POST["fieldName"]
     log.debug("Views.loadRevision called; UUID: %s (fieldName: %s, version: %s)" % (id,fieldName,version))
     try:
-        p = Revision.objects.get(parentId=id,fieldName=fieldName,version=version)
+        p = Revision.get(parentId=id,fieldName=fieldName,version=version)
     except Revision.DoesNotExist:
         raise RevisionError("Revision does not exist for this ID/fieldname/version combo")
     return HttpResponse(escape(p.fieldText))
 
 
-#@require_http_methods(['GET'])
-#def revisionsList(request,uuid):
-#    log.debug(f"Revision.getVersionList called; uuid: {uuid}")
-#    return HttpResponse(escape(Revision.listRevisions(uuid)))
-
-
-@require_http_methods(['POST'])
-def revisionsList(request):
-    uuid = request.POST["uuid"]
-    isComponent = json.loads(request.POST["isComponent"].lower())
-    field = request.POST["field"]
+@require_http_methods(['GET'])
+def revisionsList(request,uuid):
     log.debug(f"Revision.getVersionList called; uuid: {uuid}")
-    return JsonResponse(Revision.listRevisions(uuid,isComponent,field))
-
-
-def revisionGetText(id,isComponent,fieldName,version):
-    try:
-        p = Revision.objects.get(parentId=id,fieldName=fieldName,version=version)
-        text = p.fieldText
-        print(text)
-    except Revision.DoesNotExist:
-        raise RevisionError("Revision does not exist for this ID/fieldname/version combo")
-    return text
-
+    return HttpResponse(escape(Revision.listRevisions(uuid)))
 
 
 @csrf_protect
 @require_http_methods(['POST'])
 def revisionCompare(request):
-    id = request.POST["uuid"]
-
-    # todo: validate all user input
+    id = request.POST["UUID"]
     currentText = request.POST["currentText"]
-    toVersion = request.POST["toVersion"]
-    fromVersion = str(request.POST["fromVersion"])
-    toVersion = str(request.POST["toVersion"])
+    version = request.POST["version"]
     fieldName = request.POST["fieldName"]
-    isComponent = bool(request.POST["isComponent"])
+    log.debug("Views.compareRevision called; UUID: %s (fieldName: %s, version: %s)" % (id,fieldName,version))
+    try:
+        p = Revision.get(parentId=id,fieldName=fieldName,version=version)
+    except Revision.DoesNotExist:
+        raise RevisionError("Revision does not exist for this ID/fieldname/version combo")
 
-    log.debug("Views.revisionCompare called; UUID: %s (fieldName: %s, toVersion: %s, fromVersion: %s)" % (id,fieldName,toVersion,fromVersion))
+    diffJSON = p.compare(fieldName,currentText)
+    return HttpResponse(diffJSON,conent_type="application_json")
 
-
-    if int(fromVersion) == -1:
-        fromText = currentText
-    else:
-        fromText = revisionGetText(id,isComponent,fieldName,fromVersion)
-
-    if int(toVersion) == -1:
-        toText = currentText
-    else:
-        toText = revisionGetText(id,isComponent,fieldName,toVersion)
-
-    diffHTML = Revision.diff(fromText,toText)
-   # diffJSON = Revision.diff(toText,fromText)
-
-    diffJSON = {}
-    diffJSON['unifiedDiff'] = base64.urlsafe_b64encode(bytes(diffHTML,'utf-8')).decode('ascii')
-    diffJSON['fromText'] = base64.urlsafe_b64encode(bytes(fromText,'utf-8')).decode('ascii')
-    return JsonResponse(diffJSON)
 
 @require_http_methods(['GET'])
 def engagementNew(request):
@@ -1225,7 +1200,6 @@ def engagementNew(request):
 def engagementCreate(request):
     
     p = Engagement.new(request.POST)
-    p.name = request.POST.getlist("name")[0]
     p.save()
     response = HttpResponse(escape(p.name))
     response.status_code = 200
@@ -1563,7 +1537,6 @@ def engagementFindingExcel(request,uuid):
 @csrf_protect
 @require_http_methods(['POST', 'GET'])
 def engagementFindingEdit(request, uuid):
-
     log.info(f"engagementFindingEdit called for UUID {uuid}; request.method: {request.method}")
 
     finding = EngagementFinding.get_child(uuid)
@@ -1759,6 +1732,7 @@ def reportSaveToTemplate(request,uuid):
 def reportCreateFromTemplate(request,uuid):
 
     engagementID = str(uuidlib.UUID(request.POST['engagementID']))
+
     savedReport = SavedReport.objects.get(id=uuid)
     log.debug(f"reportCreateFromTemplate; savedReport.id: {savedReport.id}")
     report = savedReport.clone(name=savedReport.name, destinationClass=Report)
@@ -1874,11 +1848,6 @@ def pageClone(request, uuid):
     page = PageTemplate.get(id=uuid)
     clonedPage = page.clone()
     clonedPage.save()
-    log.debug("{0}".format(clonedPage))
-
-
-
-
     return HttpResponse(clonedPage.id)
 
 

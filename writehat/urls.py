@@ -36,6 +36,10 @@ urlpatterns = [
 
     #url(rf'^images/test/{uuid}$', views.imageTest),
 
+    # Password change
+
+    path('password', views.password),
+    path('password/change', views.passwordChange),
 
     # findings urls
     path('findings', views.findingsList),
@@ -73,7 +77,8 @@ urlpatterns = [
     path('revisions/save', views.revisionSave),
     path('revisions/load', views.revisionLoad),
     path('revisions/compare', views.revisionCompare),
-    path('revisions/list', views.revisionsList),
+    url(rf'^revisions/list/{uuid}$', views.revisionsList),
+
     url(rf'^revisions/timestamp/{uuid}$', views.timestamp),
 
     # engagement urls
