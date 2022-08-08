@@ -36,6 +36,11 @@ urlpatterns = [
 
     #url(rf'^images/test/{uuid}$', views.imageTest),
 
+    # Password change
+
+    path('password', views.password),
+    path('password/change', views.passwordChange),
+
 
     # findings urls
     path('findings', views.findingsList),
