@@ -1091,9 +1091,16 @@ def findingCategoryDelete(request, uuid):
 
     # Check and see if this category has children. If it does, deny the deletion
     categoryChildren = DatabaseFindingCategory.objects.filter(categoryParent=uuid)
+    cvssFinding = CVSSDatabaseFinding.objects.filter(categoryID=uuid)
+    dreadFinding = DREADDatabaseFinding.objects.filter(categoryID=uuid)
+    proactiveFinding = ProactiveDatabaseFinding.objects.filter(categoryID=uuid)
+
     if categoryChildren.exists():
-        response = HttpResponse("Cannot remove categories with children")
-        response.status = 400
+        response = HttpResponse("Cannot remove categories with child categories", status=400)
+        return response
+
+    if cvssFinding.exists() or dreadFinding.exists() or proactiveFinding.exists():
+        response = HttpResponse("Cannot remove categories with child findings", status=400)
         return response
 
     # actually remove the category
@@ -1188,8 +1195,7 @@ def revisionCompare(request):
     isComponent = bool(request.POST["isComponent"])
 
     log.debug("Views.revisionCompare called; UUID: %s (fieldName: %s, toVersion: %s, fromVersion: %s)" % (id,fieldName,toVersion,fromVersion))
-
-
+    
     if int(fromVersion) == -1:
         fromText = currentText
     else:
@@ -1219,6 +1225,7 @@ def engagementNew(request):
 def engagementCreate(request):
     
     p = Engagement.new(request.POST)
+    p.name = request.POST.getlist("name")[0]
     p.save()
     response = HttpResponse(escape(p.name))
     response.status_code = 200
