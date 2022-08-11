@@ -131,3 +131,6 @@ a.reference-link {
   }
 }
 
+table[data-split-from] thead a.footnote {
+    display: none;
+}
