@@ -19,6 +19,14 @@ function removeEmpty(e, page_id) {
 
 }
 
+let msgTimeout = null;
+function showFinished() {
+    if (msgTimeout !== null) {
+	clearTimeout(msgTimeout)
+    }
+    $(".pagedjs_pages").removeClass("finished_loading").addClass("no_message")
+}
+
 let last_node = false, last_thead = false, last_tr = false;
 class ElementCleaner extends Paged.Handler {
 
@@ -47,6 +55,8 @@ class ElementCleaner extends Paged.Handler {
 
         $("<input type='hidden' value='1' id='finished_loading' />").appendTo("html");
         console.log($("#finished_loading"));
+	$(".pagedjs_pages").addClass("finished_loading")
+	msgTimeout = setTimeout(showFinished, 1000)
     }
 
     renderNode(node, sourceNode, layout) {
