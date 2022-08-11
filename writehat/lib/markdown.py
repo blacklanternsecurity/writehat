@@ -1,4 +1,5 @@
 import re
+import uuid
 import bleach
 import logging
 import importlib
@@ -10,7 +11,7 @@ log = logging.getLogger(__name__)
 
 def getFootnote(context, *args, **kwargs):
     class Footnote:
-        id = -1
+        id = uuid.uuid4()
 
     return Footnote()
 
