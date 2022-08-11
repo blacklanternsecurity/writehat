@@ -1,4 +1,5 @@
 import re
+import uuid
 import bleach
 import logging
 import importlib
@@ -8,6 +9,11 @@ from django.template.loader import render_to_string
 
 log = logging.getLogger(__name__)
 
+def getFootnote(context, *args, **kwargs):
+    class Footnote:
+        id = uuid.uuid4()
+
+    return Footnote()
 
 def getLogo(context):
 
@@ -27,6 +33,14 @@ reference_templates = {
             r'{ {0,2}finding\|(?P<id>[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12})\|(?P<fields>[ =01A-Za-z,]{0,50}) {0,2}}'
         ),
         'allowed_fields': ('number', 'index', 'name', 'severity'),
+    },
+    'footnote': {
+        'constructor': getFootnote,
+        'template': 'reportTemplates/footnote.html',
+        'regex': re.compile(
+            r'{ {0,2}footnote\|(?P<footnote_text>[^|{}]{0,1024}) {0,2}}'
+        ),
+        'allowed_fields': ('footnote_text',),
     },
     'component': {
         'constructor': 'writehat.components.base.BaseComponent.get',

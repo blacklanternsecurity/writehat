@@ -56,6 +56,10 @@ div.generated-table tr:nth-child(even) {
 
 }
 
+div.generated-table tr {
+  break-inside: avoid;
+}
+
 div.generated-table td {
   padding: 8px;
   break-inside: avoid;

@@ -34,6 +34,19 @@ var default_toolbar_icons = [
     className: 'fa fa-window-minimize',
     title: 'Page Break'
   },
+  {
+    name: 'footnote',
+    action: function(editor) {
+      var selections = editor.codemirror.getSelections();
+      var highlighted = [];
+      for (var i = 0; i < selections.length; i++) {
+        highlighted.push('{footnote|}');
+      }
+      editor.codemirror.replaceSelections(highlighted);
+    },
+    className: 'fa fa-sticky-note',
+    title: 'Footnote'
+  },
   '|',
   {
     name: 'reference',
