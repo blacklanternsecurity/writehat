@@ -4,7 +4,7 @@
   <div id="table-of-tables">
     <ul class="tot-list">
       {% for component in tot_components %}
-        <a href='#component_{{ component.id }}'>
+        <a href='#caption_{{ component.id }}'>
           <li class="tot-entry">
             <span class="tot-item">
                 <span class="tot-header">
@@ -13,7 +13,7 @@
                 {{ component.caption }}
             </span>
             <span class="tot-dots"></span>
-            <span class="toc-pagenumber" target-component='#component_{{ component.id }}'></span>
+            <span class="toc-pagenumber" target-component='#caption_{{ component.id }}'></span>
           </li>
         </a>
       {% endfor %}
