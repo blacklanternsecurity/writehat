@@ -46,16 +46,6 @@
     div.pagedjs_pages > div.pagedjs_page {
         background-color: white;
     }
-
-    div.pagedjs_first_page {
-        margin-left: calc(var(--pagedjs-width-left) + var(--margin) * 3);
-    }
-
-    @media screen and (max-width: 1650px) {
-        div.pagedjs_first_page {
-            margin-left: calc(var(--margin));
-        }
-    }
 }
 
 div.footer-content {
@@ -128,5 +118,19 @@ div.table-caption span.table-counter::before {
 a.reference-link {
     text-decoration: none;
     color: black;
-    display: inline-block;
+    display: inline;
+}
+
+.footnote {
+  float: footnote;
+}
+
+@page {
+  @footnote {
+    float: bottom;
+  }
+}
+
+table[data-split-from] thead a.footnote {
+    display: none;
 }

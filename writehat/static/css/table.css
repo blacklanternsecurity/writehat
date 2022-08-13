@@ -40,3 +40,9 @@ table.writehat-table.dataTable thead th {
 .dataTables_wrapper {
     background: #222;
 }
+
+/* override bootstrap's .container-fluid padding */
+table.writehat-table {
+    padding-left: 0px;
+    padding-right: 0px;
+}

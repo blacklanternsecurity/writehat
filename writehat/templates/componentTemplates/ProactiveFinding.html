@@ -13,6 +13,13 @@
             {{ finding.categoryFull }}
         </div>
     </div>
+    {% if finding.affectedResources %}
+        <div class='finding-content'>
+            <div class='affected-resources'>
+                {% markdown finding.affectedResources %}
+            </div>
+        </div>
+    {% endif %}
     {% if finding.description %}
         <div class='finding-content'>
             <div class='description'>

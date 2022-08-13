@@ -1,4 +1,5 @@
 import re
+import uuid
 import bleach
 import logging
 import importlib
@@ -8,6 +9,11 @@ from django.template.loader import render_to_string
 
 log = logging.getLogger(__name__)
 
+def getFootnote(context, *args, **kwargs):
+    class Footnote:
+        id = uuid.uuid4()
+
+    return Footnote()
 
 def getLogo(context):
 
@@ -27,6 +33,14 @@ reference_templates = {
             r'{ {0,2}finding\|(?P<id>[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12})\|(?P<fields>[ =01A-Za-z,]{0,50}) {0,2}}'
         ),
         'allowed_fields': ('number', 'index', 'name', 'severity'),
+    },
+    'footnote': {
+        'constructor': getFootnote,
+        'template': 'reportTemplates/footnote.html',
+        'regex': re.compile(
+            r'{ {0,2}footnote\|(?P<footnote_text>[^|{}]{0,1024}) {0,2}}'
+        ),
+        'allowed_fields': ('footnote_text',),
     },
     'component': {
         'constructor': 'writehat.components.base.BaseComponent.get',
@@ -74,7 +88,7 @@ markdown_attrs = {
     'a': ['href', 'alt', 'title'],
     'th': ['align'],
     'td': ['align', 'finding-severity'],
-    'hl': ['purple', 'red', 'orange', 'yellow', 'green', 'blue'], # custom color highlights
+    'hl': ['purple', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'gray', 'mono'], # custom color highlights
 }
 
 
@@ -285,7 +299,7 @@ def render_markdown(markdown_text, context=None):
     # replace user-defined variables
     markdown_text = user_template_replace(markdown_text, context)
 
-    rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists'])
+    rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists', 'codehilite'])
     cleaned = bleach.clean(rendered, tags=markdown_tags, attributes=markdown_attrs)
 
     for render_placeholder, rendered_obj in temp_placeholders:

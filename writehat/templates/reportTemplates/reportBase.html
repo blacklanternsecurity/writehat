@@ -4,17 +4,19 @@
     {% include 'reportTemplates/reportDependencies.html' with report=report %}
   </head>
 
-  <body id='report-body'>
-    <div class="center header-content">
-      {% markdown header %}
-    </div>
-    <div class="center footer-content">
-      {% markdown footer %}
-    </div>
-    {% autoescape off %}
-      {% for component in components %}
-        {{ component }}
-      {% endfor %}
-    {% endautoescape %}
+  <body>
+    <template id='report-body'>
+      <div class="center header-content">
+        {% markdown header %}
+      </div>
+      <div class="center footer-content">
+        {% markdown footer %}
+      </div>
+      {% autoescape off %}
+        {% for component in components %}
+          {{ component }}
+        {% endfor %}
+      {% endautoescape %}
+    </template>
   </body>
 </html>
