@@ -1,0 +1,10 @@
+nginx/
+mysql/
+mongo/
+writehat/migrations/
+
+# ignore __pycache__ files 
+**/*.py[co]
+
+# ignore Vim swapfiles
+.*.sw*

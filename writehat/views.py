@@ -10,8 +10,10 @@ from django.conf import settings
 from django.shortcuts import render
 from django.utils.html import escape
 from django.core.exceptions import ValidationError
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.forms import PasswordChangeForm
 from django.views.decorators.http import require_http_methods
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -132,7 +134,28 @@ def validationDREAD(request):
     })
 
 
+@require_http_methods(['GET'])
+def password(request):
+    form = PasswordChangeForm(request.user)
+    return render(request, 'pages/passwordChange.html', {
+        'form': form
+    })    
 
+@require_http_methods(['POST'])
+@csrf_protect
+def passwordChange(request):
+    form = PasswordChangeForm(request.user, request.POST)
+    log.debug(f"passwordChange() called")
+    if form.is_valid():
+        user = form.save()
+        update_session_auth_hash(request, user)
+        response = HttpResponse("Successfully changed password")
+        response.status_code = 200
+    else:
+        response = HttpResponse("Failed to change password!")
+        response.status_code = 400
+    
+    return response
 
 # Given a reportID, get the JSON object containing the list of associated components
 @require_http_methods(['GET'])
