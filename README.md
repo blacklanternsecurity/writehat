@@ -252,6 +252,31 @@ $ sudo tar --same-owner -xvpzf db_backup.tar.gz
 $ systemctl start writehat
 ~~~
 
+## API - Under Development
+
+Full documentation for the API is available at **https://127.0.0.1/api/docs**.
+
+Authentication is handled via tokens (https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication). API tokens for users can be generated through the admin dashboard (**https://127.0.0.1/admin**). The token must be sent in the request in the format of `Authorization: Token <token>`.
+
+The WriteHat API currently supports the following:
+
+### Engagements
+
+* List all engagements, reports and finding groups
+* Get engagement, report and finding group details
+* Create, update and delete engagements
+* Create, update and delete reports
+* Create, update and delete finding groups
+
+### Customers
+
+* List all customers
+* Get customer details
+* Create, update and delete customer
+
+### Templates
+
+* List all report and page templates
 
 ## Roadmap / *Potential* Future Developments:
 - Change tracking and revisions

@@ -1,3 +1,5 @@
 nginx/
 mysql/
 mongo/
+
+**/*.py[co]

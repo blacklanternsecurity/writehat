@@ -1,0 +1,6 @@
+nginx/
+mysql/
+mongo/
+
+# ignore __pycache__ files 
+**/*.py[co]

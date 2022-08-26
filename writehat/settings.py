@@ -82,7 +82,33 @@ LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_active_di
 LDAP_AUTH_CONNECT_TIMEOUT = None
 LDAP_AUTH_RECEIVE_TIMEOUT = None
 
-LOGIN_REQUIRED_IGNORE_PATHS = ["/adminlogin/"]
+# Added /api/* to prevent the middleware authentication from applying
+LOGIN_REQUIRED_IGNORE_PATHS = ["/adminlogin/", r'/api/(.*)$']
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+}
+
+# Defining Swagger settings
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+      'api_key': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+   },
+   "USE_SESSION_AUTH": False
+}
 
 # Application definition
 
@@ -94,7 +120,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'writehat',
-    'django_python3_ldap'
+    'django_python3_ldap',
+    'rest_framework',
+    'writehat_api',
+    'drf_yasg',
+    'rest_framework.authtoken',
 ]
 
 AUTHENTICATION_BACKENDS =('django.contrib.auth.backends.ModelBackend', 'django_python3_ldap.auth.LDAPBackend')

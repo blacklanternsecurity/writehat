@@ -33,3 +33,4 @@ RUN pip3 install -r requirements.txt
 
 # change to app dir
 WORKDIR /opt/writehat
+
