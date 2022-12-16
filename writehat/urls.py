@@ -2,7 +2,8 @@ from writehat import views
 from writehat.lib.finding import *
 #WRITEHAT URL Configuration
 
-from django.urls import path
+from django.conf import settings
+from django.urls import path, include
 from django.contrib import admin
 from django.conf.urls import url
 from django.contrib.auth.views import LoginView,LogoutView
@@ -148,5 +149,5 @@ urlpatterns = [
 
 ]
 
-
-
+if settings.DEBUG:
+    urlpatterns = urlpatterns + [path('__debug__/', include('debug_toolbar.urls'))]

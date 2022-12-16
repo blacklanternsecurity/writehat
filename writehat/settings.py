@@ -84,6 +84,17 @@ LDAP_AUTH_RECEIVE_TIMEOUT = None
 
 LOGIN_REQUIRED_IGNORE_PATHS = ["/adminlogin/"]
 
+# Set INTERNAL_IPS for django debug toolbar
+# this setup makes it work with docker correctly
+# copied from https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+INTERNAL_IPS = []
+if DEBUG:
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
+print(INTERNAL_IPS)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -96,6 +107,9 @@ INSTALLED_APPS = [
     'writehat',
     'django_python3_ldap'
 ]
+
+if DEBUG:
+    INSTALLED_APPS = INSTALLED_APPS + ["debug_toolbar"]
 
 AUTHENTICATION_BACKENDS =('django.contrib.auth.backends.ModelBackend', 'django_python3_ldap.auth.LDAPBackend')
 
@@ -110,6 +124,9 @@ MIDDLEWARE = [
     'writehat.lib.LoginRequiredMiddleware.LoginRequiredMiddleware',
     'django_currentuser.middleware.ThreadLocalUserMiddleware'
 ]
+
+if DEBUG:
+    MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
 
 
 ROOT_URLCONF = 'writehat.urls'
