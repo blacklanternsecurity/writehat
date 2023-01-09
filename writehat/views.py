@@ -720,8 +720,8 @@ def reportGeneratePdf(request,uuid):
         log.debug(browser.get_log("driver"))
         log.debug(browser.get_log("browser"))
 
-#       # Close the browser
-        browser.close()
+        # Close the browser
+        browser.quit()
 
     # Base64-decode PDF response and render to HttpResponse
     response = HttpResponse(base64.b64decode(response.get('value').get('data')), content_type='application/pdf')
