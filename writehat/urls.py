@@ -148,6 +148,3 @@ urlpatterns = [
     path('admintools/restore', views.admintoolsRestore),
 
 ]
-
-if settings.DEBUG:
-    urlpatterns = urlpatterns + [path('__debug__/', include('debug_toolbar.urls'))]

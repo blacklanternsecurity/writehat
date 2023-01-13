@@ -12,4 +12,3 @@ pymongo==3.11
 PyMySQL==1.0.2
 django-currentuser
 django-python3_ldap==0.11.4
-django-debug-toolbar==3.2.4
