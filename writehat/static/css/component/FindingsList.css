@@ -1,17 +1,3 @@
-/* GENERIC, APPLIES TO ALL FINDING TYPES */
-
-section > h1.finding-heading {
-    margin: 0px !important;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-
-div.finding div.finding-content div > p { 
-    text-align: justify;
-    text-align-last: auto !important;
-    overflow: hidden;
-}
-
 .finding-severity {
     font-weight: bold;
     color: white;
@@ -20,50 +6,41 @@ div.finding div.finding-content div > p {
     padding-top: 1.5em;
     padding-bottom: 1.5em;
     text-align: center;
-}
 
-div.finding {
-    --header-text-color: black;
-    --stripe-background-color: rgba(128,128,128,.1);
-  
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
-
-    display: flex;
-    flex-direction: column;
-    border-top: 3px solid var(--severity-color);
-    border-bottom: 3px solid var(--severity-color);
-}
-
-section.l1 div.first-finding-container { height: calc(100% - 30px - 2.3rem); }
-section.l2 div.first-finding-container { height: calc(100% - 30px - 2.2rem); }
-section.l3 div.first-finding-container { height: calc(100% - 26px - 2.0rem); }
-
-section.l1 div.first-finding-container[data-split-from], 
-section.l2 div.first-finding-container[data-split-from], 
-section.l3 div.first-finding-container[data-split-from] {
-    height: 100%;
-}
-
-div.finding table {
-    page-break-inside: avoid;
-}
-
-div.finding div.finding-header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
-}
-
-div.finding div.finding-header div.finding-severity {
     width: 11rem;
     max-width: 11rem;
     min-width: 11rem;
 }
 
-div.finding div.finding-header div.finding-title {
+.finding {
+    --header-text-color: black;
+    --stripe-background-color: rgba(128,128,128,.1);
+  
+    width: 100%;
+    height: 100%;
+    max-height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
+    padding: 0px;
+    margin: 0px;
+
+    border-top: 5px solid var(--severity-color);
+    border-radius: 5px 5px 0px 0px;
+}
+
+/* Adjust the height of the finding box to accomodate the Table of Contents header if it exists */
+/* The pixel height of the header is currently hardcoded, should probably get this value dynamicalluy */
+.toc-member + .finding {
+    max-height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom) - 22px);
+}
+
+/* Make the title of each finding line up properly with the severity */
+.finding-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+/* Make the title for the finding all nice and pretty and stuff */
+.finding-title {
     flex-grow: 1;
     font-weight: bold;
     line-height: 3.5rem;
@@ -74,36 +51,22 @@ div.finding div.finding-header div.finding-title {
     padding: 1.5rem;
 }
 
-div.finding div.finding-content {
+.finding-content {
     position: relative;
 }
 
-div.finding div.finding-content:last-child {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-div.finding div.finding-content > div {
+.finding-content > div {
     margin-left: 11rem;
-    padding: 1rem;
-    overflow-wrap: break-word;
-    flex-grow: 1;
+    padding: 0.5rem !important;
+    overflow-wrap: break-word
 }
 
-div.finding div.finding-content > div > p:first-child {
-    margin-block-start: 0;
-} 
-
-div.finding div.finding-content > div > p:last-child {
-    margin-block-end: 0;
-}
-
-div.finding div.finding-content:nth-of-type(odd) > div {
+/* alternate colors on rows for readability */
+.finding-content:nth-of-type(odd) > div {
     background-color: var(--stripe-background-color);
 }
 
-div.finding div.finding-content > div::before {
+.finding-content > div::before {
     position: absolute;
     background-color: var(--severity-color-faded);
     min-width: 9rem;
@@ -115,6 +78,14 @@ div.finding div.finding-content > div::before {
     left: 0;
     bottom: 0;
     top: 0;
+}
+
+/* These two rules force the last finding-content element and its children to fill the rest of the page */
+.finding .finding-content:last-child {
+    height: 100%;
+}
+.finding .finding-content:last-child > div::before, .finding .finding-content:last-child > div {
+    height: 100%;
 }
 
 /* DREAD Categories */
@@ -150,22 +121,23 @@ div.finding-content > div.impact ul li {
   margin: 4px;
 }
 
-div.finding div.finding-content > div.category::before           { content: "Category" !important; }
-div.finding div.finding-content > div.affected-resources::before { content: "Affected Resources" !important; }
-div.finding div.finding-content > div.description::before        { content: "Description" !important; }
-div.finding div.finding-content > div.background::before         { content: "Background" !important; }
-div.finding div.finding-content > div.remediation::before        { content: "Remediation" !important; }
-div.finding div.finding-content > div.references::before         { content: "References" !important; }
+
+.finding-content > .category::before           { content: "Category" !important; }
+.finding-content > .affected-resources::before { content: "Affected Resources" !important; }
+.finding-content > .description::before        { content: "Description" !important; }
+.finding-content > .background::before         { content: "Background" !important; }
+.finding-content > .remediation::before        { content: "Remediation" !important; }
+.finding-content > .references::before         { content: "References" !important; }
 
 /* CVSS SPECIFIC */
 
-div.finding div.finding-content > div.vector::before             { content: "CVSS3 Vector" !important; }
-div.finding div.finding-content > div.tools-used::before         { content: "Tools Used" !important; }
-div.finding div.finding-content > div.poc::before                { content: "Proof of Concept" !important; }
+.finding-content > .vector::before             { content: "CVSS3 Vector" !important; }
+.finding-content > .tools-used::before         { content: "Tools Used" !important; }
+.finding-content > .poc::before                { content: "Proof of Concept" !important; }
 
 /* DREAD SPECIFIC */
 
-div.finding div.finding-content > div.dread-category::before     { content: attr(category) !important; }
-div.finding div.finding-content > div.impact::before             { content: "Impact" !important; }
+.finding-content > .dread-category::before     { content: attr(category) !important; }
+.finding-content > .impact::before             { content: "Impact" !important; }
 
 /* PROACTIVE SPECIFIC */
