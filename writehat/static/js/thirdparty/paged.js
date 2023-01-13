@@ -1,12 +1,420 @@
 /**
- * @license Paged.js v0.3.5 | MIT | https://gitlab.pagedmedia.org/tools/pagedjs
+ * @license Paged.js v0.4.0 | MIT | https://gitlab.pagedmedia.org/tools/pagedjs
  */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Paged = {}));
-})(this, (function (exports) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.PagedPolyfill = factory());
+})(this, (function () { 'use strict';
+
+	var eventEmitter = {exports: {}};
+
+	var d$3 = {exports: {}};
+
+	var isImplemented$6 = function () {
+		var assign = Object.assign, obj;
+		if (typeof assign !== "function") return false;
+		obj = { foo: "raz" };
+		assign(obj, { bar: "dwa" }, { trzy: "trzy" });
+		return (obj.foo + obj.bar + obj.trzy) === "razdwatrzy";
+	};
+
+	var isImplemented$5 = function () {
+		try {
+			Object.keys("primitive");
+			return true;
+		} catch (e) {
+	 return false;
+	}
+	};
+
+	// eslint-disable-next-line no-empty-function
+	var noop$4 = function () {};
+
+	var _undefined = noop$4(); // Support ES3 engines
+
+	var isValue$5 = function (val) {
+	 return (val !== _undefined) && (val !== null);
+	};
+
+	var isValue$4 = isValue$5;
+
+	var keys$2 = Object.keys;
+
+	var shim$5 = function (object) {
+		return keys$2(isValue$4(object) ? Object(object) : object);
+	};
+
+	var keys$1 = isImplemented$5()
+		? Object.keys
+		: shim$5;
+
+	var isValue$3 = isValue$5;
+
+	var validValue$1 = function (value) {
+		if (!isValue$3(value)) throw new TypeError("Cannot use null or undefined");
+		return value;
+	};
+
+	var keys  = keys$1
+	  , value$3 = validValue$1
+	  , max$1   = Math.max;
+
+	var shim$4 = function (dest, src /*, …srcn*/) {
+		var error, i, length = max$1(arguments.length, 2), assign;
+		dest = Object(value$3(dest));
+		assign = function (key) {
+			try {
+				dest[key] = src[key];
+			} catch (e) {
+				if (!error) error = e;
+			}
+		};
+		for (i = 1; i < length; ++i) {
+			src = arguments[i];
+			keys(src).forEach(assign);
+		}
+		if (error !== undefined) throw error;
+		return dest;
+	};
+
+	var assign$2 = isImplemented$6()
+		? Object.assign
+		: shim$4;
+
+	var isValue$2 = isValue$5;
+
+	var forEach$1 = Array.prototype.forEach, create$6 = Object.create;
+
+	var process = function (src, obj) {
+		var key;
+		for (key in src) obj[key] = src[key];
+	};
+
+	// eslint-disable-next-line no-unused-vars
+	var normalizeOptions = function (opts1 /*, …options*/) {
+		var result = create$6(null);
+		forEach$1.call(arguments, function (options) {
+			if (!isValue$2(options)) return;
+			process(Object(options), result);
+		});
+		return result;
+	};
+
+	var isCallable$1 = function (obj) {
+	 return typeof obj === "function";
+	};
+
+	var str = "razdwatrzy";
+
+	var isImplemented$4 = function () {
+		if (typeof str.contains !== "function") return false;
+		return (str.contains("dwa") === true) && (str.contains("foo") === false);
+	};
+
+	var indexOf$3 = String.prototype.indexOf;
+
+	var shim$3 = function (searchString/*, position*/) {
+		return indexOf$3.call(this, searchString, arguments[1]) > -1;
+	};
+
+	var contains$1 = isImplemented$4()
+		? String.prototype.contains
+		: shim$3;
+
+	var assign$1        = assign$2
+	  , normalizeOpts = normalizeOptions
+	  , isCallable    = isCallable$1
+	  , contains      = contains$1
+
+	  , d$2;
+
+	d$2 = d$3.exports = function (dscr, value/*, options*/) {
+		var c, e, w, options, desc;
+		if ((arguments.length < 2) || (typeof dscr !== 'string')) {
+			options = value;
+			value = dscr;
+			dscr = null;
+		} else {
+			options = arguments[2];
+		}
+		if (dscr == null) {
+			c = w = true;
+			e = false;
+		} else {
+			c = contains.call(dscr, 'c');
+			e = contains.call(dscr, 'e');
+			w = contains.call(dscr, 'w');
+		}
+
+		desc = { value: value, configurable: c, enumerable: e, writable: w };
+		return !options ? desc : assign$1(normalizeOpts(options), desc);
+	};
+
+	d$2.gs = function (dscr, get, set/*, options*/) {
+		var c, e, options, desc;
+		if (typeof dscr !== 'string') {
+			options = set;
+			set = get;
+			get = dscr;
+			dscr = null;
+		} else {
+			options = arguments[3];
+		}
+		if (get == null) {
+			get = undefined;
+		} else if (!isCallable(get)) {
+			options = get;
+			get = set = undefined;
+		} else if (set == null) {
+			set = undefined;
+		} else if (!isCallable(set)) {
+			options = set;
+			set = undefined;
+		}
+		if (dscr == null) {
+			c = true;
+			e = false;
+		} else {
+			c = contains.call(dscr, 'c');
+			e = contains.call(dscr, 'e');
+		}
+
+		desc = { get: get, set: set, configurable: c, enumerable: e };
+		return !options ? desc : assign$1(normalizeOpts(options), desc);
+	};
+
+	var validCallable = function (fn) {
+		if (typeof fn !== "function") throw new TypeError(fn + " is not a function");
+		return fn;
+	};
+
+	(function (module, exports) {
+
+	var d        = d$3.exports
+	  , callable = validCallable
+
+	  , apply = Function.prototype.apply, call = Function.prototype.call
+	  , create = Object.create, defineProperty = Object.defineProperty
+	  , defineProperties = Object.defineProperties
+	  , hasOwnProperty = Object.prototype.hasOwnProperty
+	  , descriptor = { configurable: true, enumerable: false, writable: true }
+
+	  , on, once, off, emit, methods, descriptors, base;
+
+	on = function (type, listener) {
+		var data;
+
+		callable(listener);
+
+		if (!hasOwnProperty.call(this, '__ee__')) {
+			data = descriptor.value = create(null);
+			defineProperty(this, '__ee__', descriptor);
+			descriptor.value = null;
+		} else {
+			data = this.__ee__;
+		}
+		if (!data[type]) data[type] = listener;
+		else if (typeof data[type] === 'object') data[type].push(listener);
+		else data[type] = [data[type], listener];
+
+		return this;
+	};
+
+	once = function (type, listener) {
+		var once, self;
+
+		callable(listener);
+		self = this;
+		on.call(this, type, once = function () {
+			off.call(self, type, once);
+			apply.call(listener, this, arguments);
+		});
+
+		once.__eeOnceListener__ = listener;
+		return this;
+	};
+
+	off = function (type, listener) {
+		var data, listeners, candidate, i;
+
+		callable(listener);
+
+		if (!hasOwnProperty.call(this, '__ee__')) return this;
+		data = this.__ee__;
+		if (!data[type]) return this;
+		listeners = data[type];
+
+		if (typeof listeners === 'object') {
+			for (i = 0; (candidate = listeners[i]); ++i) {
+				if ((candidate === listener) ||
+						(candidate.__eeOnceListener__ === listener)) {
+					if (listeners.length === 2) data[type] = listeners[i ? 0 : 1];
+					else listeners.splice(i, 1);
+				}
+			}
+		} else {
+			if ((listeners === listener) ||
+					(listeners.__eeOnceListener__ === listener)) {
+				delete data[type];
+			}
+		}
+
+		return this;
+	};
+
+	emit = function (type) {
+		var i, l, listener, listeners, args;
+
+		if (!hasOwnProperty.call(this, '__ee__')) return;
+		listeners = this.__ee__[type];
+		if (!listeners) return;
+
+		if (typeof listeners === 'object') {
+			l = arguments.length;
+			args = new Array(l - 1);
+			for (i = 1; i < l; ++i) args[i - 1] = arguments[i];
+
+			listeners = listeners.slice();
+			for (i = 0; (listener = listeners[i]); ++i) {
+				apply.call(listener, this, args);
+			}
+		} else {
+			switch (arguments.length) {
+			case 1:
+				call.call(listeners, this);
+				break;
+			case 2:
+				call.call(listeners, this, arguments[1]);
+				break;
+			case 3:
+				call.call(listeners, this, arguments[1], arguments[2]);
+				break;
+			default:
+				l = arguments.length;
+				args = new Array(l - 1);
+				for (i = 1; i < l; ++i) {
+					args[i - 1] = arguments[i];
+				}
+				apply.call(listeners, this, args);
+			}
+		}
+	};
+
+	methods = {
+		on: on,
+		once: once,
+		off: off,
+		emit: emit
+	};
+
+	descriptors = {
+		on: d(on),
+		once: d(once),
+		off: d(off),
+		emit: d(emit)
+	};
+
+	base = defineProperties({}, descriptors);
+
+	module.exports = exports = function (o) {
+		return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
+	};
+	exports.methods = methods;
+	}(eventEmitter, eventEmitter.exports));
+
+	var EventEmitter = eventEmitter.exports;
+
+	/**
+	 * Hooks allow for injecting functions that must all complete in order before finishing
+	 * They will execute in parallel but all must finish before continuing
+	 * Functions may return a promise if they are asycn.
+	 * From epubjs/src/utils/hooks
+	 * @param {any} context scope of this
+	 * @example this.content = new Hook(this);
+	 */
+	class Hook {
+		constructor(context){
+			this.context = context || this;
+			this.hooks = [];
+		}
+
+		/**
+		 * Adds a function to be run before a hook completes
+		 * @example this.content.register(function(){...});
+		 * @return {undefined} void
+		 */
+		register(){
+			for(var i = 0; i < arguments.length; ++i) {
+				if (typeof arguments[i]  === "function") {
+					this.hooks.push(arguments[i]);
+				} else {
+					// unpack array
+					for(var j = 0; j < arguments[i].length; ++j) {
+						this.hooks.push(arguments[i][j]);
+					}
+				}
+			}
+		}
+
+		/**
+		 * Triggers a hook to run all functions
+		 * @example this.content.trigger(args).then(function(){...});
+		 * @return {Promise} results
+		 */
+		trigger(){
+			var args = arguments;
+			var context = this.context;
+			var promises = [];
+
+			this.hooks.forEach(function(task) {
+				var executing = task.apply(context, args);
+
+				if(executing && typeof executing["then"] === "function") {
+					// Task is a function that returns a promise
+					promises.push(executing);
+				} else {
+					// Otherwise Task resolves immediately, add resolved promise with result
+					promises.push(new Promise((resolve, reject) => {
+						resolve(executing);
+					}));
+				}
+			});
+
+
+			return Promise.all(promises);
+		}
+
+		/**
+	   * Triggers a hook to run all functions synchronously
+	   * @example this.content.trigger(args).then(function(){...});
+	   * @return {Array} results
+	   */
+		triggerSync(){
+			var args = arguments;
+			var context = this.context;
+			var results = [];
+
+			this.hooks.forEach(function(task) {
+				var executing = task.apply(context, args);
+
+				results.push(executing);
+			});
+
+
+			return results;
+		}
+
+		// Adds a function to be run before a hook completes
+		list(){
+			return this.hooks;
+		}
+
+		clear(){
+			return this.hooks = [];
+		}
+	}
 
 	function getBoundingClientRect(element) {
 		if (!element) {
@@ -290,7 +698,7 @@
 		let after = elementAfter(node, limiter);
 
 		while (after && after.dataset.undisplayed) {
-			after = elementAfter(after);
+			after = elementAfter(after, limiter);
 		}
 
 		return after;
@@ -300,7 +708,7 @@
 		let before = elementBefore(node, limiter);
 
 		while (before && before.dataset.undisplayed) {
-			before = elementBefore(before);
+			before = elementBefore(before, limiter);
 		}
 
 		return before;
@@ -677,7 +1085,7 @@
 	}
 
 
-	function indexOf$3(node) {
+	function indexOf$2(node) {
 		let parent = node.parentNode;
 		if (!parent) {
 			return 0;
@@ -862,7 +1270,7 @@
 	}
 
 	/**
-	 * Layout
+	 * BreakToken
 	 * @class
 	 */
 	class BreakToken {
@@ -887,6 +1295,30 @@
 			return true;
 		}
 
+		toJSON(hash) {
+			let node;
+			let index = 0;
+			if (!this.node) {
+				return {};
+			}
+			if (isElement(this.node) && this.node.dataset.ref) {
+				node = this.node.dataset.ref;
+			} else if (hash) {
+				node = this.node.parentElement.dataset.ref;
+			}
+
+			if (this.node.parentElement) {
+				const children = Array.from(this.node.parentElement.childNodes);
+				index = children.indexOf(this.node);
+			}
+
+			return JSON.stringify({
+				"node": node,
+				"index" : index,
+				"offset": this.offset
+			});
+		}
+
 	}
 
 	/**
@@ -905,414 +1337,6 @@
 		constructor(message, items) {
 			super(message);
 			this.items = items;
-		}
-	}
-
-	var eventEmitter = {exports: {}};
-
-	var d$3 = {exports: {}};
-
-	var isImplemented$6 = function () {
-		var assign = Object.assign, obj;
-		if (typeof assign !== "function") return false;
-		obj = { foo: "raz" };
-		assign(obj, { bar: "dwa" }, { trzy: "trzy" });
-		return (obj.foo + obj.bar + obj.trzy) === "razdwatrzy";
-	};
-
-	var isImplemented$5 = function () {
-		try {
-			Object.keys("primitive");
-			return true;
-		} catch (e) {
-	 return false;
-	}
-	};
-
-	// eslint-disable-next-line no-empty-function
-	var noop$4 = function () {};
-
-	var _undefined = noop$4(); // Support ES3 engines
-
-	var isValue$5 = function (val) {
-	 return (val !== _undefined) && (val !== null);
-	};
-
-	var isValue$4 = isValue$5;
-
-	var keys$2 = Object.keys;
-
-	var shim$5 = function (object) {
-		return keys$2(isValue$4(object) ? Object(object) : object);
-	};
-
-	var keys$1 = isImplemented$5()
-		? Object.keys
-		: shim$5;
-
-	var isValue$3 = isValue$5;
-
-	var validValue$1 = function (value) {
-		if (!isValue$3(value)) throw new TypeError("Cannot use null or undefined");
-		return value;
-	};
-
-	var keys  = keys$1
-	  , value$3 = validValue$1
-	  , max$1   = Math.max;
-
-	var shim$4 = function (dest, src /*, …srcn*/) {
-		var error, i, length = max$1(arguments.length, 2), assign;
-		dest = Object(value$3(dest));
-		assign = function (key) {
-			try {
-				dest[key] = src[key];
-			} catch (e) {
-				if (!error) error = e;
-			}
-		};
-		for (i = 1; i < length; ++i) {
-			src = arguments[i];
-			keys(src).forEach(assign);
-		}
-		if (error !== undefined) throw error;
-		return dest;
-	};
-
-	var assign$2 = isImplemented$6()
-		? Object.assign
-		: shim$4;
-
-	var isValue$2 = isValue$5;
-
-	var forEach$1 = Array.prototype.forEach, create$6 = Object.create;
-
-	var process = function (src, obj) {
-		var key;
-		for (key in src) obj[key] = src[key];
-	};
-
-	// eslint-disable-next-line no-unused-vars
-	var normalizeOptions = function (opts1 /*, …options*/) {
-		var result = create$6(null);
-		forEach$1.call(arguments, function (options) {
-			if (!isValue$2(options)) return;
-			process(Object(options), result);
-		});
-		return result;
-	};
-
-	var isCallable$1 = function (obj) {
-	 return typeof obj === "function";
-	};
-
-	var str = "razdwatrzy";
-
-	var isImplemented$4 = function () {
-		if (typeof str.contains !== "function") return false;
-		return (str.contains("dwa") === true) && (str.contains("foo") === false);
-	};
-
-	var indexOf$2 = String.prototype.indexOf;
-
-	var shim$3 = function (searchString/*, position*/) {
-		return indexOf$2.call(this, searchString, arguments[1]) > -1;
-	};
-
-	var contains$1 = isImplemented$4()
-		? String.prototype.contains
-		: shim$3;
-
-	var assign$1        = assign$2
-	  , normalizeOpts = normalizeOptions
-	  , isCallable    = isCallable$1
-	  , contains      = contains$1
-
-	  , d$2;
-
-	d$2 = d$3.exports = function (dscr, value/*, options*/) {
-		var c, e, w, options, desc;
-		if ((arguments.length < 2) || (typeof dscr !== 'string')) {
-			options = value;
-			value = dscr;
-			dscr = null;
-		} else {
-			options = arguments[2];
-		}
-		if (dscr == null) {
-			c = w = true;
-			e = false;
-		} else {
-			c = contains.call(dscr, 'c');
-			e = contains.call(dscr, 'e');
-			w = contains.call(dscr, 'w');
-		}
-
-		desc = { value: value, configurable: c, enumerable: e, writable: w };
-		return !options ? desc : assign$1(normalizeOpts(options), desc);
-	};
-
-	d$2.gs = function (dscr, get, set/*, options*/) {
-		var c, e, options, desc;
-		if (typeof dscr !== 'string') {
-			options = set;
-			set = get;
-			get = dscr;
-			dscr = null;
-		} else {
-			options = arguments[3];
-		}
-		if (get == null) {
-			get = undefined;
-		} else if (!isCallable(get)) {
-			options = get;
-			get = set = undefined;
-		} else if (set == null) {
-			set = undefined;
-		} else if (!isCallable(set)) {
-			options = set;
-			set = undefined;
-		}
-		if (dscr == null) {
-			c = true;
-			e = false;
-		} else {
-			c = contains.call(dscr, 'c');
-			e = contains.call(dscr, 'e');
-		}
-
-		desc = { get: get, set: set, configurable: c, enumerable: e };
-		return !options ? desc : assign$1(normalizeOpts(options), desc);
-	};
-
-	var validCallable = function (fn) {
-		if (typeof fn !== "function") throw new TypeError(fn + " is not a function");
-		return fn;
-	};
-
-	(function (module, exports) {
-
-	var d        = d$3.exports
-	  , callable = validCallable
-
-	  , apply = Function.prototype.apply, call = Function.prototype.call
-	  , create = Object.create, defineProperty = Object.defineProperty
-	  , defineProperties = Object.defineProperties
-	  , hasOwnProperty = Object.prototype.hasOwnProperty
-	  , descriptor = { configurable: true, enumerable: false, writable: true }
-
-	  , on, once, off, emit, methods, descriptors, base;
-
-	on = function (type, listener) {
-		var data;
-
-		callable(listener);
-
-		if (!hasOwnProperty.call(this, '__ee__')) {
-			data = descriptor.value = create(null);
-			defineProperty(this, '__ee__', descriptor);
-			descriptor.value = null;
-		} else {
-			data = this.__ee__;
-		}
-		if (!data[type]) data[type] = listener;
-		else if (typeof data[type] === 'object') data[type].push(listener);
-		else data[type] = [data[type], listener];
-
-		return this;
-	};
-
-	once = function (type, listener) {
-		var once, self;
-
-		callable(listener);
-		self = this;
-		on.call(this, type, once = function () {
-			off.call(self, type, once);
-			apply.call(listener, this, arguments);
-		});
-
-		once.__eeOnceListener__ = listener;
-		return this;
-	};
-
-	off = function (type, listener) {
-		var data, listeners, candidate, i;
-
-		callable(listener);
-
-		if (!hasOwnProperty.call(this, '__ee__')) return this;
-		data = this.__ee__;
-		if (!data[type]) return this;
-		listeners = data[type];
-
-		if (typeof listeners === 'object') {
-			for (i = 0; (candidate = listeners[i]); ++i) {
-				if ((candidate === listener) ||
-						(candidate.__eeOnceListener__ === listener)) {
-					if (listeners.length === 2) data[type] = listeners[i ? 0 : 1];
-					else listeners.splice(i, 1);
-				}
-			}
-		} else {
-			if ((listeners === listener) ||
-					(listeners.__eeOnceListener__ === listener)) {
-				delete data[type];
-			}
-		}
-
-		return this;
-	};
-
-	emit = function (type) {
-		var i, l, listener, listeners, args;
-
-		if (!hasOwnProperty.call(this, '__ee__')) return;
-		listeners = this.__ee__[type];
-		if (!listeners) return;
-
-		if (typeof listeners === 'object') {
-			l = arguments.length;
-			args = new Array(l - 1);
-			for (i = 1; i < l; ++i) args[i - 1] = arguments[i];
-
-			listeners = listeners.slice();
-			for (i = 0; (listener = listeners[i]); ++i) {
-				apply.call(listener, this, args);
-			}
-		} else {
-			switch (arguments.length) {
-			case 1:
-				call.call(listeners, this);
-				break;
-			case 2:
-				call.call(listeners, this, arguments[1]);
-				break;
-			case 3:
-				call.call(listeners, this, arguments[1], arguments[2]);
-				break;
-			default:
-				l = arguments.length;
-				args = new Array(l - 1);
-				for (i = 1; i < l; ++i) {
-					args[i - 1] = arguments[i];
-				}
-				apply.call(listeners, this, args);
-			}
-		}
-	};
-
-	methods = {
-		on: on,
-		once: once,
-		off: off,
-		emit: emit
-	};
-
-	descriptors = {
-		on: d(on),
-		once: d(once),
-		off: d(off),
-		emit: d(emit)
-	};
-
-	base = defineProperties({}, descriptors);
-
-	module.exports = exports = function (o) {
-		return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
-	};
-	exports.methods = methods;
-	}(eventEmitter, eventEmitter.exports));
-
-	var EventEmitter = eventEmitter.exports;
-
-	/**
-	 * Hooks allow for injecting functions that must all complete in order before finishing
-	 * They will execute in parallel but all must finish before continuing
-	 * Functions may return a promise if they are asycn.
-	 * From epubjs/src/utils/hooks
-	 * @param {any} context scope of this
-	 * @example this.content = new Hook(this);
-	 */
-	class Hook {
-		constructor(context){
-			this.context = context || this;
-			this.hooks = [];
-		}
-
-		/**
-		 * Adds a function to be run before a hook completes
-		 * @example this.content.register(function(){...});
-		 * @return {undefined} void
-		 */
-		register(){
-			for(var i = 0; i < arguments.length; ++i) {
-				if (typeof arguments[i]  === "function") {
-					this.hooks.push(arguments[i]);
-				} else {
-					// unpack array
-					for(var j = 0; j < arguments[i].length; ++j) {
-						this.hooks.push(arguments[i][j]);
-					}
-				}
-			}
-		}
-
-		/**
-		 * Triggers a hook to run all functions
-		 * @example this.content.trigger(args).then(function(){...});
-		 * @return {Promise} results
-		 */
-		trigger(){
-			var args = arguments;
-			var context = this.context;
-			var promises = [];
-
-			this.hooks.forEach(function(task) {
-				var executing = task.apply(context, args);
-
-				if(executing && typeof executing["then"] === "function") {
-					// Task is a function that returns a promise
-					promises.push(executing);
-				} else {
-					// Otherwise Task resolves immediately, add resolved promise with result
-					promises.push(new Promise((resolve, reject) => {
-						resolve(executing);
-					}));
-				}
-			});
-
-
-			return Promise.all(promises);
-		}
-
-		/**
-	   * Triggers a hook to run all functions synchronously
-	   * @example this.content.trigger(args).then(function(){...});
-	   * @return {Array} results
-	   */
-		triggerSync(){
-			var args = arguments;
-			var context = this.context;
-			var results = [];
-
-			this.hooks.forEach(function(task) {
-				var executing = task.apply(context, args);
-
-				results.push(executing);
-			});
-
-
-			return results;
-		}
-
-		// Adds a function to be run before a hook completes
-		list(){
-			return this.hooks;
-		}
-
-		clear(){
-			return this.hooks = [];
 		}
 	}
 
@@ -1414,14 +1438,19 @@
 
 					if (!newBreakToken) {
 						newBreakToken = this.breakAt(node);
+					} else {
+						this.rebuildTableFromBreakToken(newBreakToken, wrapper);
 					}
 
 					if (newBreakToken && newBreakToken.equals(prevBreakToken)) {
 						console.warn("Unable to layout item: ", node);
-						return new RenderResult(undefined, new OverflowContentError("Unable to layout item", [node]));
+						let after = newBreakToken.node && nodeAfter(newBreakToken.node);
+						if (after) {
+							newBreakToken = new BreakToken(after);
+						} else {
+							return new RenderResult(undefined, new OverflowContentError("Unable to layout item", [node]));
+						}
 					}
-
-					this.rebuildTableFromBreakToken(newBreakToken, wrapper);
 
 					length = 0;
 
@@ -1463,9 +1492,9 @@
 
 					if (!newBreakToken) {
 						newBreakToken = this.breakAt(node);
+					} else {
+						this.rebuildTableFromBreakToken(newBreakToken, wrapper);
 					}
-
-					this.rebuildTableFromBreakToken(newBreakToken, wrapper);
 
 					length = 0;
 					this.forceRenderBreak = false;
@@ -1485,14 +1514,19 @@
 
 					newBreakToken = this.findBreakToken(wrapper, source, bounds, prevBreakToken);
 
-					if (newBreakToken && newBreakToken.equals(prevBreakToken)) {
-						console.warn("Unable to layout item: ", node);
-						return new RenderResult(undefined, new OverflowContentError("Unable to layout item", [node]));
-					}
-
 					if (newBreakToken) {
 						length = 0;
 						this.rebuildTableFromBreakToken(newBreakToken, wrapper);
+					}
+
+					if (newBreakToken && newBreakToken.equals(prevBreakToken)) {
+						console.warn("Unable to layout item: ", node);
+						let after = newBreakToken.node && nodeAfter(newBreakToken.node);
+						if (after) {
+							newBreakToken = new BreakToken(after);
+						} else {
+							return new RenderResult(undefined, new OverflowContentError("Unable to layout item", [node]));
+						}
 					}
 				}
 
@@ -1790,9 +1824,11 @@
 
 		hasOverflow(element, bounds = this.bounds) {
 			let constrainingElement = element && element.parentNode; // this gets the element, instead of the wrapper for the width workaround
-			let {width} = element.getBoundingClientRect();
+			let {width, height} = element.getBoundingClientRect();
 			let scrollWidth = constrainingElement ? constrainingElement.scrollWidth : 0;
-			return Math.max(Math.floor(width), scrollWidth) > Math.round(bounds.width);
+			let scrollHeight = constrainingElement ? constrainingElement.scrollHeight : 0;
+			return Math.max(Math.floor(width), scrollWidth) > Math.round(bounds.width) ||
+				Math.max(Math.floor(height), scrollHeight) > Math.round(bounds.height);
 		}
 
 		findOverflow(rendered, bounds = this.bounds, gap = this.gap) {
@@ -1800,6 +1836,8 @@
 
 			let start = Math.floor(bounds.left);
 			let end = Math.round(bounds.right + gap);
+			let vStart = Math.round(bounds.top);
+			let vEnd = Math.round(bounds.bottom);
 			let range;
 
 			let walker = walk$2(rendered.firstChild, rendered);
@@ -1819,8 +1857,10 @@
 					let pos = getBoundingClientRect(node);
 					let left = Math.round(pos.left);
 					let right = Math.floor(pos.right);
+					let top = Math.round(pos.top);
+					let bottom = Math.floor(pos.bottom);
 
-					if (!range && left >= end) {
+					if (!range && (left >= end || top >= vEnd)) {
 						// Check if it is a float
 						let isFloat = false;
 
@@ -1828,7 +1868,8 @@
 						const insideTableCell = parentOf(node, "TD", rendered);
 						if (insideTableCell && window.getComputedStyle(insideTableCell)["break-inside"] === "avoid") {
 							// breaking inside a table cell produces unexpected result, as a workaround, we forcibly avoid break inside in a cell.
-							prev = insideTableCell;
+							// But we take the whole row, not just the cell that is causing the break.
+							prev = insideTableCell.parentElement;
 						} else if (isElement(node)) {
 							let styles = window.getComputedStyle(node);
 							isFloat = styles.getPropertyValue("float") !== "none";
@@ -1907,16 +1948,20 @@
 						let rects = getClientRects(node);
 						let rect;
 						left = 0;
+						top = 0;
 						for (var i = 0; i != rects.length; i++) {
 							rect = rects[i];
 							if (rect.width > 0 && (!left || rect.left > left)) {
 								left = rect.left;
 							}
+							if (rect.height > 0 && (!top || rect.top > top)) {
+								top = rect.top;
+							}
 						}
 
-						if (left >= end) {
+						if (left >= end || top >= vEnd) {
 							range = document.createRange();
-							offset = this.textBreak(node, start, end);
+							offset = this.textBreak(node, start, end, vStart, vEnd);
 							if (!offset) {
 								range = undefined;
 							} else {
@@ -1927,7 +1972,7 @@
 					}
 
 					// Skip children
-					if (skip || right <= end) {
+					if (skip || (right <= end && bottom <= vEnd)) {
 						next = nodeAfter(node, rendered);
 						if (next) {
 							walker = walk$2(next, rendered);
@@ -1970,7 +2015,7 @@
 			if (isText(lastChild)) {
 
 				if (lastChild.parentNode.dataset.ref) {
-					lastNodeIndex = indexOf$3(lastChild);
+					lastNodeIndex = indexOf$2(lastChild);
 					lastChild = lastChild.parentNode;
 				} else {
 					lastChild = lastChild.previousSibling;
@@ -1988,10 +2033,12 @@
 			return this.breakAt(after);
 		}
 
-		textBreak(node, start, end) {
+		textBreak(node, start, end, vStart, vEnd) {
 			let wordwalker = words(node);
 			let left = 0;
 			let right = 0;
+			let top = 0;
+			let bottom = 0;
 			let word, next, done, pos;
 			let offset;
 			while (!done) {
@@ -2007,13 +2054,15 @@
 
 				left = Math.floor(pos.left);
 				right = Math.floor(pos.right);
+				top = Math.floor(pos.top);
+				bottom = Math.floor(pos.bottom);
 
-				if (left >= end) {
+				if (left >= end || top >= vEnd) {
 					offset = word.startOffset;
 					break;
 				}
 
-				if (right > end) {
+				if (right > end || bottom > vEnd) {
 					let letterwalker = letters(word);
 					let letter, nextLetter, doneLetter;
 
@@ -2028,8 +2077,9 @@
 
 						pos = getBoundingClientRect(letter);
 						left = Math.floor(pos.left);
+						top = Math.floor(pos.top);
 
-						if (left >= end) {
+						if (left >= end || top >= vEnd) {
 							offset = letter.startOffset;
 							done = true;
 
@@ -2745,6 +2795,7 @@
 			this.hooks.afterOverflowRemoved = new Hook(this);
 			this.hooks.onBreakToken = new Hook();
 			this.hooks.afterPageLayout = new Hook(this);
+			this.hooks.finalizePage = new Hook(this);
 			this.hooks.afterRendered = new Hook(this);
 
 			this.pages = [];
@@ -2951,12 +3002,14 @@
 				this.emit("page", page);
 				// await this.hooks.layout.trigger(page.element, page, undefined, this);
 				await this.hooks.afterPageLayout.trigger(page.element, page, undefined, this);
+				await this.hooks.finalizePage.trigger(page.element, page, undefined, this);
 				this.emit("renderedPage", page);
 			}
 		}
 
 		async *layout(content, startAt) {
 			let breakToken = startAt || false;
+			let tokens = [];
 
 			while (breakToken !== undefined && (true)) {
 
@@ -2974,7 +3027,20 @@
 				// Layout content in the page, starting from the breakToken
 				breakToken = await page.layout(content, breakToken, this.maxChars);
 
+				if (breakToken) {
+					let newToken = breakToken.toJSON(true);
+					if (tokens.lastIndexOf(newToken) > -1) {
+						// loop
+						let err = new OverflowContentError("Layout repeated", [breakToken.node]);
+						console.error("Layout repeated at: ", breakToken.node);
+						return err;
+					} else {
+						tokens.push(newToken);
+					}
+				}
+
 				await this.hooks.afterPageLayout.trigger(page.element, page, breakToken, this);
+				await this.hooks.finalizePage.trigger(page.element, page, undefined, this);
 				this.emit("renderedPage", page);
 
 				this.recoredCharLength(page.wrapper.textContent.length);
@@ -3145,6 +3211,7 @@
 			}
 
 			await this.hooks.afterPageLayout.trigger(page.element, page, undefined, this);
+			await this.hooks.finalizePage.trigger(page.element, page, undefined, this);
 			this.emit("renderedPage", page);
 		}
 
@@ -26143,44 +26210,48 @@
 	    node: node
 	};
 
-	var name = "css-tree";
-	var version = "1.1.3";
-	var description = "A tool set for CSS: fast detailed parser (CSS → AST), walker (AST traversal), generator (AST → CSS) and lexer (validation and matching) based on specs and browser implementations";
-	var author = "Roman Dvornov <rdvornov@gmail.com> (https://github.com/lahmatiy)";
-	var license = "MIT";
-	var repository = "csstree/csstree";
-	var keywords = [
-		"css",
-		"ast",
-		"tokenizer",
-		"parser",
-		"walker",
-		"lexer",
-		"generator",
-		"utils",
-		"syntax",
-		"validation"
+	var _args = [
+		[
+			"css-tree@1.1.3",
+			"/home/gitlab-runner/builds/BQJy2NwB/0/pagedjs/pagedjs"
+		]
 	];
-	var main = "lib/index.js";
-	var unpkg = "dist/csstree.min.js";
-	var jsdelivr = "dist/csstree.min.js";
-	var scripts = {
-		build: "rollup --config",
-		lint: "eslint data lib scripts test && node scripts/review-syntax-patch --lint && node scripts/update-docs --lint",
-		"lint-and-test": "npm run lint && npm test",
-		"update:docs": "node scripts/update-docs",
-		"review:syntax-patch": "node scripts/review-syntax-patch",
-		test: "mocha --reporter progress",
-		coverage: "nyc npm test",
-		travis: "nyc npm run lint-and-test && npm run coveralls",
-		coveralls: "nyc report --reporter=text-lcov | coveralls",
-		prepublishOnly: "npm run build",
-		hydrogen: "node --trace-hydrogen --trace-phase=Z --trace-deopt --code-comments --hydrogen-track-positions --redirect-code-traces --redirect-code-traces-to=code.asm --trace_hydrogen_file=code.cfg --print-opt-code bin/parse --stat -o /dev/null"
+	var _from = "css-tree@1.1.3";
+	var _id = "css-tree@1.1.3";
+	var _inBundle = false;
+	var _integrity = "sha512-tRpdppF7TRazZrjJ6v3stzv93qxRcSsFmW6cX0Zm2NVKpxE1WV1HblnghVv9TreireHkqI/VDEsfolRF1p6y7Q==";
+	var _location = "/css-tree";
+	var _phantomChildren = {
+	};
+	var _requested = {
+		type: "version",
+		registry: true,
+		raw: "css-tree@1.1.3",
+		name: "css-tree",
+		escapedName: "css-tree",
+		rawSpec: "1.1.3",
+		saveSpec: null,
+		fetchSpec: "1.1.3"
+	};
+	var _requiredBy = [
+		"/"
+	];
+	var _resolved = "https://registry.npmjs.org/css-tree/-/css-tree-1.1.3.tgz";
+	var _spec = "1.1.3";
+	var _where = "/home/gitlab-runner/builds/BQJy2NwB/0/pagedjs/pagedjs";
+	var author = {
+		name: "Roman Dvornov",
+		email: "rdvornov@gmail.com",
+		url: "https://github.com/lahmatiy"
+	};
+	var bugs = {
+		url: "https://github.com/csstree/csstree/issues"
 	};
 	var dependencies = {
 		"mdn-data": "2.0.14",
 		"source-map": "^0.6.1"
 	};
+	var description = "A tool set for CSS: fast detailed parser (CSS → AST), walker (AST traversal), generator (AST → CSS) and lexer (validation and matching) based on specs and browser implementations";
 	var devDependencies = {
 		"@rollup/plugin-commonjs": "^11.0.2",
 		"@rollup/plugin-json": "^4.0.2",
@@ -26201,22 +26272,72 @@
 		"dist",
 		"lib"
 	];
+	var homepage = "https://github.com/csstree/csstree#readme";
+	var jsdelivr = "dist/csstree.min.js";
+	var keywords = [
+		"css",
+		"ast",
+		"tokenizer",
+		"parser",
+		"walker",
+		"lexer",
+		"generator",
+		"utils",
+		"syntax",
+		"validation"
+	];
+	var license = "MIT";
+	var main = "lib/index.js";
+	var name = "css-tree";
+	var repository = {
+		type: "git",
+		url: "git+https://github.com/csstree/csstree.git"
+	};
+	var scripts = {
+		build: "rollup --config",
+		coverage: "nyc npm test",
+		coveralls: "nyc report --reporter=text-lcov | coveralls",
+		hydrogen: "node --trace-hydrogen --trace-phase=Z --trace-deopt --code-comments --hydrogen-track-positions --redirect-code-traces --redirect-code-traces-to=code.asm --trace_hydrogen_file=code.cfg --print-opt-code bin/parse --stat -o /dev/null",
+		lint: "eslint data lib scripts test && node scripts/review-syntax-patch --lint && node scripts/update-docs --lint",
+		"lint-and-test": "npm run lint && npm test",
+		prepublishOnly: "npm run build",
+		"review:syntax-patch": "node scripts/review-syntax-patch",
+		test: "mocha --reporter progress",
+		travis: "nyc npm run lint-and-test && npm run coveralls",
+		"update:docs": "node scripts/update-docs"
+	};
+	var unpkg = "dist/csstree.min.js";
+	var version = "1.1.3";
 	var require$$4 = {
-		name: name,
-		version: version,
-		description: description,
+		_args: _args,
+		_from: _from,
+		_id: _id,
+		_inBundle: _inBundle,
+		_integrity: _integrity,
+		_location: _location,
+		_phantomChildren: _phantomChildren,
+		_requested: _requested,
+		_requiredBy: _requiredBy,
+		_resolved: _resolved,
+		_spec: _spec,
+		_where: _where,
 		author: author,
-		license: license,
-		repository: repository,
-		keywords: keywords,
-		main: main,
-		unpkg: unpkg,
-		jsdelivr: jsdelivr,
-		scripts: scripts,
+		bugs: bugs,
 		dependencies: dependencies,
+		description: description,
 		devDependencies: devDependencies,
 		engines: engines,
-		files: files
+		files: files,
+		homepage: homepage,
+		jsdelivr: jsdelivr,
+		keywords: keywords,
+		license: license,
+		main: main,
+		name: name,
+		repository: repository,
+		scripts: scripts,
+		unpkg: unpkg,
+		version: version
 	};
 
 	function merge() {
@@ -29305,7 +29426,7 @@
 			// page.element.querySelector('.paged_area').style.color = red;
 		}
 
-		afterPageLayout(fragment, page, breakToken, chunker) {
+		finalizePage(fragment, page, breakToken, chunker) {
 			for (let m in this.marginalia) {
 				let margin = this.marginalia[m];
 				let sels = m.split(" ");
@@ -31297,18 +31418,16 @@
 		afterPageLayout(fragment) {
 			for (let name of Object.keys(this.runningSelectors)) {
 				let set = this.runningSelectors[name];
-				if (!set.first) {
-					let selected = fragment.querySelector(set.selector);
-					if (selected) {
-						// let cssVar;
-						if (set.identifier === "running") {
-							// cssVar = selected.textContent.replace(/\\([\s\S])|(["|'])/g,"\\$1$2");
-							// this.styleSheet.insertRule(`:root { --string-${name}: "${cssVar}"; }`, this.styleSheet.cssRules.length);
-							// fragment.style.setProperty(`--string-${name}`, `"${cssVar}"`);
-							set.first = selected;
-						} else {
-							console.warn(set.value + "needs css replacement");
-						}
+				let selected = fragment.querySelector(set.selector);
+				if (selected) {
+					// let cssVar;
+					if (set.identifier === "running") {
+						// cssVar = selected.textContent.replace(/\\([\s\S])|(["|'])/g,"\\$1$2");
+						// this.styleSheet.insertRule(`:root { --string-${name}: "${cssVar}"; }`, this.styleSheet.cssRules.length);
+						// fragment.style.setProperty(`--string-${name}`, `"${cssVar}"`);
+						set.first = selected;
+					} else {
+						console.warn(set.value + "needs css replacement");
 					}
 				}
 			}
@@ -31459,7 +31578,7 @@
 
 			this.stringSetSelectors = {};
 			this.type;
-			// pageLastString = last string variable defined on the page 
+			// pageLastString = last string variable defined on the page
 			this.pageLastString;
 
 		}
@@ -31468,21 +31587,35 @@
 			if (declaration.property === "string-set") {
 				let selector = lib.generate(rule.ruleNode.prelude);
 
-				let identifier = declaration.value.children.first().name;
+				let identifiers = [];
+				let functions = [];
+				let values = [];
 
-				let value;
-				lib.walk(declaration, {
-					visit: "Function",
-					enter: (node, item, list) => {
-						value = lib.generate(node);
+				declaration.value.children.forEach((child) => {
+					if (child.type === "Identifier") {
+						identifiers.push(child.name);
+					}
+					if (child.type === "Function") {
+						functions.push(child.name);
+						child.children.forEach((subchild) => {
+							if (subchild.type === "Identifier") {
+								values.push(subchild.name);
+							}
+						});
 					}
 				});
 
-				this.stringSetSelectors[identifier] = {
-					identifier,
-					value,
-					selector
-				};
+				identifiers.forEach((identifier, index) => {
+					let func = functions[index];
+					let value = values[index];
+					this.stringSetSelectors[identifier] = {
+						identifier,
+						func,
+						value,
+						selector
+					};
+				});
+
 			}
 		}
 
@@ -31522,11 +31655,13 @@
 			{
 				this.pageLastString = {};
 			}
-		
+
 			
 			for (let name of Object.keys(this.stringSetSelectors)) {
 		
 				let set = this.stringSetSelectors[name];
+				let value = set.value;
+				let func = set.func;
 				let selected = fragment.querySelectorAll(set.selector);
 
 				// Get the last found string for the current identifier
@@ -31544,18 +31679,36 @@
 
 					selected.forEach((sel) => {
 						// push each content into the array to define in the variable the first and the last element of the page.
-						this.pageLastString[name] = selected[selected.length - 1].textContent;
-					
+						if (func === "content") {
+							this.pageLastString[name] = selected[selected.length - 1].textContent;
+						}
+
+						if (func === "attr") {
+							this.pageLastString[name] = selected[selected.length - 1].getAttribute(value) || "";
+						}
+
 					});	
 
 					/* FIRST */
 		
-					varFirst = selected[0].textContent;
+					if (func === "content") {
+						varFirst = selected[0].textContent;
+					}
+
+					if (func === "attr") {
+						varFirst = selected[0].getAttribute(value) || "";
+					}
 
 
 					/* LAST */
 
-					varLast = selected[selected.length - 1].textContent;
+					if (func === "content") {
+						varLast = selected[selected.length - 1].textContent;
+					}
+
+					if (func === "attr") {
+						varLast = selected[selected.length - 1].getAttribute(value) || "";
+					}
 
 
 					/* START */
@@ -32828,13 +32981,60 @@
 
 	EventEmitter(Previewer.prototype);
 
-	exports.Chunker = Chunker;
-	exports.Handler = Handler;
-	exports.Polisher = Polisher;
-	exports.Previewer = Previewer;
-	exports.initializeHandlers = initializeHandlers;
-	exports.registerHandlers = registerHandlers;
+	var Paged = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Chunker: Chunker,
+		Polisher: Polisher,
+		Previewer: Previewer,
+		Handler: Handler,
+		registeredHandlers: registeredHandlers,
+		registerHandlers: registerHandlers,
+		initializeHandlers: initializeHandlers
+	});
 
-	Object.defineProperty(exports, '__esModule', { value: true });
+	window.Paged = Paged;
+
+	let ready = new Promise(function(resolve, reject){
+		if (document.readyState === "interactive" || document.readyState === "complete") {
+			resolve(document.readyState);
+			return;
+		}
+
+		document.onreadystatechange = function ($) {
+			if (document.readyState === "interactive") {
+				resolve(document.readyState);
+			}
+		};
+	});
+
+	let config = window.PagedConfig || {
+		auto: true,
+		before: undefined,
+		after: undefined,
+		content: undefined,
+		stylesheets: undefined,
+		renderTo: undefined,
+		settings: undefined
+	};
+
+	let previewer = new Previewer(config.settings);
+
+	ready.then(async function () {
+		let done;
+		if (config.before) {
+			await config.before();
+		}
+
+		if(config.auto !== false) {
+			done = await previewer.preview(config.content, config.stylesheets, config.renderTo);
+		}
+
+
+		if (config.after) {
+			await config.after(done);
+		}
+	});
+
+	return previewer;
 
 }));
