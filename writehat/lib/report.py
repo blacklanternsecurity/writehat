@@ -407,10 +407,15 @@ class BaseReport(WriteHatBaseModel):
     def render(self):
 
         rendered_components = self.renderComponents()
-
         master_template = get_template('reportTemplates/reportBase.html')
-        #page_footer = get_template('reportTemplates/reportPageFooter.html')
-        rendered = master_template.render({ 'report': self, 'components': rendered_components, 'footer': self.pageTemplate.renderFooter(), 'header': self.pageTemplate.renderHeader() })
+
+        rendered = master_template.render({ 
+            'components': rendered_components["components"],
+            'component_css': rendered_components["component_css"],
+            'report': self,
+            'footer': self.pageTemplate.renderFooter(),
+            'header': self.pageTemplate.renderHeader(),
+        })
 
         return rendered
 
@@ -421,17 +426,20 @@ class BaseReport(WriteHatBaseModel):
 
         return [component.render({'report': self}) for component in self]
     '''
-        # Returns a list of rendered report components
     def renderComponents(self):
 
-        rendered_components = []
+        rendered_components = {
+            "components": [],
+            "component_css": []
+        }
 
         for order, component in enumerate(self):
             if order == 0:
                 log.debug(f"Removing page break from first component {component.name}")
                 component.pageBreakBefore = False
 
-            rendered_components.append(component.render({
+            rendered_components["component_css"].append(component.type)
+            rendered_components["components"].append(component.render({
                 'report': self
             }))
 
@@ -522,7 +530,8 @@ class Report(BaseReport):
         # reportBase.html or it will only appear on the last page. To edit
         # footer contents, modify templates/reportTemplates/reportPageFooter.html
         rendered = master_template.render({ 
-            'components': rendered_components,
+            'components': rendered_components["components"],
+            'component_css': rendered_components["component_css"],
             'report': self,
             'footer': self.pageTemplate.renderFooter(),
             'header': self.pageTemplate.renderHeader(),
@@ -648,14 +657,18 @@ class Report(BaseReport):
 
     def renderComponents(self):
 
-        rendered_components = []
+        rendered_components = {
+            "components": [],
+            "component_css": []
+        }
 
         for order, component in enumerate(self):
             if order == 0:
                 log.debug(f"Removing page break from first component {component.name}")
                 component.pageBreakBefore = False
 
-            rendered_components.append(component.render({
+            rendered_components["component_css"].append(component.type)
+            rendered_components["components"].append(component.render({
                 'engagement': self.engagement,
                 'report': self
             }))
