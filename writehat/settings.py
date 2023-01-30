@@ -111,7 +111,6 @@ MIDDLEWARE = [
     'django_currentuser.middleware.ThreadLocalUserMiddleware'
 ]
 
-
 ROOT_URLCONF = 'writehat.urls'
 
 TEMPLATES = [

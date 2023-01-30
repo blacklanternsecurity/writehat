@@ -340,8 +340,8 @@ class BaseComponent():
         template = get_template(self.htmlTemplate)
         context = self.preprocess(context=context)
         contentHTML = template.render(context)
-        styleHTML = get_template(f'snippets/componentCSS.html').render({'component': self.type})
-        return styleHTML + contentHTML
+        # styleHTML = get_template(f'snippets/componentCSS.html').render({'component': self.type})
+        return contentHTML
 
 
     def delete(self):

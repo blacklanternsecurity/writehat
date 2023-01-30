@@ -24,24 +24,4 @@
   .pagedjs_page {
     background-image: url('/images/{{ report.pageTemplate.backgroundImageID }}') !important;
   }
-
-  .pagedjs_pages {
-      position: relative;
-  }
-
-  .pagedjs_pages:after {
-      content: "Loading...";
-      position: absolute;
-      margin: 3rem;
-      top: 0;
-      left: 0;
-  }
-
-  .pagedjs_pages.no_message:after {
-      content: "";
-  }
-
-  .pagedjs_pages.finished_loading:after {
-      content: "Finished loading";
-  }
 </style>
