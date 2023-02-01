@@ -30,13 +30,24 @@ class ElementCleaner extends Paged.Handler {
         $("#report-body > div.pagedjs_pages").css("justify-content", "center");
     }
 
-    afterPageLayout(pageFragment, page) {
+    afterPageLayout(pageElement, page, breakToken) {
         const cleanup = [ 
             ".generated-table table", 
             ".finding-content pre",
             ".finding-content",
             "tbody"
         ];
+
+        if (breakToken) {
+            let token = $(breakToken.node)
+            let token_parent = token.parents('.avoid-split')
+            let should_avoid_split = token_parent.length > 0
+
+            if (should_avoid_split) {
+                let new_break_node = token_parent.get(0)
+                breakToken.node = new_break_node
+            }
+        }
 
         cleanup.forEach( e => $(page.element).find(e).each( function() { removeEmpty($(this), page.id); } ) );
     }
