@@ -53,6 +53,21 @@ class ElementCleaner extends Paged.Handler {
     }
 
     afterRendered(pages) {
+        for (let i = 0; i < pages.length; i++) {
+            let page = $(pages[i].element)
+            let split_finding = page.find('.finding-content-body[data-split-original=true]')
+
+            if (split_finding.length > 0) {
+                let split_id = split_finding.attr('data-split-to')
+                let next_page = $(pages[i + 1].element)
+
+                let split_content = next_page.find(`[data-split-from='${split_id}']`)
+                let section = split_finding.prev()
+
+                split_content.before(section.clone())
+            }
+        }
+
         let t1 = performance.now();
         console.log("Rendering took " + Number.parseFloat((t1 - t0)/1000).toPrecision(3) + " seconds.");
 

@@ -52,25 +52,15 @@
 }
 
 .finding-content {
-    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
 }
 
-.finding-content > div {
-    margin-left: 11rem;
-    padding: 0.5rem !important;
-    overflow-wrap: break-word
-}
-
-/* alternate colors on rows for readability */
-.finding-content:nth-of-type(odd) > div {
-    background-color: var(--stripe-background-color);
-}
-
-.finding-content > div::before {
-    position: absolute;
+.finding-content-header {
     background-color: var(--severity-color-faded);
-    min-width: 9rem;
-    max-width: 9rem;
+    min-width: 11rem;
+    max-width: 11rem;
     text-align: right;
     padding: 1rem;
     font-weight: bold;
@@ -80,12 +70,14 @@
     top: 0;
 }
 
-/* These two rules force the last finding-content element and its children to fill the rest of the page */
-.finding .finding-content:last-child {
-    height: 100%;
+.finding-content-body {
+    padding: 1rem;
+    width: 100%;
+    overflow-wrap: break-word
 }
-.finding .finding-content:last-child > div::before, .finding .finding-content:last-child > div {
-    height: 100%;
+
+.finding-content:nth-of-type(odd) > .finding-content-body {
+    background-color: var(--stripe-background-color);
 }
 
 /* DREAD Categories */
