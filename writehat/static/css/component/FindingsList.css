@@ -80,23 +80,15 @@
     background-color: var(--stripe-background-color);
 }
 
-/* DREAD Categories */
-
-div.finding.content > div.dread-category { 
-    display: flex;
-    align-items: stretch;
+/* These two rules force the last finding-content element and its children to fill the rest of the page */
+.finding .finding-content:last-child {
+    height: 100%;
+}
+.finding .finding-content:last-child div {
+    height: 100%;
 }
 
-div.finding-content > div.dread-category > p {
-    display: table-cell;
-}
-
-div.finding-content > div.dread-category > p.dread-score { 
-    padding-right: 1rem;
-    vertical-align: middle;
-}
-
-div.finding-content > div.impact ul {
+.dread-impact ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -105,31 +97,10 @@ div.finding-content > div.impact ul {
   justify-content: start;
 }
 
-div.finding-content > div.impact ul li {
+.dread-impact ul li {
   padding: 4px;
   border: 1px solid #ddd;
   background-color: rgba(240, 240, 240, 0.2);
   border-radius: 5px;
   margin: 4px;
 }
-
-
-.finding-content > .category::before           { content: "Category" !important; }
-.finding-content > .affected-resources::before { content: "Affected Resources" !important; }
-.finding-content > .description::before        { content: "Description" !important; }
-.finding-content > .background::before         { content: "Background" !important; }
-.finding-content > .remediation::before        { content: "Remediation" !important; }
-.finding-content > .references::before         { content: "References" !important; }
-
-/* CVSS SPECIFIC */
-
-.finding-content > .vector::before             { content: "CVSS3 Vector" !important; }
-.finding-content > .tools-used::before         { content: "Tools Used" !important; }
-.finding-content > .poc::before                { content: "Proof of Concept" !important; }
-
-/* DREAD SPECIFIC */
-
-.finding-content > .dread-category::before     { content: attr(category) !important; }
-.finding-content > .impact::before             { content: "Impact" !important; }
-
-/* PROACTIVE SPECIFIC */
