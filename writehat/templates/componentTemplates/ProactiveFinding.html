@@ -9,34 +9,49 @@
         </div>
     </div>
     <div class='finding-content'>
-        <div class='category' style='font-weight: bold'>
+        <div class='finding-content-header'>
+            Category
+        </div>
+        <div class='finding-content-body' style='font-weight: bold'>
             {{ finding.categoryFull }}
         </div>
     </div>
     {% if finding.affectedResources %}
         <div class='finding-content'>
-            <div class='affected-resources'>
+            <div class='finding-content-header'>
+                Affected Resources
+            </div>
+            <div class='finding-content-body'>
                 {% markdown finding.affectedResources %}
             </div>
         </div>
     {% endif %}
     {% if finding.description %}
         <div class='finding-content'>
-            <div class='description'>
+            <div class='finding-content-header'>
+                Description
+            </div>
+            <div class='finding-content-body'>
                 {% markdown finding.description %}
             </div>
         </div>
     {% endif %}
     {% if finding.background %}
         <div class='finding-content'>
-            <div class='background'>
+            <div class='finding-content-header'>
+                Background
+            </div>
+            <div class='finding-content-body'>
                 {% markdown finding.background %}
             </div>
         </div>
     {% endif %}
     {% if finding.references %}
         <div class='finding-content'>
-            <div class='references'>
+            <div class='finding-content-header'>
+                References
+            </div>
+            <div class='finding-content-body'>
                 {% markdown finding.references %}
             </div>
         </div>
