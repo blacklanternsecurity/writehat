@@ -20,14 +20,14 @@
             </div>
         </div>
     {% endif %}
-    <div class='finding-content'>
-        <div class='finding-content-header'>
-            Category
+        <div class='finding-content'>
+            <div class='finding-content-header'>
+                Category
+            </div>
+            <div class='finding-content-body' style='font-weight: bold'>
+                {{ finding.categoryFull }}
+            </div>
         </div>
-        <div class='finding-content-body' style='font-weight: bold'>
-            {{ finding.categoryFull }}
-        </div>
-    </div>
     {% if finding.affectedResources %}
         <div class='finding-content'>
             <div class='finding-content-header'>
