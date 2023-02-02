@@ -40,12 +40,11 @@ class ElementCleaner extends Paged.Handler {
 
         if (breakToken) {
             let token = $(breakToken.node)
-            let token_parent = token.parents('.avoid-split')
+            let token_parent = token.closest('.avoid-split')
             let should_avoid_split = token_parent.length > 0
 
             if (should_avoid_split) {
-                let new_break_node = token_parent.get(0)
-                breakToken.node = new_break_node
+                breakToken.node = token_parent.get(0)
             }
         }
 
