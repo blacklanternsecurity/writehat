@@ -54,7 +54,7 @@ class ElementCleaner extends Paged.Handler {
     afterRendered(pages) {
         for (let i = 0; i < pages.length; i++) {
             let page = $(pages[i].element)
-            let split_finding = page.find('.finding-content-body[data-split-original=true]')
+            let split_finding = page.find('.finding-content-body[data-split-to]')
 
             if (split_finding.length > 0) {
                 let split_id = split_finding.attr('data-split-to')
