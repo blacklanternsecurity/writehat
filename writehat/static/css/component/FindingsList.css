@@ -15,7 +15,7 @@
 .finding {
     --header-text-color: black;
     --stripe-background-color: rgba(128,128,128,.1);
-  
+
     width: 100%;
     height: 100%;
     padding: 0px;
@@ -55,6 +55,11 @@
 .finding-content-body {
     padding: 1rem;
     width: 100%;
+
+    /* this max-width settings is magic, I dont know why it works but it does. */
+    /* keeps the table from going outside the bounds of the page width */
+    max-width: 1px;
+
     overflow-wrap: break-word;
     vertical-align: top;
     text-align: left;
