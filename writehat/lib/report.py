@@ -667,7 +667,9 @@ class Report(BaseReport):
                 log.debug(f"Removing page break from first component {component.name}")
                 component.pageBreakBefore = False
 
-            rendered_components["component_css"].append(component.type)
+            if component.type not in rendered_components["component_css"]:
+                rendered_components["component_css"].append(component.type)
+
             rendered_components["components"].append(component.render({
                 'engagement': self.engagement,
                 'report': self
