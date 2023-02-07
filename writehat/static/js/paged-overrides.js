@@ -49,6 +49,14 @@ class ElementCleaner extends Paged.Handler {
         }
 
         cleanup.forEach( e => $(page.element).find(e).each( function() { removeEmpty($(this), page.id); } ) );
+
+        $(page.element).find(".finding-content-body").each(function() {
+            let empty = $(this).text().trim().length == 0
+
+            if (empty) {
+                $(this).parent().remove()
+            }
+        })
     }
 
     afterRendered(pages) {
@@ -60,10 +68,10 @@ class ElementCleaner extends Paged.Handler {
                 let split_id = split_finding.attr('data-split-to')
                 let next_page = $(pages[i + 1].element)
 
-                let split_content = next_page.find(`[data-split-from='${split_id}']`)
-                let section = split_finding.prev()
+                let split_content = next_page.find(`[data-split-from='${split_id}']`).prev()
+                let section = split_finding.prev().html()
 
-                split_content.before(section.clone())
+                split_content.html(section)
             }
         }
 

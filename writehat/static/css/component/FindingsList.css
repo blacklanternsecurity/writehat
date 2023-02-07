@@ -18,25 +18,12 @@
   
     width: 100%;
     height: 100%;
-    max-height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
     padding: 0px;
     margin: 0px;
 
     border-top: 5px solid var(--severity-color);
+    border-spacing: 0;
     border-radius: 5px 5px 0px 0px;
-}
-
-/* Adjust the height of the finding box to accomodate the Table of Contents header if it exists */
-/* The pixel height of the header is currently hardcoded, should probably get this value dynamicalluy */
-.toc-member + .finding {
-    max-height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom) - 22px);
-}
-
-/* Make the title of each finding line up properly with the severity */
-.finding-header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
 }
 
 /* Make the title for the finding all nice and pretty and stuff */
@@ -51,12 +38,6 @@
     padding: 1.5rem;
 }
 
-.finding-content {
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
-}
-
 .finding-content-header {
     background-color: var(--severity-color-faded);
     min-width: 11rem;
@@ -64,27 +45,27 @@
     text-align: right;
     padding: 1rem;
     font-weight: bold;
-    display: inline-block;
     left: 0;
     bottom: 0;
     top: 0;
+    vertical-align: top;
+    text-align: right;
 }
 
 .finding-content-body {
     padding: 1rem;
     width: 100%;
-    overflow-wrap: break-word
+    overflow-wrap: break-word;
+    vertical-align: top;
+    text-align: left;
 }
 
 .finding-content:nth-of-type(odd) > .finding-content-body {
     background-color: var(--stripe-background-color);
 }
 
-/* These two rules force the last finding-content element and its children to fill the rest of the page */
-.finding .finding-content:last-child {
-    height: 100%;
-}
-.finding .finding-content:last-child div {
+/* this rule forces the last finding-content element and its children to fill the rest of the page */
+.finding .finding-content:last-child, .finding-content:last-child td {
     height: 100%;
 }
 
