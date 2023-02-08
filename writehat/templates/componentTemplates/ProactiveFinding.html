@@ -1,62 +1,62 @@
 {% load custom_tags %}
-<table id="finding-{{ finding.id }}" scoring-type="PROACTIVE" class="finding" finding-severity="{{ finding.severity }}">
-    <tr class='finding-header'>
-        <td class='finding-severity background-color-severity'>
+<div id="finding-{{ finding.id }}" scoring-type="PROACTIVE" class="finding" finding-severity="{{ finding.severity }}">
+    <div class='finding-header'>
+        <div class='finding-severity background-color-severity'>
             {{ finding.severity }}
-        </td>
-        <td class='finding-title'>
+        </div>
+        <div class='finding-title'>
             [{{ finding.number }}] {{ finding.name }}
-        </td>
-    </tr>
-    <tr class='finding-content'>
-        <td class='finding-content-header'>
+        </div>
+    </div>
+    <div class='finding-content'>
+        <div class='finding-content-header'>
             Category
-        </td>
-        <td class='finding-content-body' style='font-weight: bold'>
+        </div>
+        <div class='finding-content-body' style='font-weight: bold'>
             {{ finding.categoryFull }}
-        </td>
-    </tr>
+        </div>
+    </div>
     {% if finding.affectedResources %}
-        <tr class='finding-content'>
-            <td class='finding-content-header'>
+        <div class='finding-content'>
+            <div class='finding-content-header'>
                 Affected Resources
-            </td>
-            <td class='finding-content-body'>
+            </div>
+            <div class='finding-content-body'>
                 {% markdown finding.affectedResources %}
-            </td>
-        </tr>
+            </div>
+        </div>
     {% endif %}
     {% if finding.description %}
-        <tr class='finding-content'>
-            <td class='finding-content-header'>
+        <div class='finding-content'>
+            <div class='finding-content-header'>
                 Description
-            </td>
-            <td class='finding-content-body'>
+            </div>
+            <div class='finding-content-body'>
                 {% markdown finding.description %}
-            </td>
-        </tr>
+            </div>
+        </div>
     {% endif %}
     {% if finding.background %}
-        <tr class='finding-content'>
-            <td class='finding-content-header'>
+        <div class='finding-content'>
+            <div class='finding-content-header'>
                 Background
-            </td>
-            <td class='finding-content-body'>
+            </div>
+            <div class='finding-content-body'>
                 {% markdown finding.background %}
-            </td>
-        </tr>
+            </div>
+        </div>
     {% endif %}
     {% if finding.references %}
-        <tr class='finding-content'>
-            <td class='finding-content-header'>
+        <div class='finding-content'>
+            <div class='finding-content-header'>
                 References
-            </td>
-            <td class='finding-content-body'>
+            </div>
+            <div class='finding-content-body'>
                 {% markdown finding.references %}
-            </td>
-        </tr>
+            </div>
+        </div>
     {% endif %}
-</table>
+</div>
 {% for figure in finding.figures_ending %}
   {% include 'reportTemplates/figure.html' with figure=figure %}
 {% endfor %}

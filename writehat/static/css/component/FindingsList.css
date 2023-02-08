@@ -1,23 +1,9 @@
-.finding-severity {
-    font-weight: bold;
-    color: white;
-    font-size: 1.5em;
-    padding: 0px;
-    padding-top: 1.5em;
-    padding-bottom: 1.5em;
-    text-align: center;
-
-    width: 11rem;
-    max-width: 11rem;
-    min-width: 11rem;
-}
-
 .finding {
     --header-text-color: black;
     --stripe-background-color: rgba(128,128,128,.1);
 
     width: 100%;
-    height: 100%;
+    height: var(--page-content-height);
     padding: 0px;
     margin: 0px;
 
@@ -26,39 +12,67 @@
     border-radius: 5px 5px 0px 0px;
 }
 
-/* Make the title for the finding all nice and pretty and stuff */
+.finding-header {
+    display: block;
+    font-size: 0px;
+}
+
+.finding-header > div {
+    font-size: 1.5rem;
+}
+
+.finding-severity {
+    display: table-cell;
+    font-weight: bold;
+    color: white;
+    padding: 0px;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    text-align: center;
+
+    max-width: 11rem;
+    min-width: 11rem;
+}
+
 .finding-title {
-    flex-grow: 1;
+    width: 100%;
+    max-width: calc(var(--page-content-width) - 11rem);
+    display: table-cell;
     font-weight: bold;
     line-height: 3.5rem;
     color: var(--header-text-color);
     background-color: var(--stripe-background-color);
-    font-size: 1.5rem;
     text-align: left;
+    vertical-align: middle;
     padding: 1.5rem;
 }
 
+.finding-content {
+    display: table;
+    font-size: 0px;
+}
+
+.finding-content > div {
+    font-size: 11pt;
+}
+
 .finding-content-header {
+    display: table-cell;
     background-color: var(--severity-color-faded);
     min-width: 11rem;
     max-width: 11rem;
-    text-align: right;
     padding: 1rem;
     font-weight: bold;
-    left: 0;
-    bottom: 0;
-    top: 0;
     vertical-align: top;
     text-align: right;
 }
 
 .finding-content-body {
+    display: table-cell;
     padding: 1rem;
-    width: 100%;
 
-    /* this max-width settings is magic, I dont know why it works but it does. */
-    /* keeps the table from going outside the bounds of the page width */
-    max-width: 1px;
+    width: 100%;
+    max-width: calc(var(--page-content-width) - 11rem);
 
     overflow-wrap: break-word;
     vertical-align: top;
@@ -69,8 +83,7 @@
     background-color: var(--stripe-background-color);
 }
 
-/* this rule forces the last finding-content element and its children to fill the rest of the page */
-.finding .finding-content:last-child, .finding-content:last-child td {
+.finding .finding-content:last-child{
     height: 100%;
 }
 

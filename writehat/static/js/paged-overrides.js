@@ -58,10 +58,10 @@ class ElementCleaner extends Paged.Handler {
                 let split_id = split_finding.attr('data-split-to')
                 let next_page = $(pages[i + 1].element)
 
-                let split_content = next_page.find(`[data-split-from='${split_id}']`).prev()
-                let section = split_finding.prev().html()
+                let split_content = next_page.find(`[data-split-from='${split_id}']`)
+                let section = split_finding.prev()
 
-                split_content.html(section)
+                split_content.before(section.clone())
             }
         }
 
