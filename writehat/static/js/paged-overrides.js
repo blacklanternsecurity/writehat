@@ -40,13 +40,6 @@ class ElementCleaner extends Paged.Handler {
 
         cleanup.forEach( e => $(page.element).find(e).each( function() { removeEmpty($(this), page.id); } ) );
 
-        $(page.element).find(".finding-content-body").each(function() {
-            let empty = $(this).text().trim().length == 0
-
-            if (empty) {
-                $(this).parent().remove()
-            }
-        })
     }
 
     afterRendered(pages) {
@@ -62,6 +55,11 @@ class ElementCleaner extends Paged.Handler {
                 let section = split_finding.prev()
 
                 split_content.before(section.clone())
+
+                let empty = split_finding.text().trim().length == 0
+                if (empty) {
+                    split_finding.parent().remove()
+                }
             }
         }
 
