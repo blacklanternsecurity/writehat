@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   nginx:
-    image: nginx
+    image: nginx:1.23.1
     volumes:
       - ./nginx:/opt/writehat/nginx
       - ./writehat/config/nginx.conf:/etc/nginx/conf.d/writehat.conf
@@ -47,7 +47,7 @@ services:
       - 27017
 
   mysql:
-    image: mysql
+    image: mysql:8.0.32
     volumes:
       - ./mysql:/var/lib/mysql
     environment:
