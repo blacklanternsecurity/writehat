@@ -706,7 +706,9 @@ def reportGeneratePdf(request,uuid):
     try:
         # Wait for page to finish rendering, assuming less than one minute
         log.debug("Waiting for request to finish")
-        element = WebDriverWait(browser, 120).until(expected_conditions.presence_of_element_located((By.ID, "finished_loading")))
+        timeout = getattr(settings, "SELENIUM_TIMEOUT", 120)
+        log.debug("TIMEOUT: {}".format(timeout))
+        WebDriverWait(browser, timeout).until(expected_conditions.presence_of_element_located((By.ID, "finished_loading")))
     finally:
         # Send request to Selenium to call Page.printToPDF
         log.debug("Finished loading")

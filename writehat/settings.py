@@ -24,6 +24,8 @@ LOGOUT_URL = '/'
 LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/'
 
+# maximum time in seconds for how long the selenium driver should wait for a pdf file to render
+SELENIUM_TIMEOUT = writehat_config['writehat']['selenium_timeout']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
