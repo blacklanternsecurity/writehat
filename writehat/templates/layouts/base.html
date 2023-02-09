@@ -66,6 +66,26 @@
           {% endblock %}
         </div>
 
+        <!-- Messages -->
+        {% if messages %}
+          <script>
+            {% for message in messages %}
+              let type
+
+              {% if message.tags == "warning" %}
+                type = 3
+              {% elif message.tags == "error" %}
+                type = 2
+              {% else %}
+                type = 1
+              {% endif %}
+
+              notify("{{ message }}", type)
+
+            {% endfor %}
+          </script>
+        {% endif %}
+
         <!-- Footer -->
         <div id="pageFooter">
           {% block footer %}{% endblock %}
