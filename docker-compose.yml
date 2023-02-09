@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
 
   chrome:
-    image: selenium/standalone-chrome:latest
+    image: selenium/standalone-chrome:109.0
     expose:
       - 4444
     depends_on:
