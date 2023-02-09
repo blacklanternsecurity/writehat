@@ -7,7 +7,7 @@ import uuid as uuidlib
 
 # django
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.html import escape
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
@@ -17,6 +17,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.contrib import messages
 
 
 # WRITEHAT
@@ -49,7 +50,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from selenium.common.exceptions import InvalidCookieDomainException
+from selenium.common.exceptions import InvalidCookieDomainException, TimeoutException
 
 
 
@@ -707,8 +708,11 @@ def reportGeneratePdf(request,uuid):
         # Wait for page to finish rendering, assuming less than one minute
         log.debug("Waiting for request to finish")
         timeout = getattr(settings, "SELENIUM_TIMEOUT", 120)
-        log.debug("TIMEOUT: {}".format(timeout))
         WebDriverWait(browser, timeout).until(expected_conditions.presence_of_element_located((By.ID, "finished_loading")))
+    except TimeoutException as e:
+        log.debug(f"Timeout of {timeout} seconds exceeded when attempting to render report with id {report.id} to PDF")
+        messages.add_message(request, messages.ERROR, "PDF took too long to render! Please contact a web administrator for more information")
+        return redirect(f"/engagements/report/{report.id}/edit", uuid=report.id)
     finally:
         # Send request to Selenium to call Page.printToPDF
         log.debug("Finished loading")
