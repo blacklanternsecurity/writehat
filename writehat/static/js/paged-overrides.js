@@ -180,6 +180,7 @@ $().ready( function() {
     let t0 = performance.now();
     let paged = new Paged.Previewer()
 	paged.preview(flowText.content).then((flow) => {
+        hljs.highlightAll();
         let t1 = performance.now();
         console.log("Rendering " + flow.total + " pages took " + (t1 - t0) + " milliseconds.");
     })

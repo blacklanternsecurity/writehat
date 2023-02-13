@@ -5,7 +5,6 @@ import logging
 import importlib
 import markdown as md
 from markdown.extensions.codehilite import CodeHiliteExtension
-from pygments.formatters import HtmlFormatter
 from django.template.loader import render_to_string
 
 
@@ -248,12 +247,6 @@ def user_template_replace(markdown_text, context):
     return new_markdown_text
 
 
-class CodeFormatter(HtmlFormatter):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.lineseparator = "<br>"
-
-
 def render_markdown(markdown_text, context=None):
 
     if not context:
@@ -305,7 +298,7 @@ def render_markdown(markdown_text, context=None):
     # replace user-defined variables
     markdown_text = user_template_replace(markdown_text, context)
 
-    codehilite_ext = CodeHiliteExtension(pygments_formatter=CodeFormatter)
+    codehilite_ext = CodeHiliteExtension(use_pygments=False)
 
     rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists', codehilite_ext])
     cleaned = bleach.clean(rendered, tags=markdown_tags, attributes=markdown_attrs)

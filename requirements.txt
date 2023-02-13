@@ -3,7 +3,6 @@ uwsgi
 bleach
 markdown
 openpyxl
-Pygments
 selenium
 mongo-tools
 cryptography
