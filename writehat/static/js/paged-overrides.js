@@ -45,20 +45,21 @@ class ElementCleaner extends Paged.Handler {
     afterRendered(pages) {
         for (let i = 0; i < pages.length; i++) {
             let page = $(pages[i].element)
-            let split_finding = page.find('.finding-content-body[data-split-to]')
+            let split_to = page.find('.finding-content[data-split-to]')
 
-            if (split_finding.length > 0) {
-                let split_id = split_finding.attr('data-split-to')
+            if (split_to.length > 0) {
+                let body = split_to.find('.finding-content-body')
+                let header = split_to.find('.finding-content-header')
+
+                let split_id = split_to.attr('data-split-to')
                 let next_page = $(pages[i + 1].element)
 
-                let split_content = next_page.find(`[data-split-from='${split_id}']`)
-                let section = split_finding.prev()
+                let split_from = next_page.find(`.finding-content[data-split-from='${split_id}']`)
 
-                split_content.before(section.clone())
+                split_from.prepend(header.clone())
 
-                let empty = split_finding.text().trim().length == 0
-                if (empty) {
-                    split_finding.parent().remove()
+                if (body.length == 0) {
+                    split_to.remove()
                 }
             }
         }
@@ -139,6 +140,7 @@ class ElementCleaner extends Paged.Handler {
 
             if (should_avoid_split) {
                 breakToken.node = token_parent.get(0)
+                breakToken.offset = 0
             }
         }
 

@@ -55,10 +55,3 @@ p, div > ul, div > ol, td {
   line-height: 1.6em;
   overflow-wrap: break-word;
 }
-
-div.finding-content > div > pre > code, 
-div.finding-content > div > pre {
-    padding-top: 1rem !important;
-    padding-bottom: 1rem !important;
-    max-height: calc(100% - 2em);
-}
