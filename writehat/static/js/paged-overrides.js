@@ -35,11 +35,12 @@ class ElementCleaner extends Paged.Handler {
             ".generated-table table", 
             ".finding-content pre",
             ".finding-content",
-            "tbody"
+            "tbody",
+            "ul",
+            "ol"
         ];
 
         cleanup.forEach( e => $(page.element).find(e).each( function() { removeEmpty($(this), page.id); } ) );
-
     }
 
     afterRendered(pages) {
