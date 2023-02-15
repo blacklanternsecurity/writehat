@@ -59,7 +59,7 @@ class ElementCleaner extends Paged.Handler {
 
                 split_from.prepend(header.clone())
 
-                if (body.length == 0) {
+                if (body.text().length == 0) {
                     split_to.remove()
                 }
             }
