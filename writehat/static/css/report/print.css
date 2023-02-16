@@ -56,11 +56,6 @@ div.header-content {
     position: running(headerContent);
 }
 
-html, body {
-    font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
-    font-size: 11pt;
-}
-
 .center { 
     text-align: center;
 }

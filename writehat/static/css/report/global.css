@@ -8,6 +8,35 @@
 @import url("/static/css/report/highlight.css");
 @import url("/static/css/report/codehilite.css");
 
+@font-face {
+  font-family: ReportFont;
+  src: url("/static/fonts/calibri-font-family/calibri-regular.ttf");
+}
+
+@font-face {
+  font-family: ReportFont;
+  src: url("/static/fonts/calibri-font-family/calibri-italic.ttf");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: ReportFont;
+  src: url("/static/fonts/calibri-font-family/calibri-bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: ReportFont;
+  src: url("/static/fonts/calibri-font-family/calibri-bold-italic.ttf");
+  font-weight: bold;
+  font-style: italic;
+}
+
+html, body {
+  font-family: ReportFont, Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+  font-size: 11pt;
+}
+
 .container {
   --page-content-height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
   --page-content-width: calc(var(--pagedjs-pagebox-width) - var(--pagedjs-margin-left) - var(--pagedjs-margin-right));
