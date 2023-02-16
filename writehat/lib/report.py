@@ -6,6 +6,7 @@ from django.db import models
 from writehat.models import *
 from writehat.lib.util import *
 from writehat.lib.errors import *
+from writehat.lib.revision import Revision
 from writehat.validation import *
 from writehat.components.base import *
 from django.core.exceptions import ValidationError
@@ -538,6 +539,24 @@ class Report(BaseReport):
         })
 
         return rendered
+
+
+    @property
+    def revisions(self):
+        result = {}
+
+        if self._components is not None:
+            components = json.loads(self._components)
+            component_ids = [component["uuid"] for component in components]
+            revisions = Revision.objects\
+                .filter(parentId__in=component_ids)\
+                .values('parentId')\
+                .order_by('version')
+
+            for id in component_ids:
+                result[id] = [ item for item in revisions if str(item["parentId"]) == id]
+
+        return result
 
 
     @property
