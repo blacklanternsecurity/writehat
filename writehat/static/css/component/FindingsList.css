@@ -116,3 +116,25 @@
     border-radius: 5px;
     margin: 4px;
 }
+
+.finding-content-header.category::after { content: "Category" !important; }
+.finding-content-header.affected-resources::after { content: "Affected Resources" !important; }
+.finding-content-header.description::after { content: "Description" !important; }
+.finding-content-header.background::after { content: "Background" !important; }
+.finding-content-header.remediation::after { content: "Remediation" !important; }
+.finding-content-header.references::after { content: "References" !important; }
+
+/* CVSS SPECIFIC */
+
+.finding-content-header.cvss-vector::after { content: "CVSS 3.1 Vector" !important; }
+.finding-content-header.cvss-tools-used::after { content: "Tools Used" !important; }
+.finding-content-header.cvss-poc::after { content: "Proof of Concept" !important; }
+
+/* DREAD SPECIFIC */
+
+.finding-content-header .dread-damage::after { content: "Damage" !important; }
+.finding-content-header .dread-reproducibility::after { content: "Reproducibility" !important; }
+.finding-content-header .dread-exploitability::after { content: "Exploitability" !important; }
+.finding-content-header .dread-affected-users::after { content: "Affected Users" !important; }
+.finding-content-header .dread-discoverability::after { content: "Discoverability" !important; }
+.finding-content-header.dread-impact::after { content: "Impact" !important; }
