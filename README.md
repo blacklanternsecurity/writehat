@@ -124,6 +124,13 @@ A **Finding Group** is a collection of findings that are scored in the same way 
 ### Page Template
 A **Page Template** lets you customize report background images and footers.  You can set one **Page Template** as the default, and it will be applied globally unless overridden at the **Engagement** or **Report** level.
 
+## Markdown placeholders
+You can automatically insert client-specific information such as the client name, URL, e-mail, etc. in your reports, by inserting
+`{Client<field>}` in the text. This is particularly useful for report templates.
+
+For example, if you want to refer to the client in your executive summary, you can insert `{ClientName}` in the text. For a specific
+list of fields you can insert, or to insert more, refer to [the markdown.py file](writehat/lib/markdown.py)
+
 
 ## Writing Custom Report Components
 
@@ -261,6 +268,10 @@ $ systemctl start writehat
 - Presentation slide generation
 - More advanced table creator with CSV upload feature
 - More granular permissions / ACLs (beyond just user + admin roles)
+
+## Starting afresh
+WriteHat stores your instance's data in the `/mongo` and `/mysql` directories. The easiest way to start from
+scratch is to run `git clean -f -d`.
 
 
 ## Known Bugs / Limitations:
