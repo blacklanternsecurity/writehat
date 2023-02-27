@@ -4,7 +4,7 @@
     <ul class="toc-list">
       {% for component in toc_components %}
         {{ component.spacer|safe }}
-        <a href='#component_{{ component.id }}'>
+        <a href='#component_{{ component.id }}' class="avoid-split">
           <li class="toc-entry">
             <span style='margin-left: {{ component.level }}em;' class="toc-item"><span class='bold'>{{ component.index }} {{ component.name }}</span></span>
             <span class="toc-dots"></span>

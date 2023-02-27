@@ -1,5 +1,9 @@
 {% load custom_tags %}
-<div id="finding-{{ finding.id }}" scoring-type="CVSS" class="finding container" finding-severity="{{ finding.severity }}">
+
+{% if first %}
+  {% include 'componentTemplates/Heading.html' with classes="finding-heading" %}
+{% endif %}
+<div id="finding-{{ finding.id }}" scoring-type="CVSS" class="finding" finding-severity="{{ finding.severity }}">
     <div class='finding-header'>
         <div class='finding-severity background-color-severity'>
             {{ finding.score }}
@@ -12,67 +16,75 @@
     </div>
     {% if showVector %}
         <div class='finding-content'>
-            <div class='vector'>
+            <div class='finding-content-header cvss-vector'></div>
+            <div class='finding-content-body'>
                 {{ finding.cvss.vector }}
             </div>
         </div>
     {% endif %}
-    <div class='finding-content'>
-        <div class='category' style='font-weight: bold'>
-            {{ finding.categoryFull }}
+        <div class='finding-content'>
+            <div class='finding-content-header category'></div>
+            <div class='finding-content-body' style='font-weight: bold'>
+                {{ finding.categoryFull }}
+            </div>
         </div>
-    </div>
     {% if finding.affectedResources %}
         <div class='finding-content'>
-            <div class='affected-resources'>
+            <div class='finding-content-header affected-resources'></div>
+            <div class='finding-content-body'>
                 {% markdown finding.affectedResources %}
             </div>
         </div>
     {% endif %}
     {% if finding.description %}
         <div class='finding-content'>
-            <div class='description'>
+            <div class='finding-content-header description'></div>
+            <div class='finding-content-body'>
                 {% markdown finding.description %}
             </div>
         </div>
     {% endif %}
     {% if finding.background %}
         <div class='finding-content'>
-            <div class='background'>
+            <div class='finding-content-header background'></div>
+            <div class='finding-content-body'>
                 {% markdown finding.background %}
             </div>
         </div>
     {% endif %}
     {% if finding.toolsUsed %}
         <div class='finding-content'>
-            <div class='tools-used'>
+            <div class='finding-content-header cvss-tools-used'></div>
+            <div class='finding-content-body'>
                 {% markdown finding.toolsUsed %}
             </div>
         </div>
     {% endif %}
     {% if finding.proofOfConcept %}
         <div class='finding-content'>
-            <div class='poc'>
+            <div class='finding-content-header cvss-poc'></div>
+            <div class='finding-content-body'>
                 {% markdown finding.proofOfConcept %}
             </div>
         </div>
     {% endif %}
     {% if finding.remediation %}
         <div class='finding-content'>
-            <div class='remediation'>
+            <div class='finding-content-header remediation'></div>
+            <div class='finding-content-body'>
                 {% markdown finding.remediation %}
             </div>
         </div>
     {% endif %}
     {% if finding.references %}
         <div class='finding-content'>
-            <div class='references'>
+            <div class='finding-content-header references'></div>
+            <div class='finding-content-body'>
                 {% markdown finding.references %}
             </div>
         </div>
     {% endif %}
 </div>
-{% for figure in finding.figures_ending %}
-  {% include 'reportTemplates/figure.html' with figure=figure %}
+{% for figure in finding.figures_ending %} {% include 'reportTemplates/figure.html' with figure=figure %}
 {% endfor %}
 

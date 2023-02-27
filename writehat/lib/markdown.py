@@ -4,6 +4,7 @@ import bleach
 import logging
 import importlib
 import markdown as md
+from markdown.extensions.codehilite import CodeHiliteExtension
 from django.template.loader import render_to_string
 
 
@@ -246,8 +247,6 @@ def user_template_replace(markdown_text, context):
     return new_markdown_text
 
 
-
-
 def render_markdown(markdown_text, context=None):
 
     if not context:
@@ -299,7 +298,9 @@ def render_markdown(markdown_text, context=None):
     # replace user-defined variables
     markdown_text = user_template_replace(markdown_text, context)
 
-    rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists', 'codehilite'])
+    codehilite_ext = CodeHiliteExtension(use_pygments=False)
+
+    rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists', codehilite_ext])
     cleaned = bleach.clean(rendered, tags=markdown_tags, attributes=markdown_attrs)
 
     for render_placeholder, rendered_obj in temp_placeholders:

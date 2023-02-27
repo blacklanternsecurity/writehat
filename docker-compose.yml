@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   nginx:
-    image: nginx
+    image: nginx:1.23.1
     volumes:
       - ./nginx:/opt/writehat/nginx
       - ./writehat/config/nginx.conf:/etc/nginx/conf.d/writehat.conf
@@ -47,7 +47,7 @@ services:
       - 27017
 
   mysql:
-    image: mysql
+    image: mysql:8.0.26
     volumes:
       - ./mysql:/var/lib/mysql
     environment:
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
 
   chrome:
-    image: selenium/standalone-chrome:latest
+    image: selenium/standalone-chrome:109.0
     expose:
       - 4444
     depends_on:

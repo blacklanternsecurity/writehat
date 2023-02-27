@@ -1,143 +1,140 @@
+.finding {
+    --header-text-color: black;
+    --stripe-background-color: rgba(128,128,128,.1);
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: var(--page-content-height);
+    padding: 0px;
+    margin: 0px;
+
+    border-top: 5px solid var(--severity-color);
+    border-spacing: 0;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.finding-header {
+    display: flex;
+}
+
 .finding-severity {
+    height: 100%;
     font-weight: bold;
-    color: white;
     font-size: 1.5em;
+    color: white;
     padding: 0px;
     padding-top: 1.5em;
     padding-bottom: 1.5em;
     text-align: center;
 
-    width: 11rem;
     max-width: 11rem;
     min-width: 11rem;
 }
 
-.finding {
-    --header-text-color: black;
-    --stripe-background-color: rgba(128,128,128,.1);
-  
-    width: 100%;
-    height: 100%;
-    max-height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
-    padding: 0px;
-    margin: 0px;
-
-    border-top: 5px solid var(--severity-color);
-    border-radius: 5px 5px 0px 0px;
-}
-
-/* Adjust the height of the finding box to accomodate the Table of Contents header if it exists */
-/* The pixel height of the header is currently hardcoded, should probably get this value dynamicalluy */
-.toc-member + .finding {
-    max-height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom) - 22px);
-}
-
-/* Make the title of each finding line up properly with the severity */
-.finding-header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
-}
-
-/* Make the title for the finding all nice and pretty and stuff */
 .finding-title {
-    flex-grow: 1;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 1.5rem;
+    overflow-wrap: anywhere;
+    max-width: calc(var(--page-content-width) - 11rem);
+    font-size: 1.5em;
     font-weight: bold;
-    line-height: 3.5rem;
     color: var(--header-text-color);
     background-color: var(--stripe-background-color);
-    font-size: 1.5rem;
-    text-align: left;
-    padding: 1.5rem;
 }
 
 .finding-content {
-    position: relative;
+    --header-width: 11rem;
 }
 
-.finding-content > div {
-    margin-left: 11rem;
-    padding: 0.5rem !important;
-    overflow-wrap: break-word
+.finding-content-header {
+    float: left;
+    background-color: var(--severity-color-faded);
+
+    height: 100%;
+    min-width: var(--header-width);
+    max-width: var(--header-width);
+    padding: 1rem;
+    vertical-align: top;
+    text-align: right;
+
+    font-weight: bold;
 }
 
-/* alternate colors on rows for readability */
-.finding-content:nth-of-type(odd) > div {
+.finding-content-body {
+    padding: 1rem;
+    height: 100%;
+
+    width: 100%;
+    margin-left: var(--header-width);
+    max-width: calc(var(--page-content-width) - var(--header-width));
+
+    overflow-wrap: break-word;
+    vertical-align: top;
+    text-align: left;
+}
+
+.finding-content-body pre {
+    margin: 0;
+}
+
+.finding-content-body[data-split-from], .finding-content-body pre > code[data-split-from] {
+    padding-top: 1rem !important;
+}
+
+.finding-content:nth-of-type(odd) > .finding-content-body {
     background-color: var(--stripe-background-color);
 }
 
-.finding-content > div::before {
-    position: absolute;
-    background-color: var(--severity-color-faded);
-    min-width: 9rem;
-    max-width: 9rem;
-    text-align: right;
-    padding: 1rem;
-    font-weight: bold;
-    display: inline-block;
-    left: 0;
-    bottom: 0;
-    top: 0;
-}
-
-/* These two rules force the last finding-content element and its children to fill the rest of the page */
-.finding .finding-content:last-child {
-    height: 100%;
-}
-.finding .finding-content:last-child > div::before, .finding .finding-content:last-child > div {
+.finding .finding-content:last-child{
     height: 100%;
 }
 
-/* DREAD Categories */
+.finding-content li, p {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
 
-div.finding.content > div.dread-category { 
+.dread-impact ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: start;
 }
 
-div.finding-content > div.dread-category > p {
-    display: table-cell;
+.dread-impact ul li {
+    padding: 4px;
+    border: 1px solid #ddd;
+    background-color: rgba(240, 240, 240, 0.2);
+    border-radius: 5px;
+    margin: 4px;
 }
 
-div.finding-content > div.dread-category > p.dread-score { 
-    padding-right: 1rem;
-    vertical-align: middle;
-}
-
-div.finding-content > div.impact ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
-}
-
-div.finding-content > div.impact ul li {
-  padding: 4px;
-  border: 1px solid #ddd;
-  background-color: rgba(240, 240, 240, 0.2);
-  border-radius: 5px;
-  margin: 4px;
-}
-
-
-.finding-content > .category::before           { content: "Category" !important; }
-.finding-content > .affected-resources::before { content: "Affected Resources" !important; }
-.finding-content > .description::before        { content: "Description" !important; }
-.finding-content > .background::before         { content: "Background" !important; }
-.finding-content > .remediation::before        { content: "Remediation" !important; }
-.finding-content > .references::before         { content: "References" !important; }
+.finding-content-header.category::after { content: "Category" !important; }
+.finding-content-header.affected-resources::after { content: "Affected Resources" !important; }
+.finding-content-header.description::after { content: "Description" !important; }
+.finding-content-header.background::after { content: "Background" !important; }
+.finding-content-header.remediation::after { content: "Remediation" !important; }
+.finding-content-header.references::after { content: "References" !important; }
 
 /* CVSS SPECIFIC */
 
-.finding-content > .vector::before             { content: "CVSS3 Vector" !important; }
-.finding-content > .tools-used::before         { content: "Tools Used" !important; }
-.finding-content > .poc::before                { content: "Proof of Concept" !important; }
+.finding-content-header.cvss-vector::after { content: "CVSS 3.1 Vector" !important; }
+.finding-content-header.cvss-tools-used::after { content: "Tools Used" !important; }
+.finding-content-header.cvss-poc::after { content: "Proof of Concept" !important; }
 
 /* DREAD SPECIFIC */
 
-.finding-content > .dread-category::before     { content: attr(category) !important; }
-.finding-content > .impact::before             { content: "Impact" !important; }
-
-/* PROACTIVE SPECIFIC */
+.finding-content-header .dread-damage::after { content: "Damage" !important; }
+.finding-content-header .dread-reproducibility::after { content: "Reproducibility" !important; }
+.finding-content-header .dread-exploitability::after { content: "Exploitability" !important; }
+.finding-content-header .dread-affected-users::after { content: "Affected Users" !important; }
+.finding-content-header .dread-discoverability::after { content: "Discoverability" !important; }
+.finding-content-header.dread-impact::after { content: "Impact" !important; }
