@@ -147,6 +147,48 @@ $(document).ready(function() {
     reportUpdateAndRefresh()
   })
 
+  let show_revisions = false
+
+  $('#reportRevisions').click(function() {
+    show_revisions = !show_revisions
+
+    if (show_revisions) {
+      $.ajax({
+        url: '/engagements/report/' + reportID + '/revisions',
+        success: function(result) {
+          let data = result.data
+          let components = $('#reportComponents')
+
+          for (let component of components.children()){
+            component = $(component)
+
+            let id = component.attr('component-id')
+            let revision = data[id][0]
+
+            let span = component.find('.latest-revision')
+
+            if (revision) {
+              let date = new Date(revision.createdDate)
+              let timestamp = date.getUTCFullYear() + '/' + date.getUTCMonth() + '/' + date.getUTCDay() + ' at ' + date.getUTCHours() + ':' + date.getUTCMinutes()
+              let content = 'Updated ' + timestamp + ' - ' + ' changed by ' + revision.owner
+
+              span.text(content)
+            }
+          }
+        }
+      })
+
+      $(this).css('color', 'green')
+    } else {
+      let revisions = $('#reportComponents .latest-revision')
+      revisions.each(function() {
+        $(this).empty()
+      })
+
+      $(this).css('color', 'white')
+    }
+
+  })
 
   $('#reportGenerate').click(function() {
     var url = '/engagements/report/' + reportID + '/generate';

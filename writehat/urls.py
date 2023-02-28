@@ -136,6 +136,7 @@ urlpatterns = [
     url(rf'^engagements/report/{uuid}/delete$', views.reportDelete),
     url(rf'^engagements/report/{uuid}/saveToTemplate$', views.reportSaveToTemplate),
     url(rf'^engagements/report/{uuid}/createFromTemplate$', views.reportCreateFromTemplate),
+    url(rf'^engagements/report/{uuid}/revisions$', views.reportRevisions),
 
     # Template loading helper URLs
     url(r'^panes/(?P<pane>[a-zA-Z]{1,30})$', views.renderPane),

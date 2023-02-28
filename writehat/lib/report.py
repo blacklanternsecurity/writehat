@@ -550,11 +550,11 @@ class Report(BaseReport):
             component_ids = [component["uuid"] for component in components]
             revisions = Revision.objects\
                 .filter(parentId__in=component_ids)\
-                .values('parentId')\
-                .order_by('version')
+                .values()\
+                .order_by('-version')
 
             for id in component_ids:
-                result[id] = [ item for item in revisions if str(item["parentId"]) == id]
+                result[id] = [ dict(item) for item in revisions if str(item["parentId"]) == id]
 
         return result
 

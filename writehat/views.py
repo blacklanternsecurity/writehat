@@ -154,6 +154,17 @@ def reportEdit(request,uuid):
         })
 
 @require_http_methods(['GET'])
+def reportRevisions(request, uuid):
+    log.debug("reportRevisions() called; UUID: {0}".format(uuid))
+    log.debug("Found {0} available components".format(len(settings.VALID_COMPONENTS)))
+
+    report = Report.get(id=uuid)
+
+    return JsonResponse({
+        'data': report.revisions
+    })
+
+@require_http_methods(['GET'])
 @csrf_protect
 def componentReviewStatus(request,uuid):
     log.debug("componentReviewStatus() called; UUID: {0}".format(uuid))
