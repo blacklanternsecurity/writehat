@@ -543,18 +543,22 @@ class Report(BaseReport):
 
     @property
     def revisions(self):
-        result = {}
+        result = []
 
-        if self._components is not None:
-            components = json.loads(self._components)
-            component_ids = [component["uuid"] for component in components]
-            revisions = Revision.objects\
-                .filter(parentId__in=component_ids)\
-                .values()\
-                .order_by('-version')
+        component_ids = [component.id for component in self.components]
+        query = Revision.objects\
+            .filter(parentId__in=component_ids)\
+            .values()\
+            .order_by('-version')
 
-            for id in component_ids:
-                result[id] = [ dict(item) for item in revisions if str(item["parentId"]) == id]
+        for component in self.components:
+            revisions = [dict(obj) for obj in query if obj["parentId"] == component.id]
+            item = {
+                "id": component.id,
+                "name": component.name,
+                "revisions": revisions
+            }
+            result.append(item)
 
         return result
 

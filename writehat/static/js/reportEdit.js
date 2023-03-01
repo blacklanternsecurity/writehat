@@ -163,13 +163,25 @@ $(document).ready(function() {
             component = $(component)
 
             let id = component.attr('component-id')
-            let revision = data[id][0]
+            let obj = data.filter(item => {
+              return item.id == id
+            })[0]
+
+
+            let revision
+
+            if (obj) {
+              revision = obj.revisions[0]
+            }
 
             let span = component.find('.latest-revision')
 
             if (revision) {
               let date = new Date(revision.createdDate)
-              let timestamp = date.getUTCFullYear() + '/' + date.getUTCMonth() + '/' + date.getUTCDay() + ' at ' + date.getUTCHours() + ':' + date.getUTCMinutes()
+              let year = date.getUTCFullYear()
+              let month = date.getUTCMonth() + 1
+              let day = date.getUTCDate()
+              let timestamp = year + '/' + month + '/' + day + ' at ' + date.getUTCHours() + ':' + date.getUTCMinutes()
               let content = 'Updated ' + timestamp + ' - ' + ' changed by ' + revision.owner
 
               span.text(content)
