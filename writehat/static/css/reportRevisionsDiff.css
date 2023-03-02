@@ -1,0 +1,7 @@
+.report-revisions li {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px !important;
+  cursor: pointer;
+  outline: white solid 2px;
+}

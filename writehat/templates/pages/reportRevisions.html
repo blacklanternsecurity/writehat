@@ -1,0 +1,51 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ report.name }} Changelog{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/reportRevisionsDiff.css' %}"/>
+{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/breadcrumbs.html' with current=report %}
+{% endblock %}
+
+{% block headerRight %}
+{% endblock %}
+
+{% block fullPane %}
+<div class="container">
+  <ul class="list-group report-revisions">
+    {% for revision in revisions %}
+    <li id="{{ revision.id }}" class="list-group-item revision" version="{{ revision.fieldName }}-{{ revision.version }}" parent="{{ revision.parentId }}" component="{{ revision.isComponent }}">
+      <div class="row">
+        <div class="col-8 font-weight-bold">Name</div>
+        <div class="col-2 font-weight-bold">Editor</div>
+        <div class="col-2 font-weight-bold">Date Modified</div>
+      </div>
+      <hr class="h-sep"/>
+      <div class="row">
+        <div class="revision-name col-8 text-truncate">{{ revision.name }}</div>
+        <div class="revision-editor col-2">{{ revision.owner }}</div>
+        <div class="revision-date col-2">{{ revision.createdDate }}</div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
+
+{% block footer %}
+  <!-- Hidden report div for storing Report Name, UUID, etc. -->
+  <span id="report-info" report-name="{{ report.name }}" report-id="{{ report.id }}" style="display: none;"></span>
+  <span id="engagement-info" engagement-id="{{ report.engagementParent }}" style="display: none;"></span>
+  <span id="timestamp-check" object-id="{{ report.id }}" hint="report" button="reportUpdate"></span>
+
+  {% include "modals/reportRevisionsDiff.html" %}
+
+  <script src="/static/js/reportRevisions.js"></script>
+  <script src="/static/js/reports.js"></script>
+  <script src="/static/js/checkbox.js"></script>
+{% endblock %}

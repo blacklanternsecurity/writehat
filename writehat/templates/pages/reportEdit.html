@@ -10,7 +10,8 @@
 
   {% include 'snippets/textButton.html' with name='PDF' id='reportGeneratePdf' type='file-pdf' class='btn-light border-danger' %}
   {% include 'snippets/textButton.html' with name='HTML' id='reportGenerate' type='file-code' class='btn-light border border-warning' %}
-  {% include 'snippets/textButton.html' with name='Revisions' id='reportRevisions' type='code-branch' class='btn-light border border-success' %}
+  {% include 'snippets/textButton.html' with name='Revisions' id='reportToggleRevisions' type='code-branch' class='btn-light border border-success' %}
+  {% include 'snippets/textButton.html' with name='Changelog' id='reportRevisions' type='code-branch' class='btn-light border border-warning'%}
   {% include 'snippets/textButton.html' with name='Save to Template' id='saveToTemplate' type='copy' class='btn-light border border-primary' %}
   {% include 'snippets/textButton.html' with name='Select Findings' id='findingSelectButton' type='search' class='btn-warning' %}
   {% include 'snippets/textButton.html' with name='Save' id='reportUpdate' type='save' class='btn-success' %}

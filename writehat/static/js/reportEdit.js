@@ -149,12 +149,12 @@ $(document).ready(function() {
 
   let show_revisions = false
 
-  $('#reportRevisions').click(function() {
+  $('#reportToggleRevisions').click(function() {
     show_revisions = !show_revisions
 
     if (show_revisions) {
       $.ajax({
-        url: '/engagements/report/' + reportID + '/revisions',
+        url: '/engagements/report/' + reportID + '/components/revisions',
         success: function(result) {
           let data = result.data
           let components = $('#reportComponents')
@@ -200,6 +200,11 @@ $(document).ready(function() {
       $(this).css('color', 'white')
     }
 
+  })
+
+  $('#reportRevisions').click(function() {
+    var url = '/engagements/report/' + reportID + '/revisions';
+    window.location.href = url
   })
 
   $('#reportGenerate').click(function() {
