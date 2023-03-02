@@ -5,3 +5,7 @@
   cursor: pointer;
   outline: white solid 2px;
 }
+
+.pagination {
+  padding: 1rem;
+}

@@ -10,6 +10,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils.html import escape
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.http import require_http_methods
@@ -171,10 +172,15 @@ def reportRevisions(request, uuid):
 
     report = Report.get(id=uuid)
 
+    page_number = request.GET.get('page', 1)
+    per_page = request.GET.get('max', 10)
+    paginator = Paginator(report.revisions, per_page)
+    revisions = paginator.get_page(page_number)
+
     return render(request, "pages/reportRevisions.html", {
         "report": report,
         "engagement": report.engagement,
-        "revisions": report.revisions
+        "revisions": revisions
     })
 
 @require_http_methods(['GET'])

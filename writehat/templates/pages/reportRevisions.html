@@ -34,6 +34,26 @@
     </li>
     {% endfor %}
   </ul>
+
+  <ul class="pagination justify-content-center">
+    {% if revisions.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ revisions.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+    <li class="page-item"><a class="page-link" href="#">Page {{ request.GET.page }} of {{ revisions.paginator.num_pages }}</a></li>
+
+    {% if revisions.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ revisions.next_page_number }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
 </div>
 {% endblock %}
 
