@@ -34,7 +34,6 @@ class ElementCleaner extends Paged.Handler {
         const cleanup = [ 
             ".generated-table table", 
             ".finding-content pre",
-            ".finding-content",
             "tbody",
             "ul",
             "ol"
