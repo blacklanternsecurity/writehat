@@ -6,9 +6,15 @@
     flex-direction: column;
 
     width: 100%;
-    height: var(--page-content-height);
+    height: 100%;
     padding: 0px;
     margin: 0px;
+}
+
+.finding-table {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 
     border-top: 5px solid var(--severity-color);
     border-spacing: 0;
