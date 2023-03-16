@@ -515,7 +515,10 @@
 		let currentLetter;
 
 		let range;
-		const significantWhitespaces = node.parentElement && node.parentElement.nodeName === "PRE";
+		// manually patched in from https://github.com/pagedjs/pagedjs/issues/75
+		// preserves whitespace in pre>code as needed
+		//ORIGINAL -> const significantWhitespaces = node.parentElement && node.parentElement.nodeName === "PRE";
+		const significantWhitespaces = node.parentElement && getComputedStyle(node.parentElement).whiteSpace.includes("pre");
 
 		while (currentOffset < max) {
 			currentLetter = currentText[currentOffset];
