@@ -97,14 +97,14 @@
     border-radius: 0;
 }
 
-.finding-content:first-child .finding-content-body pre:first-child,
+.finding-content:first-child .finding-content-body[data-split-from] pre:first-child,
 .finding-content:first-child .finding-content-body[data-split-from]:has(pre:first-child) {
     padding-top: unset;
     margin-top: unset;
 }
 
-.finding-content-body[data-split-to],
-.finding-content-body[data-split-to] > *:last-child {
+.finding-content-body > *:last-child,
+.finding-content:last-child .finding-content-body {
     padding-bottom: unset;
     margin-bottom: unset;
 }
