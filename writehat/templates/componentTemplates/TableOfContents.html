@@ -4,13 +4,13 @@
     <ul class="toc-list">
       {% for component in toc_components %}
         {{ component.spacer|safe }}
-        <a href='#component_{{ component.id }}' class="avoid-split">
-          <li class="toc-entry">
+        <li>
+          <a href='#component_{{ component.id }}' class="toc-entry">
             <span style='margin-left: {{ component.level }}em;' class="toc-item"><span class='bold'>{{ component.index }} {{ component.name }}</span></span>
             <span class="toc-dots"></span>
             <span class="toc-pagenumber" target-component='#component_{{ component.id }}'></span>
-          </li>
-        </a>
+          </a>
+        </li>
       {% endfor %}
     </ul>
   </div>
