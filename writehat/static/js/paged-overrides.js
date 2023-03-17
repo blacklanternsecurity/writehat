@@ -64,6 +64,9 @@ class ElementCleaner extends Paged.Handler {
             }
         }
 
+        // Remove empty finding-content sections
+        $('.finding-content:has(.finding-content-body:empty)').remove()
+
         let t1 = performance.now();
         console.log("Rendering took " + Number.parseFloat((t1 - t0)/1000).toPrecision(3) + " seconds.");
 
@@ -133,6 +136,21 @@ class ElementCleaner extends Paged.Handler {
     }
 
     onBreakToken(breakToken, overflow, rendered) {
+        if (breakToken) {
+            let node = $(breakToken.node)
+            if (node.hasClass('page-break')) {
+                let content = node.closest('.finding-content')
+                if (content.length > 0) {
+                    content = content.get(0)
+                    if (node.is(':last-child')) {
+                        content.parentNode.insertBefore(breakToken.node, content.nextSibling)
+                    } else if (node.is(':first-child')) {
+                        content.parentNode.insertBefore(breakToken.node, content)
+                    }
+                }
+            }
+        }
+
         if (overflow) {
             let sc = $(overflow.startContainer)[0];
             if ($(sc).is("td") || $(sc).parent().is("td") || $(sc).is("tbody")) {
