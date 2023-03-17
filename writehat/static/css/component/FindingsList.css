@@ -85,12 +85,28 @@
     text-align: left;
 }
 
-.finding-content-body pre {
-    margin: 0;
+.finding-content:last-child .finding-content-body pre:last-child > code[data-split-to] {
+    border-radius: .5rem .5rem 0rem 0rem;
 }
 
-.finding-content-body[data-split-from], .finding-content-body pre > code[data-split-from] {
-    padding-top: 1rem !important;
+.finding-content:first-child .finding-content-body pre:first-child > code[data-split-from] {
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
+}
+
+.finding-content:first-child .finding-content-body pre > code[data-split-from][data-split-to] {
+    border-radius: 0;
+}
+
+.finding-content:first-child .finding-content-body pre:first-child,
+.finding-content:first-child .finding-content-body[data-split-from]:has(pre:first-child) {
+    padding-top: unset;
+    margin-top: unset;
+}
+
+.finding-content-body[data-split-to],
+.finding-content-body[data-split-to] > *:last-child {
+    padding-bottom: unset;
+    margin-bottom: unset;
 }
 
 .finding-content:nth-of-type(odd) > .finding-content-body {
