@@ -133,17 +133,6 @@ class ElementCleaner extends Paged.Handler {
     }
 
     onBreakToken(breakToken, overflow, rendered) {
-        if (breakToken) {
-            let token = $(breakToken.node)
-            let token_parent = token.closest('.avoid-split')
-            let should_avoid_split = token_parent.length > 0
-
-            if (should_avoid_split) {
-                breakToken.node = token_parent.get(0)
-                breakToken.offset = 0
-            }
-        }
-
         if (overflow) {
             let sc = $(overflow.startContainer)[0];
             if ($(sc).is("td") || $(sc).parent().is("td") || $(sc).is("tbody")) {
