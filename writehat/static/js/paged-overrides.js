@@ -36,7 +36,9 @@ class ElementCleaner extends Paged.Handler {
             ".finding-content pre",
             "tbody",
             "ul",
-            "ol"
+            "ul li",
+            "ol",
+            "ol li"
         ];
 
         cleanup.forEach( e => $(page.element).find(e).each( function() { removeEmpty($(this), page.id); } ) );
