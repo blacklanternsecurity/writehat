@@ -68,6 +68,7 @@ class ElementCleaner extends Paged.Handler {
 
         // Remove empty finding-content sections
         $('.finding-content:has(.finding-content-body:empty)').remove()
+        $('section div.page-break:empty').remove()
 
         let t1 = performance.now();
         console.log("Rendering took " + Number.parseFloat((t1 - t0)/1000).toPrecision(3) + " seconds.");
