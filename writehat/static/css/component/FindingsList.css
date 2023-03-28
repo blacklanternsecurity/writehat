@@ -93,14 +93,12 @@
     border-radius: 0rem 0rem 0.5rem 0.5rem;
 }
 
-.finding-content:first-child .finding-content-body pre > code[data-split-from][data-split-to] {
-    border-radius: 0;
+.finding-content:first-child .finding-content-body:has(pre:first-child > code[data-split-from]) {
+    padding-top: unset;
 }
 
-.finding-content:first-child .finding-content-body[data-split-from] pre:first-child,
-.finding-content:first-child .finding-content-body[data-split-from]:has(pre:first-child) {
-    padding-top: unset;
-    margin-top: unset;
+.finding-content:first-child .finding-content-body pre > code[data-split-from][data-split-to] {
+    border-radius: 0;
 }
 
 .finding-content-body > *:last-child,
