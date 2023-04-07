@@ -4,6 +4,7 @@ from writehat.lib.markdown import render_markdown
 
 register = template.Library()
 
+
 @register.filter
 def addstr(arg1, arg2):
     '''concatenate arg1 & arg2'''
@@ -15,3 +16,15 @@ def markdown(context, arg1):
     '''render in markdown'''
 
     return mark_safe(render_markdown(arg1, context))
+
+
+@register.filter
+def camelcaseToTitle(input):
+    result = ""
+
+    for i in input:
+        if i.isupper():
+            result += " "
+        result += i
+
+    return result
