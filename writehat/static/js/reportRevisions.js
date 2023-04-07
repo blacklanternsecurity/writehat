@@ -7,12 +7,12 @@ $(document).ready(function() {
       return diffHtmlNew
    }
 
-   $('.revision').click(function() {
-      let revision = $(this)
+   function showDiff(row) {
+      let revision = row
       let [field_name, version] = revision.attr('version').split('-')
       let parent = revision.attr('parent')
       let is_component = revision.attr('component') == "True"
-      let previous_version = $('.report-revisions li[version="' + field_name + '-' + (version - 1) + '"][parent="' + parent + '"]')
+      let previous_version = $('#report-revisions tbody tr[version="' + field_name + '-' + (version - 1) + '"][parent="' + parent + '"]')
       let editor = revision.find('.revision-editor').text().trim()
       let name = revision.find('.revision-name').text().trim()
 
@@ -54,5 +54,21 @@ $(document).ready(function() {
             }
          })
       })
+   }
+
+   let dtable = $("#report-revisions")
+
+   $.fn.dataTable.moment('MMMM D, YYYY, h:mm A');
+   dtable.DataTable({
+      "pagingType": "full_numbers",
+      "iDisplayLength": 25,
+      "stateSave": true,
+      "order": [
+         [4, "desc"]
+      ]
+   });
+
+   dtable.on("click", "tbody tr", function() {
+      showDiff($(this))
    })
 })

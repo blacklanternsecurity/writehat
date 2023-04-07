@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}{{ report.name }} Changelog{% endblock %}
 
@@ -16,44 +17,29 @@
 {% endblock %}
 
 {% block fullPane %}
-<div class="container">
-  <ul class="list-group report-revisions">
-    {% for revision in revisions %}
-    <li id="{{ revision.id }}" class="list-group-item revision" version="{{ revision.fieldName }}-{{ revision.version }}" parent="{{ revision.parentId }}" component="{{ revision.isComponent }}">
-      <div class="row">
-        <div class="col-8 font-weight-bold">Name</div>
-        <div class="col-2 font-weight-bold">Editor</div>
-        <div class="col-2 font-weight-bold">Date Modified</div>
-      </div>
-      <hr class="h-sep"/>
-      <div class="row">
-        <div class="revision-name col-8 text-truncate">{{ revision.name }}</div>
-        <div class="revision-editor col-2">{{ revision.owner }}</div>
-        <div class="revision-date col-2">{{ revision.createdDate }}</div>
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
-
-  <ul class="pagination justify-content-center">
-    {% if revisions.has_previous %}
-    <li class="page-item">
-      <a class="page-link" href="?page={{ revisions.previous_page_number }}" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    {% endif %}
-
-    <li class="page-item"><a class="page-link" href="#">Page {{ request.GET.page }} of {{ revisions.paginator.num_pages }}</a></li>
-
-    {% if revisions.has_next %}
-    <li class="page-item">
-      <a class="page-link" href="?page={{ revisions.next_page_number }}" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-    {% endif %}
-  </ul>
+<div class="container-fluid px-3 py-2 bg-light border border-info rounded">
+  <table id="report-revisions" class="writehat-table container-fluid table-light table-striped table-hover overflow-auto">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Field Modified</th>
+        <th>Editor</th>
+        <th>Date Modified</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for revision in revisions %}
+      <tr id="{{ revision.id }}" class="revision" version="{{ revision.fieldName }}-{{ revision.version }}" parent="{{ revision.parentId }}" component="{{ revision.isComponent }}">
+        <td class="revision-name text-truncate">{{ revision.name }}</td>
+        <td class="revision-type">{{ revision.isComponent|yesno:"Component,Finding,Other" }}</td>
+        <td class="revision-fieldname">{{ revision.fieldName|camelcaseToTitle|title }}</td>
+        <td class="revision-editor">{{ revision.owner }}</td>
+        <td class="revision-date">{{ revision.createdDate|date:'N j, Y, g:i A' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}
 

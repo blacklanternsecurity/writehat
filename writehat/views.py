@@ -172,15 +172,10 @@ def reportRevisions(request, uuid):
 
     report = Report.get(id=uuid)
 
-    page_number = request.GET.get('page', 1)
-    per_page = request.GET.get('max', 10)
-    paginator = Paginator(report.revisions, per_page)
-    revisions = paginator.get_page(page_number)
-
     return render(request, "pages/reportRevisions.html", {
         "report": report,
         "engagement": report.engagement,
-        "revisions": revisions
+        "revisions": report.revisions
     })
 
 @require_http_methods(['GET'])

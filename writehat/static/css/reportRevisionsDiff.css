@@ -1,11 +1,4 @@
-.report-revisions li {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 5px !important;
+table#report-revisions tbody tr {
+  padding: 0.5rem;
   cursor: pointer;
-  outline: white solid 2px;
-}
-
-.pagination {
-  padding: 1rem;
 }
