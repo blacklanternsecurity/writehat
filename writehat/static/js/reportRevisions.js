@@ -43,11 +43,18 @@ $(document).ready(function() {
             url: '/revisions/compare',
             data: data,
             success: function(result) {
-               var diff = atob(result.unifiedDiff.replace(/_/g, '/').replace(/-/g, '+'));
+               var diff = diff2HtmlGenerate(atob(result.unifiedDiff.replace(/_/g, '/').replace(/-/g, '+')))
+               let summary = ""
                let type = is_component ? "component" : "finding"
-               let summary = editor + ' made changes to "' + field_name + '" for the "' + name + '" ' + type
+
+               if (diff.trim().length == 0) {
+                  summary = editor + ' created the ' + type + ' "' + name + '"'
+               } else {
+                  summary = editor + ' made changes to "' + field_name + '" for the "' + name + '" ' + type
+               }
+
                revision_summary.html(summary)
-               revision_diff.html(diff2HtmlGenerate(diff))
+               revision_diff.html(diff)
             },
             error: function(err) {
                modal.html("OOF")
