@@ -566,7 +566,7 @@ class Report(BaseReport):
         result = []
 
         findings = self.findings
-        components = self.components
+        components = [component for component in self]
         revised_items = findings + components
 
         component_ids = [component.id for component in components]
