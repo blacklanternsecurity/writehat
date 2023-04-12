@@ -2,3 +2,12 @@ table#report-revisions tbody tr {
   padding: 0.5rem;
   cursor: pointer;
 }
+
+.d2h-code-line-prefix {
+  vertical-align: top;
+}
+
+.d2h-code-line-ctn {
+  word-wrap: break-word;
+  white-space: normal;
+}
