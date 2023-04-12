@@ -147,61 +147,6 @@ $(document).ready(function() {
     reportUpdateAndRefresh()
   })
 
-  let show_revisions = false
-
-  $('#reportToggleRevisions').click(function() {
-    show_revisions = !show_revisions
-
-    if (show_revisions) {
-      $.ajax({
-        url: '/engagements/report/' + reportID + '/components/revisions',
-        success: function(result) {
-          let data = result.data
-          let components = $('#reportComponents')
-
-          for (let component of components.children()){
-            component = $(component)
-
-            let id = component.attr('component-id')
-            let obj = data.filter(item => {
-              return item.id == id
-            })[0]
-
-
-            let revision
-
-            if (obj) {
-              revision = obj.revisions[0]
-            }
-
-            let span = component.find('.latest-revision')
-
-            if (revision) {
-              let date = new Date(revision.createdDate)
-              let year = date.getUTCFullYear()
-              let month = date.getUTCMonth() + 1
-              let day = date.getUTCDate()
-              let timestamp = year + '/' + month + '/' + day + ' at ' + date.getUTCHours() + ':' + date.getUTCMinutes()
-              let content = 'Updated ' + timestamp + ' - ' + ' changed by ' + revision.owner
-
-              span.text(content)
-            }
-          }
-        }
-      })
-
-      $(this).css('color', 'green')
-    } else {
-      let revisions = $('#reportComponents .latest-revision')
-      revisions.each(function() {
-        $(this).empty()
-      })
-
-      $(this).css('color', 'white')
-    }
-
-  })
-
   $('#reportRevisions').click(function() {
     var url = '/engagements/report/' + reportID + '/revisions';
     window.location.href = url

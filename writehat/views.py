@@ -155,17 +155,6 @@ def reportEdit(request,uuid):
         })
 
 @require_http_methods(['GET'])
-def reportComponentRevisions(request, uuid):
-    log.debug("reportRevisions() called; UUID: {0}".format(uuid))
-    log.debug("Found {0} available components".format(len(settings.VALID_COMPONENTS)))
-
-    report = Report.get(id=uuid)
-
-    return JsonResponse({
-        'data': report.component_revisions()
-    })
-
-@require_http_methods(['GET'])
 def reportRevisions(request, uuid):
     log.debug("reportRevisions() called; UUID: {0}".format(uuid))
     log.debug("Found {0} available components".format(len(settings.VALID_COMPONENTS)))

@@ -541,26 +541,6 @@ class Report(BaseReport):
 
         return rendered
 
-    def component_revisions(self):
-        result = []
-
-        component_ids = [component.id for component in self.components]
-        query = Revision.objects\
-            .filter(parentId__in=component_ids)\
-            .values()\
-            .order_by('-version')
-
-        for component in self.components:
-            revisions = [dict(obj) for obj in query if obj["parentId"] == component.id]
-            item = {
-                "id": component.id,
-                "name": component.name,
-                "revisions": revisions
-            }
-            result.append(item)
-
-        return result
-
     @property
     def revisions(self):
         result = []
