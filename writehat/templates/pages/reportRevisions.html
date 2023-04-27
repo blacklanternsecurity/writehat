@@ -1,0 +1,57 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}{{ report.name }} Changelog{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/reportRevisionsDiff.css' %}"/>
+{% endblock %}
+
+{% block headerLeft %}
+  {% include 'snippets/breadcrumbs.html' with current=report %}
+{% endblock %}
+
+{% block headerRight %}
+{% endblock %}
+
+{% block fullPane %}
+<div class="container-fluid px-3 py-2 bg-light border border-info rounded">
+  <table id="report-revisions" class="writehat-table container-fluid table-light table-striped table-hover overflow-auto">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Field Modified</th>
+        <th>Editor</th>
+        <th>Date Modified</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for revision in revisions %}
+      <tr id="{{ revision.id }}" class="revision" version="{{ revision.fieldName }}-{{ revision.version }}" parent="{{ revision.parentId }}" component="{{ revision.isComponent }}">
+        <td class="revision-name text-truncate">{{ revision.name }}</td>
+        <td class="revision-type">{{ revision.isComponent|yesno:"Component,Finding,Other" }}</td>
+        <td class="revision-fieldname">{{ revision.fieldName|camelcaseToTitle|title }}</td>
+        <td class="revision-editor">{{ revision.owner }}</td>
+        <td class="revision-date">{{ revision.createdDate|date:'N j, Y, g:i A' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block footer %}
+  <!-- Hidden report div for storing Report Name, UUID, etc. -->
+  <span id="report-info" report-name="{{ report.name }}" report-id="{{ report.id }}" style="display: none;"></span>
+  <span id="engagement-info" engagement-id="{{ report.engagementParent }}" style="display: none;"></span>
+  <span id="timestamp-check" object-id="{{ report.id }}" hint="report" button="reportUpdate"></span>
+
+  {% include "modals/reportRevisionsDiff.html" %}
+
+  <script src="/static/js/reportRevisions.js"></script>
+  <script src="/static/js/reports.js"></script>
+  <script src="/static/js/checkbox.js"></script>
+{% endblock %}

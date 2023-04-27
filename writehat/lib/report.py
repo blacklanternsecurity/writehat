@@ -3,9 +3,11 @@ import logging
 from uuid import UUID
 from django import forms
 from django.db import models
+from django.db.models import Q
 from writehat.models import *
 from writehat.lib.util import *
 from writehat.lib.errors import *
+from writehat.lib.revision import Revision
 from writehat.validation import *
 from writehat.components.base import *
 from django.core.exceptions import ValidationError
@@ -538,6 +540,37 @@ class Report(BaseReport):
         })
 
         return rendered
+
+    @property
+    def revisions(self):
+        result = []
+
+        findings = self.findings
+        components = [component for component in self]
+        revised_items = findings + components
+
+        component_ids = [component.id for component in components]
+        finding_ids = [finding.id for finding in findings]
+
+        result = Revision.objects\
+            .filter(Q(parentId__in=component_ids) | Q(parentId__in=finding_ids))\
+            .order_by('-createdDate')\
+            .values()
+
+        result = list(result)
+
+        # adding the name of the component to the revision makes it possible to list
+        # revisions alongside the component or finding that they belong to. This is
+        # probably preferable to doing more database lookups when we already queried for it
+        # earlier in self.findings and self.components
+        for revision in result:
+            # gets the name of the component/finding the revision belongs to
+            # just filters the list of all components/findings and then returns the name
+            # of the component/finding the this revision belongs to. probably not fast
+            name = list(filter(lambda i : i.id == revision["parentId"], revised_items))[0].name
+            revision["name"] = name
+
+        return result
 
 
     @property

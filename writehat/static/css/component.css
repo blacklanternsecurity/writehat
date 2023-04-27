@@ -11,6 +11,11 @@
   border: 1px solid rgba(255,255,255,.3);
 }
 
+.componentItem .latest-revision {
+    color: var(--gray);
+    padding-left: 1rem;
+}
+
 .componentItem .componentEditControls {
   margin-left: auto;
 }

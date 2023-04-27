@@ -10,6 +10,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils.html import escape
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.http import require_http_methods
@@ -152,6 +153,19 @@ def reportEdit(request,uuid):
             "componentsList": settings.VALID_COMPONENTS,
 
         })
+
+@require_http_methods(['GET'])
+def reportRevisions(request, uuid):
+    log.debug("reportRevisions() called; UUID: {0}".format(uuid))
+    log.debug("Found {0} available components".format(len(settings.VALID_COMPONENTS)))
+
+    report = Report.get(id=uuid)
+
+    return render(request, "pages/reportRevisions.html", {
+        "report": report,
+        "engagement": report.engagement,
+        "revisions": report.revisions
+    })
 
 @require_http_methods(['GET'])
 @csrf_protect
@@ -1130,20 +1144,6 @@ def timestamp(request,uuid):
     p = resolve(uuid,hint)
 
     return HttpResponse(p.modifiedDate)
-
-
-
-
-@csrf_protect
-@require_http_methods(['POST'])
-def revisionSave(request):
-    # componentID
-    id = request.POST["UUID"]
-    text = request.POST["text"]
-    fieldName = request.POST["fieldName"]
-    p = Revision.new(componentID=id,fieldName=fieldName,fieldText=text)
-    p.save()
-    return HttpResponse(p.version)
 
 
 @csrf_protect
