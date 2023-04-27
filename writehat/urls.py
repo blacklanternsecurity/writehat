@@ -71,7 +71,6 @@ urlpatterns = [
 
 
     # revision urls
-    path('revisions/save', views.revisionSave),
     path('revisions/load', views.revisionLoad),
     path('revisions/compare', views.revisionCompare),
     path('revisions/list', views.revisionsList),

@@ -1146,20 +1146,6 @@ def timestamp(request,uuid):
     return HttpResponse(p.modifiedDate)
 
 
-
-
-@csrf_protect
-@require_http_methods(['POST'])
-def revisionSave(request):
-    # componentID
-    id = request.POST["UUID"]
-    text = request.POST["text"]
-    fieldName = request.POST["fieldName"]
-    p = Revision.new(componentID=id,fieldName=fieldName,fieldText=text)
-    p.save()
-    return HttpResponse(p.version)
-
-
 @csrf_protect
 @require_http_methods(['POST'])
 def revisionLoad(request):
