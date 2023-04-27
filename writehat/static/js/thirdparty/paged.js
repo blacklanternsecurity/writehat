@@ -1,420 +1,12 @@
 /**
- * @license Paged.js v0.4.0 | MIT | https://gitlab.pagedmedia.org/tools/pagedjs
+ * @license Paged.js v0.5.0-beta.0 | MIT | https://gitlab.pagedmedia.org/tools/pagedjs
  */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.PagedPolyfill = factory());
-})(this, (function () { 'use strict';
-
-	var eventEmitter = {exports: {}};
-
-	var d$3 = {exports: {}};
-
-	var isImplemented$6 = function () {
-		var assign = Object.assign, obj;
-		if (typeof assign !== "function") return false;
-		obj = { foo: "raz" };
-		assign(obj, { bar: "dwa" }, { trzy: "trzy" });
-		return (obj.foo + obj.bar + obj.trzy) === "razdwatrzy";
-	};
-
-	var isImplemented$5 = function () {
-		try {
-			Object.keys("primitive");
-			return true;
-		} catch (e) {
-	 return false;
-	}
-	};
-
-	// eslint-disable-next-line no-empty-function
-	var noop$4 = function () {};
-
-	var _undefined = noop$4(); // Support ES3 engines
-
-	var isValue$5 = function (val) {
-	 return (val !== _undefined) && (val !== null);
-	};
-
-	var isValue$4 = isValue$5;
-
-	var keys$2 = Object.keys;
-
-	var shim$5 = function (object) {
-		return keys$2(isValue$4(object) ? Object(object) : object);
-	};
-
-	var keys$1 = isImplemented$5()
-		? Object.keys
-		: shim$5;
-
-	var isValue$3 = isValue$5;
-
-	var validValue$1 = function (value) {
-		if (!isValue$3(value)) throw new TypeError("Cannot use null or undefined");
-		return value;
-	};
-
-	var keys  = keys$1
-	  , value$3 = validValue$1
-	  , max$1   = Math.max;
-
-	var shim$4 = function (dest, src /*, …srcn*/) {
-		var error, i, length = max$1(arguments.length, 2), assign;
-		dest = Object(value$3(dest));
-		assign = function (key) {
-			try {
-				dest[key] = src[key];
-			} catch (e) {
-				if (!error) error = e;
-			}
-		};
-		for (i = 1; i < length; ++i) {
-			src = arguments[i];
-			keys(src).forEach(assign);
-		}
-		if (error !== undefined) throw error;
-		return dest;
-	};
-
-	var assign$2 = isImplemented$6()
-		? Object.assign
-		: shim$4;
-
-	var isValue$2 = isValue$5;
-
-	var forEach$1 = Array.prototype.forEach, create$6 = Object.create;
-
-	var process = function (src, obj) {
-		var key;
-		for (key in src) obj[key] = src[key];
-	};
-
-	// eslint-disable-next-line no-unused-vars
-	var normalizeOptions = function (opts1 /*, …options*/) {
-		var result = create$6(null);
-		forEach$1.call(arguments, function (options) {
-			if (!isValue$2(options)) return;
-			process(Object(options), result);
-		});
-		return result;
-	};
-
-	var isCallable$1 = function (obj) {
-	 return typeof obj === "function";
-	};
-
-	var str = "razdwatrzy";
-
-	var isImplemented$4 = function () {
-		if (typeof str.contains !== "function") return false;
-		return (str.contains("dwa") === true) && (str.contains("foo") === false);
-	};
-
-	var indexOf$3 = String.prototype.indexOf;
-
-	var shim$3 = function (searchString/*, position*/) {
-		return indexOf$3.call(this, searchString, arguments[1]) > -1;
-	};
-
-	var contains$1 = isImplemented$4()
-		? String.prototype.contains
-		: shim$3;
-
-	var assign$1        = assign$2
-	  , normalizeOpts = normalizeOptions
-	  , isCallable    = isCallable$1
-	  , contains      = contains$1
-
-	  , d$2;
-
-	d$2 = d$3.exports = function (dscr, value/*, options*/) {
-		var c, e, w, options, desc;
-		if ((arguments.length < 2) || (typeof dscr !== 'string')) {
-			options = value;
-			value = dscr;
-			dscr = null;
-		} else {
-			options = arguments[2];
-		}
-		if (dscr == null) {
-			c = w = true;
-			e = false;
-		} else {
-			c = contains.call(dscr, 'c');
-			e = contains.call(dscr, 'e');
-			w = contains.call(dscr, 'w');
-		}
-
-		desc = { value: value, configurable: c, enumerable: e, writable: w };
-		return !options ? desc : assign$1(normalizeOpts(options), desc);
-	};
-
-	d$2.gs = function (dscr, get, set/*, options*/) {
-		var c, e, options, desc;
-		if (typeof dscr !== 'string') {
-			options = set;
-			set = get;
-			get = dscr;
-			dscr = null;
-		} else {
-			options = arguments[3];
-		}
-		if (get == null) {
-			get = undefined;
-		} else if (!isCallable(get)) {
-			options = get;
-			get = set = undefined;
-		} else if (set == null) {
-			set = undefined;
-		} else if (!isCallable(set)) {
-			options = set;
-			set = undefined;
-		}
-		if (dscr == null) {
-			c = true;
-			e = false;
-		} else {
-			c = contains.call(dscr, 'c');
-			e = contains.call(dscr, 'e');
-		}
-
-		desc = { get: get, set: set, configurable: c, enumerable: e };
-		return !options ? desc : assign$1(normalizeOpts(options), desc);
-	};
-
-	var validCallable = function (fn) {
-		if (typeof fn !== "function") throw new TypeError(fn + " is not a function");
-		return fn;
-	};
-
-	(function (module, exports) {
-
-	var d        = d$3.exports
-	  , callable = validCallable
-
-	  , apply = Function.prototype.apply, call = Function.prototype.call
-	  , create = Object.create, defineProperty = Object.defineProperty
-	  , defineProperties = Object.defineProperties
-	  , hasOwnProperty = Object.prototype.hasOwnProperty
-	  , descriptor = { configurable: true, enumerable: false, writable: true }
-
-	  , on, once, off, emit, methods, descriptors, base;
-
-	on = function (type, listener) {
-		var data;
-
-		callable(listener);
-
-		if (!hasOwnProperty.call(this, '__ee__')) {
-			data = descriptor.value = create(null);
-			defineProperty(this, '__ee__', descriptor);
-			descriptor.value = null;
-		} else {
-			data = this.__ee__;
-		}
-		if (!data[type]) data[type] = listener;
-		else if (typeof data[type] === 'object') data[type].push(listener);
-		else data[type] = [data[type], listener];
-
-		return this;
-	};
-
-	once = function (type, listener) {
-		var once, self;
-
-		callable(listener);
-		self = this;
-		on.call(this, type, once = function () {
-			off.call(self, type, once);
-			apply.call(listener, this, arguments);
-		});
-
-		once.__eeOnceListener__ = listener;
-		return this;
-	};
-
-	off = function (type, listener) {
-		var data, listeners, candidate, i;
-
-		callable(listener);
-
-		if (!hasOwnProperty.call(this, '__ee__')) return this;
-		data = this.__ee__;
-		if (!data[type]) return this;
-		listeners = data[type];
-
-		if (typeof listeners === 'object') {
-			for (i = 0; (candidate = listeners[i]); ++i) {
-				if ((candidate === listener) ||
-						(candidate.__eeOnceListener__ === listener)) {
-					if (listeners.length === 2) data[type] = listeners[i ? 0 : 1];
-					else listeners.splice(i, 1);
-				}
-			}
-		} else {
-			if ((listeners === listener) ||
-					(listeners.__eeOnceListener__ === listener)) {
-				delete data[type];
-			}
-		}
-
-		return this;
-	};
-
-	emit = function (type) {
-		var i, l, listener, listeners, args;
-
-		if (!hasOwnProperty.call(this, '__ee__')) return;
-		listeners = this.__ee__[type];
-		if (!listeners) return;
-
-		if (typeof listeners === 'object') {
-			l = arguments.length;
-			args = new Array(l - 1);
-			for (i = 1; i < l; ++i) args[i - 1] = arguments[i];
-
-			listeners = listeners.slice();
-			for (i = 0; (listener = listeners[i]); ++i) {
-				apply.call(listener, this, args);
-			}
-		} else {
-			switch (arguments.length) {
-			case 1:
-				call.call(listeners, this);
-				break;
-			case 2:
-				call.call(listeners, this, arguments[1]);
-				break;
-			case 3:
-				call.call(listeners, this, arguments[1], arguments[2]);
-				break;
-			default:
-				l = arguments.length;
-				args = new Array(l - 1);
-				for (i = 1; i < l; ++i) {
-					args[i - 1] = arguments[i];
-				}
-				apply.call(listeners, this, args);
-			}
-		}
-	};
-
-	methods = {
-		on: on,
-		once: once,
-		off: off,
-		emit: emit
-	};
-
-	descriptors = {
-		on: d(on),
-		once: d(once),
-		off: d(off),
-		emit: d(emit)
-	};
-
-	base = defineProperties({}, descriptors);
-
-	module.exports = exports = function (o) {
-		return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
-	};
-	exports.methods = methods;
-	}(eventEmitter, eventEmitter.exports));
-
-	var EventEmitter = eventEmitter.exports;
-
-	/**
-	 * Hooks allow for injecting functions that must all complete in order before finishing
-	 * They will execute in parallel but all must finish before continuing
-	 * Functions may return a promise if they are asycn.
-	 * From epubjs/src/utils/hooks
-	 * @param {any} context scope of this
-	 * @example this.content = new Hook(this);
-	 */
-	class Hook {
-		constructor(context){
-			this.context = context || this;
-			this.hooks = [];
-		}
-
-		/**
-		 * Adds a function to be run before a hook completes
-		 * @example this.content.register(function(){...});
-		 * @return {undefined} void
-		 */
-		register(){
-			for(var i = 0; i < arguments.length; ++i) {
-				if (typeof arguments[i]  === "function") {
-					this.hooks.push(arguments[i]);
-				} else {
-					// unpack array
-					for(var j = 0; j < arguments[i].length; ++j) {
-						this.hooks.push(arguments[i][j]);
-					}
-				}
-			}
-		}
-
-		/**
-		 * Triggers a hook to run all functions
-		 * @example this.content.trigger(args).then(function(){...});
-		 * @return {Promise} results
-		 */
-		trigger(){
-			var args = arguments;
-			var context = this.context;
-			var promises = [];
-
-			this.hooks.forEach(function(task) {
-				var executing = task.apply(context, args);
-
-				if(executing && typeof executing["then"] === "function") {
-					// Task is a function that returns a promise
-					promises.push(executing);
-				} else {
-					// Otherwise Task resolves immediately, add resolved promise with result
-					promises.push(new Promise((resolve, reject) => {
-						resolve(executing);
-					}));
-				}
-			});
-
-
-			return Promise.all(promises);
-		}
-
-		/**
-	   * Triggers a hook to run all functions synchronously
-	   * @example this.content.trigger(args).then(function(){...});
-	   * @return {Array} results
-	   */
-		triggerSync(){
-			var args = arguments;
-			var context = this.context;
-			var results = [];
-
-			this.hooks.forEach(function(task) {
-				var executing = task.apply(context, args);
-
-				results.push(executing);
-			});
-
-
-			return results;
-		}
-
-		// Adds a function to be run before a hook completes
-		list(){
-			return this.hooks;
-		}
-
-		clear(){
-			return this.hooks = [];
-		}
-	}
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Paged = {}));
+})(this, (function (exports) { 'use strict';
 
 	function getBoundingClientRect(element) {
 		if (!element) {
@@ -1088,7 +680,7 @@
 	}
 
 
-	function indexOf$2(node) {
+	function indexOf$3(node) {
 		let parent = node.parentNode;
 		if (!parent) {
 			return 0;
@@ -1340,6 +932,414 @@
 		constructor(message, items) {
 			super(message);
 			this.items = items;
+		}
+	}
+
+	var eventEmitter = {exports: {}};
+
+	var d$3 = {exports: {}};
+
+	var isImplemented$6 = function () {
+		var assign = Object.assign, obj;
+		if (typeof assign !== "function") return false;
+		obj = { foo: "raz" };
+		assign(obj, { bar: "dwa" }, { trzy: "trzy" });
+		return (obj.foo + obj.bar + obj.trzy) === "razdwatrzy";
+	};
+
+	var isImplemented$5 = function () {
+		try {
+			Object.keys("primitive");
+			return true;
+		} catch (e) {
+	 return false;
+	}
+	};
+
+	// eslint-disable-next-line no-empty-function
+	var noop$4 = function () {};
+
+	var _undefined = noop$4(); // Support ES3 engines
+
+	var isValue$5 = function (val) {
+	 return (val !== _undefined) && (val !== null);
+	};
+
+	var isValue$4 = isValue$5;
+
+	var keys$2 = Object.keys;
+
+	var shim$5 = function (object) {
+		return keys$2(isValue$4(object) ? Object(object) : object);
+	};
+
+	var keys$1 = isImplemented$5()
+		? Object.keys
+		: shim$5;
+
+	var isValue$3 = isValue$5;
+
+	var validValue$1 = function (value) {
+		if (!isValue$3(value)) throw new TypeError("Cannot use null or undefined");
+		return value;
+	};
+
+	var keys  = keys$1
+	  , value$3 = validValue$1
+	  , max$1   = Math.max;
+
+	var shim$4 = function (dest, src /*, …srcn*/) {
+		var error, i, length = max$1(arguments.length, 2), assign;
+		dest = Object(value$3(dest));
+		assign = function (key) {
+			try {
+				dest[key] = src[key];
+			} catch (e) {
+				if (!error) error = e;
+			}
+		};
+		for (i = 1; i < length; ++i) {
+			src = arguments[i];
+			keys(src).forEach(assign);
+		}
+		if (error !== undefined) throw error;
+		return dest;
+	};
+
+	var assign$2 = isImplemented$6()
+		? Object.assign
+		: shim$4;
+
+	var isValue$2 = isValue$5;
+
+	var forEach$1 = Array.prototype.forEach, create$6 = Object.create;
+
+	var process = function (src, obj) {
+		var key;
+		for (key in src) obj[key] = src[key];
+	};
+
+	// eslint-disable-next-line no-unused-vars
+	var normalizeOptions = function (opts1 /*, …options*/) {
+		var result = create$6(null);
+		forEach$1.call(arguments, function (options) {
+			if (!isValue$2(options)) return;
+			process(Object(options), result);
+		});
+		return result;
+	};
+
+	var isCallable$1 = function (obj) {
+	 return typeof obj === "function";
+	};
+
+	var str = "razdwatrzy";
+
+	var isImplemented$4 = function () {
+		if (typeof str.contains !== "function") return false;
+		return (str.contains("dwa") === true) && (str.contains("foo") === false);
+	};
+
+	var indexOf$2 = String.prototype.indexOf;
+
+	var shim$3 = function (searchString/*, position*/) {
+		return indexOf$2.call(this, searchString, arguments[1]) > -1;
+	};
+
+	var contains$1 = isImplemented$4()
+		? String.prototype.contains
+		: shim$3;
+
+	var assign$1        = assign$2
+	  , normalizeOpts = normalizeOptions
+	  , isCallable    = isCallable$1
+	  , contains      = contains$1
+
+	  , d$2;
+
+	d$2 = d$3.exports = function (dscr, value/*, options*/) {
+		var c, e, w, options, desc;
+		if ((arguments.length < 2) || (typeof dscr !== 'string')) {
+			options = value;
+			value = dscr;
+			dscr = null;
+		} else {
+			options = arguments[2];
+		}
+		if (dscr == null) {
+			c = w = true;
+			e = false;
+		} else {
+			c = contains.call(dscr, 'c');
+			e = contains.call(dscr, 'e');
+			w = contains.call(dscr, 'w');
+		}
+
+		desc = { value: value, configurable: c, enumerable: e, writable: w };
+		return !options ? desc : assign$1(normalizeOpts(options), desc);
+	};
+
+	d$2.gs = function (dscr, get, set/*, options*/) {
+		var c, e, options, desc;
+		if (typeof dscr !== 'string') {
+			options = set;
+			set = get;
+			get = dscr;
+			dscr = null;
+		} else {
+			options = arguments[3];
+		}
+		if (get == null) {
+			get = undefined;
+		} else if (!isCallable(get)) {
+			options = get;
+			get = set = undefined;
+		} else if (set == null) {
+			set = undefined;
+		} else if (!isCallable(set)) {
+			options = set;
+			set = undefined;
+		}
+		if (dscr == null) {
+			c = true;
+			e = false;
+		} else {
+			c = contains.call(dscr, 'c');
+			e = contains.call(dscr, 'e');
+		}
+
+		desc = { get: get, set: set, configurable: c, enumerable: e };
+		return !options ? desc : assign$1(normalizeOpts(options), desc);
+	};
+
+	var validCallable = function (fn) {
+		if (typeof fn !== "function") throw new TypeError(fn + " is not a function");
+		return fn;
+	};
+
+	(function (module, exports) {
+
+	var d        = d$3.exports
+	  , callable = validCallable
+
+	  , apply = Function.prototype.apply, call = Function.prototype.call
+	  , create = Object.create, defineProperty = Object.defineProperty
+	  , defineProperties = Object.defineProperties
+	  , hasOwnProperty = Object.prototype.hasOwnProperty
+	  , descriptor = { configurable: true, enumerable: false, writable: true }
+
+	  , on, once, off, emit, methods, descriptors, base;
+
+	on = function (type, listener) {
+		var data;
+
+		callable(listener);
+
+		if (!hasOwnProperty.call(this, '__ee__')) {
+			data = descriptor.value = create(null);
+			defineProperty(this, '__ee__', descriptor);
+			descriptor.value = null;
+		} else {
+			data = this.__ee__;
+		}
+		if (!data[type]) data[type] = listener;
+		else if (typeof data[type] === 'object') data[type].push(listener);
+		else data[type] = [data[type], listener];
+
+		return this;
+	};
+
+	once = function (type, listener) {
+		var once, self;
+
+		callable(listener);
+		self = this;
+		on.call(this, type, once = function () {
+			off.call(self, type, once);
+			apply.call(listener, this, arguments);
+		});
+
+		once.__eeOnceListener__ = listener;
+		return this;
+	};
+
+	off = function (type, listener) {
+		var data, listeners, candidate, i;
+
+		callable(listener);
+
+		if (!hasOwnProperty.call(this, '__ee__')) return this;
+		data = this.__ee__;
+		if (!data[type]) return this;
+		listeners = data[type];
+
+		if (typeof listeners === 'object') {
+			for (i = 0; (candidate = listeners[i]); ++i) {
+				if ((candidate === listener) ||
+						(candidate.__eeOnceListener__ === listener)) {
+					if (listeners.length === 2) data[type] = listeners[i ? 0 : 1];
+					else listeners.splice(i, 1);
+				}
+			}
+		} else {
+			if ((listeners === listener) ||
+					(listeners.__eeOnceListener__ === listener)) {
+				delete data[type];
+			}
+		}
+
+		return this;
+	};
+
+	emit = function (type) {
+		var i, l, listener, listeners, args;
+
+		if (!hasOwnProperty.call(this, '__ee__')) return;
+		listeners = this.__ee__[type];
+		if (!listeners) return;
+
+		if (typeof listeners === 'object') {
+			l = arguments.length;
+			args = new Array(l - 1);
+			for (i = 1; i < l; ++i) args[i - 1] = arguments[i];
+
+			listeners = listeners.slice();
+			for (i = 0; (listener = listeners[i]); ++i) {
+				apply.call(listener, this, args);
+			}
+		} else {
+			switch (arguments.length) {
+			case 1:
+				call.call(listeners, this);
+				break;
+			case 2:
+				call.call(listeners, this, arguments[1]);
+				break;
+			case 3:
+				call.call(listeners, this, arguments[1], arguments[2]);
+				break;
+			default:
+				l = arguments.length;
+				args = new Array(l - 1);
+				for (i = 1; i < l; ++i) {
+					args[i - 1] = arguments[i];
+				}
+				apply.call(listeners, this, args);
+			}
+		}
+	};
+
+	methods = {
+		on: on,
+		once: once,
+		off: off,
+		emit: emit
+	};
+
+	descriptors = {
+		on: d(on),
+		once: d(once),
+		off: d(off),
+		emit: d(emit)
+	};
+
+	base = defineProperties({}, descriptors);
+
+	module.exports = exports = function (o) {
+		return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
+	};
+	exports.methods = methods;
+	}(eventEmitter, eventEmitter.exports));
+
+	var EventEmitter = eventEmitter.exports;
+
+	/**
+	 * Hooks allow for injecting functions that must all complete in order before finishing
+	 * They will execute in parallel but all must finish before continuing
+	 * Functions may return a promise if they are asycn.
+	 * From epubjs/src/utils/hooks
+	 * @param {any} context scope of this
+	 * @example this.content = new Hook(this);
+	 */
+	class Hook {
+		constructor(context){
+			this.context = context || this;
+			this.hooks = [];
+		}
+
+		/**
+		 * Adds a function to be run before a hook completes
+		 * @example this.content.register(function(){...});
+		 * @return {undefined} void
+		 */
+		register(){
+			for(var i = 0; i < arguments.length; ++i) {
+				if (typeof arguments[i]  === "function") {
+					this.hooks.push(arguments[i]);
+				} else {
+					// unpack array
+					for(var j = 0; j < arguments[i].length; ++j) {
+						this.hooks.push(arguments[i][j]);
+					}
+				}
+			}
+		}
+
+		/**
+		 * Triggers a hook to run all functions
+		 * @example this.content.trigger(args).then(function(){...});
+		 * @return {Promise} results
+		 */
+		trigger(){
+			var args = arguments;
+			var context = this.context;
+			var promises = [];
+
+			this.hooks.forEach(function(task) {
+				var executing = task.apply(context, args);
+
+				if(executing && typeof executing["then"] === "function") {
+					// Task is a function that returns a promise
+					promises.push(executing);
+				} else {
+					// Otherwise Task resolves immediately, add resolved promise with result
+					promises.push(new Promise((resolve, reject) => {
+						resolve(executing);
+					}));
+				}
+			});
+
+
+			return Promise.all(promises);
+		}
+
+		/**
+	   * Triggers a hook to run all functions synchronously
+	   * @example this.content.trigger(args).then(function(){...});
+	   * @return {Array} results
+	   */
+		triggerSync(){
+			var args = arguments;
+			var context = this.context;
+			var results = [];
+
+			this.hooks.forEach(function(task) {
+				var executing = task.apply(context, args);
+
+				results.push(executing);
+			});
+
+
+			return results;
+		}
+
+		// Adds a function to be run before a hook completes
+		list(){
+			return this.hooks;
+		}
+
+		clear(){
+			return this.hooks = [];
 		}
 	}
 
@@ -2018,7 +2018,7 @@
 			if (isText(lastChild)) {
 
 				if (lastChild.parentNode.dataset.ref) {
-					lastNodeIndex = indexOf$2(lastChild);
+					lastNodeIndex = indexOf$3(lastChild);
 					lastChild = lastChild.parentNode;
 				} else {
 					lastChild = lastChild.previousSibling;
@@ -2277,6 +2277,9 @@
 
 			this.endToken = newBreakToken;
 
+			this.area.style.columnWidth = "";
+			this.area.style.columnGap = "";
+
 			return newBreakToken;
 		}
 
@@ -2290,6 +2293,9 @@
 			let newBreakToken = renderResult.breakToken;
 
 			this.endToken = newBreakToken;
+
+			this.area.style.columnWidth = "";
+			this.area.style.columnGap = "";
 
 			return newBreakToken;
 		}
@@ -26213,48 +26219,44 @@
 	    node: node
 	};
 
-	var _args = [
-		[
-			"css-tree@1.1.3",
-			"/home/gitlab-runner/builds/BQJy2NwB/0/pagedjs/pagedjs"
-		]
+	var name = "css-tree";
+	var version = "1.1.3";
+	var description = "A tool set for CSS: fast detailed parser (CSS → AST), walker (AST traversal), generator (AST → CSS) and lexer (validation and matching) based on specs and browser implementations";
+	var author = "Roman Dvornov <rdvornov@gmail.com> (https://github.com/lahmatiy)";
+	var license = "MIT";
+	var repository = "csstree/csstree";
+	var keywords = [
+		"css",
+		"ast",
+		"tokenizer",
+		"parser",
+		"walker",
+		"lexer",
+		"generator",
+		"utils",
+		"syntax",
+		"validation"
 	];
-	var _from = "css-tree@1.1.3";
-	var _id = "css-tree@1.1.3";
-	var _inBundle = false;
-	var _integrity = "sha512-tRpdppF7TRazZrjJ6v3stzv93qxRcSsFmW6cX0Zm2NVKpxE1WV1HblnghVv9TreireHkqI/VDEsfolRF1p6y7Q==";
-	var _location = "/css-tree";
-	var _phantomChildren = {
-	};
-	var _requested = {
-		type: "version",
-		registry: true,
-		raw: "css-tree@1.1.3",
-		name: "css-tree",
-		escapedName: "css-tree",
-		rawSpec: "1.1.3",
-		saveSpec: null,
-		fetchSpec: "1.1.3"
-	};
-	var _requiredBy = [
-		"/"
-	];
-	var _resolved = "https://registry.npmjs.org/css-tree/-/css-tree-1.1.3.tgz";
-	var _spec = "1.1.3";
-	var _where = "/home/gitlab-runner/builds/BQJy2NwB/0/pagedjs/pagedjs";
-	var author = {
-		name: "Roman Dvornov",
-		email: "rdvornov@gmail.com",
-		url: "https://github.com/lahmatiy"
-	};
-	var bugs = {
-		url: "https://github.com/csstree/csstree/issues"
+	var main = "lib/index.js";
+	var unpkg = "dist/csstree.min.js";
+	var jsdelivr = "dist/csstree.min.js";
+	var scripts = {
+		build: "rollup --config",
+		lint: "eslint data lib scripts test && node scripts/review-syntax-patch --lint && node scripts/update-docs --lint",
+		"lint-and-test": "npm run lint && npm test",
+		"update:docs": "node scripts/update-docs",
+		"review:syntax-patch": "node scripts/review-syntax-patch",
+		test: "mocha --reporter progress",
+		coverage: "nyc npm test",
+		travis: "nyc npm run lint-and-test && npm run coveralls",
+		coveralls: "nyc report --reporter=text-lcov | coveralls",
+		prepublishOnly: "npm run build",
+		hydrogen: "node --trace-hydrogen --trace-phase=Z --trace-deopt --code-comments --hydrogen-track-positions --redirect-code-traces --redirect-code-traces-to=code.asm --trace_hydrogen_file=code.cfg --print-opt-code bin/parse --stat -o /dev/null"
 	};
 	var dependencies = {
 		"mdn-data": "2.0.14",
 		"source-map": "^0.6.1"
 	};
-	var description = "A tool set for CSS: fast detailed parser (CSS → AST), walker (AST traversal), generator (AST → CSS) and lexer (validation and matching) based on specs and browser implementations";
 	var devDependencies = {
 		"@rollup/plugin-commonjs": "^11.0.2",
 		"@rollup/plugin-json": "^4.0.2",
@@ -26275,72 +26277,22 @@
 		"dist",
 		"lib"
 	];
-	var homepage = "https://github.com/csstree/csstree#readme";
-	var jsdelivr = "dist/csstree.min.js";
-	var keywords = [
-		"css",
-		"ast",
-		"tokenizer",
-		"parser",
-		"walker",
-		"lexer",
-		"generator",
-		"utils",
-		"syntax",
-		"validation"
-	];
-	var license = "MIT";
-	var main = "lib/index.js";
-	var name = "css-tree";
-	var repository = {
-		type: "git",
-		url: "git+https://github.com/csstree/csstree.git"
-	};
-	var scripts = {
-		build: "rollup --config",
-		coverage: "nyc npm test",
-		coveralls: "nyc report --reporter=text-lcov | coveralls",
-		hydrogen: "node --trace-hydrogen --trace-phase=Z --trace-deopt --code-comments --hydrogen-track-positions --redirect-code-traces --redirect-code-traces-to=code.asm --trace_hydrogen_file=code.cfg --print-opt-code bin/parse --stat -o /dev/null",
-		lint: "eslint data lib scripts test && node scripts/review-syntax-patch --lint && node scripts/update-docs --lint",
-		"lint-and-test": "npm run lint && npm test",
-		prepublishOnly: "npm run build",
-		"review:syntax-patch": "node scripts/review-syntax-patch",
-		test: "mocha --reporter progress",
-		travis: "nyc npm run lint-and-test && npm run coveralls",
-		"update:docs": "node scripts/update-docs"
-	};
-	var unpkg = "dist/csstree.min.js";
-	var version = "1.1.3";
 	var require$$4 = {
-		_args: _args,
-		_from: _from,
-		_id: _id,
-		_inBundle: _inBundle,
-		_integrity: _integrity,
-		_location: _location,
-		_phantomChildren: _phantomChildren,
-		_requested: _requested,
-		_requiredBy: _requiredBy,
-		_resolved: _resolved,
-		_spec: _spec,
-		_where: _where,
-		author: author,
-		bugs: bugs,
-		dependencies: dependencies,
+		name: name,
+		version: version,
 		description: description,
+		author: author,
+		license: license,
+		repository: repository,
+		keywords: keywords,
+		main: main,
+		unpkg: unpkg,
+		jsdelivr: jsdelivr,
+		scripts: scripts,
+		dependencies: dependencies,
 		devDependencies: devDependencies,
 		engines: engines,
-		files: files,
-		homepage: homepage,
-		jsdelivr: jsdelivr,
-		keywords: keywords,
-		license: license,
-		main: main,
-		name: name,
-		repository: repository,
-		scripts: scripts,
-		unpkg: unpkg,
-		version: version
+		files: files
 	};
 
 	function merge() {
@@ -26676,701 +26628,701 @@
 	}
 
 	var baseStyles = `
-:root {
-	--pagedjs-width: 8.5in;
-	--pagedjs-height: 11in;
-	--pagedjs-width-right: 8.5in;
-	--pagedjs-height-right: 11in;
-	--pagedjs-width-left: 8.5in;
-	--pagedjs-height-left: 11in;
-	--pagedjs-pagebox-width: 8.5in;
-	--pagedjs-pagebox-height: 11in;
-	--pagedjs-footnotes-height: 0mm;
-	--pagedjs-margin-top: 1in;
-	--pagedjs-margin-right: 1in;
-	--pagedjs-margin-bottom: 1in;
-	--pagedjs-margin-left: 1in;
-	--pagedjs-padding-top: 0mm;
-	--pagedjs-padding-right: 0mm;
-	--pagedjs-padding-bottom: 0mm;
-	--pagedjs-padding-left: 0mm;
-	--pagedjs-border-top: 0mm;
-	--pagedjs-border-right: 0mm;
-	--pagedjs-border-bottom: 0mm;
-	--pagedjs-border-left: 0mm;
-	--pagedjs-bleed-top: 0mm;
-	--pagedjs-bleed-right: 0mm;
-	--pagedjs-bleed-bottom: 0mm;
-	--pagedjs-bleed-left: 0mm;
-	--pagedjs-bleed-right-top: 0mm;
-	--pagedjs-bleed-right-right: 0mm;
-	--pagedjs-bleed-right-bottom: 0mm;
-	--pagedjs-bleed-right-left: 0mm;
-	--pagedjs-bleed-left-top: 0mm;
-	--pagedjs-bleed-left-right: 0mm;
-	--pagedjs-bleed-left-bottom: 0mm;
-	--pagedjs-bleed-left-left: 0mm;
-	--pagedjs-crop-color: black;
-	--pagedjs-crop-shadow: white;
-	--pagedjs-crop-offset: 2mm;
-	--pagedjs-crop-stroke: 1px;
-	--pagedjs-cross-size: 5mm;
-	--pagedjs-mark-cross-display: none;
-	--pagedjs-mark-crop-display: none;
-	--pagedjs-page-count: 0;
-	--pagedjs-page-counter-increment: 1;
-	--pagedjs-footnotes-count: 0;
-	--pagedjs-column-gap-offset: 1000px;
-}
-
-@page {
-	size: letter;
-	margin: 0;
-}
-
-.pagedjs_sheet {
-	box-sizing: border-box;
-	width: var(--pagedjs-width);
-	height: var(--pagedjs-height);
-	overflow: hidden;
-	position: relative;
-	display: grid;
-	grid-template-columns: [bleed-left] var(--pagedjs-bleed-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-left) - var(--pagedjs-bleed-right)) [bleed-right] var(--pagedjs-bleed-right);
-	grid-template-rows: [bleed-top] var(--pagedjs-bleed-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-top) - var(--pagedjs-bleed-bottom)) [bleed-bottom] var(--pagedjs-bleed-bottom);
-}
-
-.pagedjs_right_page .pagedjs_sheet {
-	width: var(--pagedjs-width-right);
-	height: var(--pagedjs-height-right);
-	grid-template-columns: [bleed-left] var(--pagedjs-bleed-right-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-right-left) - var(--pagedjs-bleed-right-right)) [bleed-right] var(--pagedjs-bleed-right-right);
-	grid-template-rows: [bleed-top] var(--pagedjs-bleed-right-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-right-top) - var(--pagedjs-bleed-right-bottom)) [bleed-bottom] var(--pagedjs-bleed-right-bottom);
-}
-
-.pagedjs_left_page .pagedjs_sheet {
-	width: var(--pagedjs-width-left);
-	height: var(--pagedjs-height-left);
-	grid-template-columns: [bleed-left] var(--pagedjs-bleed-left-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-left-left) - var(--pagedjs-bleed-left-right)) [bleed-right] var(--pagedjs-bleed-left-right);
-	grid-template-rows: [bleed-top] var(--pagedjs-bleed-left-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-left-top) - var(--pagedjs-bleed-left-bottom)) [bleed-bottom] var(--pagedjs-bleed-left-bottom);
-}
-
-.pagedjs_bleed {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-wrap: nowrap;
-	overflow: hidden;
-}
-
-.pagedjs_bleed-top {
-	grid-column: bleed-left / -1;
-	grid-row: bleed-top;
-	flex-direction: row;
-}
-
-.pagedjs_bleed-bottom {
-	grid-column: bleed-left / -1;
-	grid-row: bleed-bottom;
-	flex-direction: row;
-}
-
-.pagedjs_bleed-left {
-	grid-column: bleed-left;
-	grid-row: bleed-top / -1;
-	flex-direction: column;
-}
-
-.pagedjs_bleed-right {
-	grid-column: bleed-right;
-	grid-row: bleed-top / -1;
-	flex-direction: column;
-}
-
-.pagedjs_marks-crop {
-	display: var(--pagedjs-mark-crop-display);
-	flex-grow: 0;
-	flex-shrink: 0;
-	z-index: 9999999999;
-}
-
-.pagedjs_bleed-top .pagedjs_marks-crop:nth-child(1),
-.pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(1) {
-	width: calc(var(--pagedjs-bleed-left) - var(--pagedjs-crop-stroke));
-	border-right: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
-	box-shadow: 1px 0px 0px 0px var(--pagedjs-crop-shadow);
-}
-
-.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(1),
-.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(1) {
-	width: calc(var(--pagedjs-bleed-right-left) - var(--pagedjs-crop-stroke));
-}
-
-.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(1),
-.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(1) {
-	width: calc(var(--pagedjs-bleed-left-left) - var(--pagedjs-crop-stroke));
-}
-
-.pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
-.pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
-	width: calc(var(--pagedjs-bleed-right) - var(--pagedjs-crop-stroke));
-	border-left: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
-	box-shadow: -1px 0px 0px 0px var(--pagedjs-crop-shadow);
-}
-
-.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
-.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
-	width: calc(var(--pagedjs-bleed-right-right) - var(--pagedjs-crop-stroke));
-}
-
-.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
-.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
-	width: calc(var(--pagedjs-bleed-left-right) - var(--pagedjs-crop-stroke));
-}
-
-.pagedjs_bleed-top .pagedjs_marks-crop {
-	align-self: flex-start;
-	height: calc(var(--pagedjs-bleed-top) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop {
-	height: calc(var(--pagedjs-bleed-right-top) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop {
-	height: calc(var(--pagedjs-bleed-left-top) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_bleed-bottom .pagedjs_marks-crop {
-	align-self: flex-end;
-	height: calc(var(--pagedjs-bleed-bottom) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop {
-	height: calc(var(--pagedjs-bleed-right-bottom) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop {
-	height: calc(var(--pagedjs-bleed-left-bottom) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
-.pagedjs_bleed-right .pagedjs_marks-crop:nth-child(1) {
-	height: calc(var(--pagedjs-bleed-top) - var(--pagedjs-crop-stroke));
-	border-bottom: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
-	box-shadow: 0px 1px 0px 0px var(--pagedjs-crop-shadow);
-}
-
-.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
-.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(1) {
-	height: calc(var(--pagedjs-bleed-right-top) - var(--pagedjs-crop-stroke));
-}
-
-.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
-.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(1) {
-	height: calc(var(--pagedjs-bleed-left-top) - var(--pagedjs-crop-stroke));
-}
-
-.pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
-.pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
-	height: calc(var(--pagedjs-bleed-bottom) - var(--pagedjs-crop-stroke));
-	border-top: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
-	box-shadow: 0px -1px 0px 0px var(--pagedjs-crop-shadow);
-}
-
-.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
-.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
-	height: calc(var(--pagedjs-bleed-right-bottom) - var(--pagedjs-crop-stroke));
-}
-
-.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
-.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
-	height: calc(var(--pagedjs-bleed-left-bottom) - var(--pagedjs-crop-stroke));
-}
-
-.pagedjs_bleed-left .pagedjs_marks-crop {
-	width: calc(var(--pagedjs-bleed-left) - var(--pagedjs-crop-offset));
-	align-self: flex-start;
-}
-
-.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop {
-	width: calc(var(--pagedjs-bleed-right-left) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop {
-	width: calc(var(--pagedjs-bleed-left-left) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_bleed-right .pagedjs_marks-crop {
-	width: calc(var(--pagedjs-bleed-right) - var(--pagedjs-crop-offset));
-	align-self: flex-end;
-}
-
-.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop {
-	width: calc(var(--pagedjs-bleed-right-right) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop {
-	width: calc(var(--pagedjs-bleed-left-right) - var(--pagedjs-crop-offset));
-}
-
-.pagedjs_marks-middle {
-	display: flex;
-	flex-grow: 1;
-	flex-shrink: 0;
-	align-items: center;
-	justify-content: center;
-}
-
-.pagedjs_marks-cross {
-	display: var(--pagedjs-mark-cross-display);
-	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIzMi41MzdweCIgaGVpZ2h0PSIzMi41MzdweCIgdmlld0JveD0iMC4xMDQgMC4xMDQgMzIuNTM3IDMyLjUzNyIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwLjEwNCAwLjEwNCAzMi41MzcgMzIuNTM3IiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMy4zODkzIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGQ9Ik0yOS45MzEsMTYuMzczYzAsNy40ODktNi4wNjgsMTMuNTYtMTMuNTU4LDEzLjU2Yy03LjQ4MywwLTEzLjU1Ny02LjA3Mi0xMy41NTctMTMuNTZjMC03LjQ4Niw2LjA3NC0xMy41NTQsMTMuNTU3LTEzLjU1NEMyMy44NjIsMi44MTksMjkuOTMxLDguODg3LDI5LjkzMSwxNi4zNzN6Ii8+PGxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjMuMzg5MyIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiB4MT0iMC4xMDQiIHkxPSIxNi4zNzMiIHgyPSIzMi42NDIiIHkyPSIxNi4zNzMiLz48bGluZSBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMy4zODkzIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHgxPSIxNi4zNzMiIHkxPSIwLjEwNCIgeDI9IjE2LjM3MyIgeTI9IjMyLjY0MiIvPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLXdpZHRoPSIzLjM4OTMiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgZD0iTTI0LjUwOCwxNi4zNzNjMCw0LjQ5Ni0zLjYzOCw4LjEzNS04LjEzNSw4LjEzNWMtNC40OTEsMC04LjEzNS0zLjYzOC04LjEzNS04LjEzNWMwLTQuNDg5LDMuNjQ0LTguMTM1LDguMTM1LTguMTM1QzIwLjg2OSw4LjIzOSwyNC41MDgsMTEuODg0LDI0LjUwOCwxNi4zNzN6Ii8+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjAuNjc3OCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBkPSJNMjkuOTMxLDE2LjM3M2MwLDcuNDg5LTYuMDY4LDEzLjU2LTEzLjU1OCwxMy41NmMtNy40ODMsMC0xMy41NTctNi4wNzItMTMuNTU3LTEzLjU2YzAtNy40ODYsNi4wNzQtMTMuNTU0LDEzLjU1Ny0xMy41NTRDMjMuODYyLDIuODE5LDI5LjkzMSw4Ljg4NywyOS45MzEsMTYuMzczeiIvPjxsaW5lIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIwLjY3NzgiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgeDE9IjAuMTA0IiB5MT0iMTYuMzczIiB4Mj0iMzIuNjQyIiB5Mj0iMTYuMzczIi8+PGxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjAuNjc3OCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiB4MT0iMTYuMzczIiB5MT0iMC4xMDQiIHgyPSIxNi4zNzMiIHkyPSIzMi42NDIiLz48cGF0aCBkPSJNMjQuNTA4LDE2LjM3M2MwLDQuNDk2LTMuNjM4LDguMTM1LTguMTM1LDguMTM1Yy00LjQ5MSwwLTguMTM1LTMuNjM4LTguMTM1LTguMTM1YzAtNC40ODksMy42NDQtOC4xMzUsOC4xMzUtOC4xMzVDMjAuODY5LDguMjM5LDI0LjUwOCwxMS44ODQsMjQuNTA4LDE2LjM3MyIvPjxsaW5lIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLXdpZHRoPSIwLjY3NzgiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgeDE9IjguMjM5IiB5MT0iMTYuMzczIiB4Mj0iMjQuNTA4IiB5Mj0iMTYuMzczIi8+PGxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjAuNjc3OCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiB4MT0iMTYuMzczIiB5MT0iOC4yMzkiIHgyPSIxNi4zNzMiIHkyPSIyNC41MDgiLz48L3N2Zz4=);
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-size: var(--pagedjs-cross-size);
-
-  z-index: 2147483647;
-	width: var(--pagedjs-cross-size);
-	height: var(--pagedjs-cross-size);
-}
-
-.pagedjs_pagebox {
-	box-sizing: border-box;
-	width: var(--pagedjs-pagebox-width);
-	height: var(--pagedjs-pagebox-height);
-	position: relative;
-	display: grid;
-	grid-template-columns: [left] var(--pagedjs-margin-left) [center] calc(var(--pagedjs-pagebox-width) - var(--pagedjs-margin-left) - var(--pagedjs-margin-right)) [right] var(--pagedjs-margin-right);
-	grid-template-rows: [header] var(--pagedjs-margin-top) [page] calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom)) [footer] var(--pagedjs-margin-bottom);
-	grid-column: sheet-center;
-	grid-row: sheet-middle;
-}
-
-.pagedjs_pagebox * {
-	box-sizing: border-box;
-}
-
-.pagedjs_margin-top {
-	width: calc(var(--pagedjs-pagebox-width) - var(--pagedjs-margin-left) - var(--pagedjs-margin-right));
-	height: var(--pagedjs-margin-top);
-	grid-column: center;
-	grid-row: header;
-	flex-wrap: nowrap;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: 100%;
-}
-
-.pagedjs_margin-top-left-corner-holder {
-	width: var(--pagedjs-margin-left);
-	height: var(--pagedjs-margin-top);
-	display: flex;
-	grid-column: left;
-	grid-row: header;
-}
-
-.pagedjs_margin-top-right-corner-holder {
-	width: var(--pagedjs-margin-right);
-	height: var(--pagedjs-margin-top);
-	display: flex;
-	grid-column: right;
-	grid-row: header;
-}
-
-.pagedjs_margin-top-left-corner {
-	width: var(--pagedjs-margin-left);
-}
-
-.pagedjs_margin-top-right-corner {
-	width: var(--pagedjs-margin-right);
-}
-
-.pagedjs_margin-right {
-	height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
-	width: var(--pagedjs-margin-right);
-	right: 0;
-	grid-column: right;
-	grid-row: page;
-	display: grid;
-	grid-template-rows: repeat(3, 33.3333%);
-	grid-template-columns: 100%;
-}
-
-.pagedjs_margin-bottom {
-	width: calc(var(--pagedjs-pagebox-width) - var(--pagedjs-margin-left) - var(--pagedjs-margin-right));
-	height: var(--pagedjs-margin-bottom);
-	grid-column: center;
-	grid-row: footer;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: 100%;
-}
-
-.pagedjs_margin-bottom-left-corner-holder {
-	width: var(--pagedjs-margin-left);
-	height: var(--pagedjs-margin-bottom);
-	display: flex;
-	grid-column: left;
-	grid-row: footer;
-}
-
-.pagedjs_margin-bottom-right-corner-holder {
-	width: var(--pagedjs-margin-right);
-	height: var(--pagedjs-margin-bottom);
-	display: flex;
-	grid-column: right;
-	grid-row: footer;
-}
-
-.pagedjs_margin-bottom-left-corner {
-	width: var(--pagedjs-margin-left);
-}
-
-.pagedjs_margin-bottom-right-corner {
-	width: var(--pagedjs-margin-right);
-}
-
-
-
-.pagedjs_margin-left {
-	height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
-	width: var(--pagedjs-margin-left);
-	grid-column: left;
-	grid-row: page;
-	display: grid;
-	grid-template-rows: repeat(3, 33.33333%);
-	grid-template-columns: 100%;
-}
-
-.pagedjs_pages .pagedjs_pagebox .pagedjs_margin:not(.hasContent) {
-	visibility: hidden;
-}
-
-.pagedjs_pagebox > .pagedjs_area {
-	grid-column: center;
-	grid-row: page;
-	width: 100%;
-	height: 100%;
-	padding: var(--pagedjs-padding-top) var(--pagedjs-padding-right) var(--pagedjs-padding-bottom) var(--pagedjs-padding-left);
-	border-top: var(--pagedjs-border-top);
-	border-right: var(--pagedjs-border-right);
-	border-bottom: var(--pagedjs-border-bottom);
-	border-left: var(--pagedjs-border-left);
-}
-
-.pagedjs_pagebox > .pagedjs_area > .pagedjs_page_content {
-	width: 100%;
-	height: calc(100% - var(--pagedjs-footnotes-height));
-	position: relative;
-	column-fill: auto;
-}
-
-.pagedjs_pagebox > .pagedjs_area > .pagedjs_page_content > div {
-	height: inherit;
-}
-
-.pagedjs_pagebox > .pagedjs_area > .pagedjs_footnote_area {
-	position: relative;
-	overflow: hidden;
-	height: var(--pagedjs-footnotes-height);
-	display: flex;
-    justify-content: flex-end;
-    flex-flow: column;
-}
-
-.pagedjs_pagebox > .pagedjs_area > .pagedjs_footnote_area > .pagedjs_footnote_content {
-	overflow: hidden;
-}
-
-.pagedjs_pagebox > .pagedjs_area > .pagedjs_footnote_area > .pagedjs_footnote_inner_content {
-	overflow: hidden;
-}
-
-.pagedjs_area [data-footnote-call] {
-	all: unset;
-	counter-increment: footnote;
-}
-
-.pagedjs_area [data-split-from] {
-	counter-increment: unset;
-	counter-reset: unset;
-}
-
-[data-footnote-call]::after {
-	vertical-align: super;
-	font-size: 65%;
-	line-height: normal;
-	content: counter(footnote);
-}
-
-@supports ( font-variant-position: super ) {
-	[data-footnote-call]::after {
-		vertical-align: baseline;
-		font-size: 100%;
-		line-height: inherit;
-		font-variant-position: super;
+@layer pagedjs {
+	:root {
+		--pagedjs-width: 8.5in;
+		--pagedjs-height: 11in;
+		--pagedjs-width-right: 8.5in;
+		--pagedjs-height-right: 11in;
+		--pagedjs-width-left: 8.5in;
+		--pagedjs-height-left: 11in;
+		--pagedjs-pagebox-width: 8.5in;
+		--pagedjs-pagebox-height: 11in;
+		--pagedjs-footnotes-height: 0mm;
+		--pagedjs-margin-top: 1in;
+		--pagedjs-margin-right: 1in;
+		--pagedjs-margin-bottom: 1in;
+		--pagedjs-margin-left: 1in;
+		--pagedjs-padding-top: 0mm;
+		--pagedjs-padding-right: 0mm;
+		--pagedjs-padding-bottom: 0mm;
+		--pagedjs-padding-left: 0mm;
+		--pagedjs-border-top: 0mm;
+		--pagedjs-border-right: 0mm;
+		--pagedjs-border-bottom: 0mm;
+		--pagedjs-border-left: 0mm;
+		--pagedjs-bleed-top: 0mm;
+		--pagedjs-bleed-right: 0mm;
+		--pagedjs-bleed-bottom: 0mm;
+		--pagedjs-bleed-left: 0mm;
+		--pagedjs-bleed-right-top: 0mm;
+		--pagedjs-bleed-right-right: 0mm;
+		--pagedjs-bleed-right-bottom: 0mm;
+		--pagedjs-bleed-right-left: 0mm;
+		--pagedjs-bleed-left-top: 0mm;
+		--pagedjs-bleed-left-right: 0mm;
+		--pagedjs-bleed-left-bottom: 0mm;
+		--pagedjs-bleed-left-left: 0mm;
+		--pagedjs-crop-color: black;
+		--pagedjs-crop-shadow: white;
+		--pagedjs-crop-offset: 2mm;
+		--pagedjs-crop-stroke: 1px;
+		--pagedjs-cross-size: 5mm;
+		--pagedjs-mark-cross-display: none;
+		--pagedjs-mark-crop-display: none;
+		--pagedjs-page-count: 0;
+		--pagedjs-page-counter-increment: 1;
+		--pagedjs-footnotes-count: 0;
+		--pagedjs-column-gap-offset: 1000px;
 	}
-}
 
-.pagedjs_footnote_empty {
-	display: none;
-}
+	@page {
+		size: letter;
+		margin: 0;
+	}
 
-.pagedjs_area [data-split-from] {
-	counter-increment: unset;
-	counter-reset: unset;
-}
+	.pagedjs_sheet {
+		box-sizing: border-box;
+		width: var(--pagedjs-width);
+		height: var(--pagedjs-height);
+		overflow: hidden;
+		position: relative;
+		display: grid;
+		grid-template-columns: [bleed-left] var(--pagedjs-bleed-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-left) - var(--pagedjs-bleed-right)) [bleed-right] var(--pagedjs-bleed-right);
+		grid-template-rows: [bleed-top] var(--pagedjs-bleed-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-top) - var(--pagedjs-bleed-bottom)) [bleed-bottom] var(--pagedjs-bleed-bottom);
+	}
 
-[data-footnote-marker]:not([data-split-from]) {
-	counter-increment: footnote-marker;
-	text-indent: 0;
-	display: list-item;
-	list-style-position: inside;
-}
+	.pagedjs_right_page .pagedjs_sheet {
+		width: var(--pagedjs-width-right);
+		height: var(--pagedjs-height-right);
+		grid-template-columns: [bleed-left] var(--pagedjs-bleed-right-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-right-left) - var(--pagedjs-bleed-right-right)) [bleed-right] var(--pagedjs-bleed-right-right);
+		grid-template-rows: [bleed-top] var(--pagedjs-bleed-right-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-right-top) - var(--pagedjs-bleed-right-bottom)) [bleed-bottom] var(--pagedjs-bleed-right-bottom);
+	}
 
-[data-footnote-marker]::marker {
-	content: counter(footnote-marker) ". ";
-}
+	.pagedjs_left_page .pagedjs_sheet {
+		width: var(--pagedjs-width-left);
+		height: var(--pagedjs-height-left);
+		grid-template-columns: [bleed-left] var(--pagedjs-bleed-left-left) [sheet-center] calc(var(--pagedjs-width) - var(--pagedjs-bleed-left-left) - var(--pagedjs-bleed-left-right)) [bleed-right] var(--pagedjs-bleed-left-right);
+		grid-template-rows: [bleed-top] var(--pagedjs-bleed-left-top) [sheet-middle] calc(var(--pagedjs-height) - var(--pagedjs-bleed-left-top) - var(--pagedjs-bleed-left-bottom)) [bleed-bottom] var(--pagedjs-bleed-left-bottom);
+	}
 
-[data-footnote-marker][data-split-from]::marker {
-	content: unset;
-}
+	.pagedjs_bleed {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: nowrap;
+		overflow: hidden;
+	}
 
-.pagedjs_area .pagedjs_footnote_inner_content [data-note-display="inline"] {
- 	display: inline;
-}
+	.pagedjs_bleed-top {
+		grid-column: bleed-left / -1;
+		grid-row: bleed-top;
+		flex-direction: row;
+	}
 
-.pagedjs_page {
-	counter-increment: page var(--pagedjs-page-counter-increment);
-	width: var(--pagedjs-width);
-	height: var(--pagedjs-height);
-}
+	.pagedjs_bleed-bottom {
+		grid-column: bleed-left / -1;
+		grid-row: bleed-bottom;
+		flex-direction: row;
+	}
 
-.pagedjs_page.pagedjs_right_page {
-	width: var(--pagedjs-width-right);
-	height: var(--pagedjs-height-right);
-}
+	.pagedjs_bleed-left {
+		grid-column: bleed-left;
+		grid-row: bleed-top / -1;
+		flex-direction: column;
+	}
 
-.pagedjs_page.pagedjs_left_page {
-	width: var(--pagedjs-width-left);
-	height: var(--pagedjs-height-left);
-}
+	.pagedjs_bleed-right {
+		grid-column: bleed-right;
+		grid-row: bleed-top / -1;
+		flex-direction: column;
+	}
 
-.pagedjs_pages {
-	counter-reset: pages var(--pagedjs-page-count) footnote var(--pagedjs-footnotes-count) footnote-marker var(--pagedjs-footnotes-count);
-}
+	.pagedjs_marks-crop {
+		display: var(--pagedjs-mark-crop-display);
+		flex-grow: 0;
+		flex-shrink: 0;
+		z-index: 9999999999;
+	}
 
-.pagedjs_pagebox .pagedjs_margin-top-left-corner,
-.pagedjs_pagebox .pagedjs_margin-top-right-corner,
-.pagedjs_pagebox .pagedjs_margin-bottom-left-corner,
-.pagedjs_pagebox .pagedjs_margin-bottom-right-corner,
-.pagedjs_pagebox .pagedjs_margin-top-left,
-.pagedjs_pagebox .pagedjs_margin-top-right,
-.pagedjs_pagebox .pagedjs_margin-bottom-left,
-.pagedjs_pagebox .pagedjs_margin-bottom-right,
-.pagedjs_pagebox .pagedjs_margin-top-center,
-.pagedjs_pagebox .pagedjs_margin-bottom-center,
-.pagedjs_pagebox .pagedjs_margin-top-center,
-.pagedjs_pagebox .pagedjs_margin-bottom-center,
-.pagedjs_margin-right-middle,
-.pagedjs_margin-left-middle  {
-	display: flex;
-	align-items: center;
-}
+	.pagedjs_bleed-top .pagedjs_marks-crop:nth-child(1),
+	.pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(1) {
+		width: calc(var(--pagedjs-bleed-left) - var(--pagedjs-crop-stroke));
+		border-right: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
+		box-shadow: 1px 0px 0px 0px var(--pagedjs-crop-shadow);
+	}
 
-.pagedjs_margin-right-top,
-.pagedjs_margin-left-top  {
-	display: flex;
-	align-items: flex-top;
-}
+	.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(1),
+	.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(1) {
+		width: calc(var(--pagedjs-bleed-right-left) - var(--pagedjs-crop-stroke));
+	}
 
+	.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(1),
+	.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(1) {
+		width: calc(var(--pagedjs-bleed-left-left) - var(--pagedjs-crop-stroke));
+	}
 
-.pagedjs_margin-right-bottom,
-.pagedjs_margin-left-bottom  {
-	display: flex;
-	align-items: flex-end;
-}
+	.pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
+	.pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
+		width: calc(var(--pagedjs-bleed-right) - var(--pagedjs-crop-stroke));
+		border-left: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
+		box-shadow: -1px 0px 0px 0px var(--pagedjs-crop-shadow);
+	}
 
+	.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
+	.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
+		width: calc(var(--pagedjs-bleed-right-right) - var(--pagedjs-crop-stroke));
+	}
 
+	.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop:nth-child(3),
+	.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop:nth-child(3) {
+		width: calc(var(--pagedjs-bleed-left-right) - var(--pagedjs-crop-stroke));
+	}
 
-/*
-.pagedjs_pagebox .pagedjs_margin-top-center,
-.pagedjs_pagebox .pagedjs_margin-bottom-center {
-	height: 100%;
-	display: none;
-	align-items: center;
-	flex: 1 0 33%;
-	margin: 0 auto;
-}
+	.pagedjs_bleed-top .pagedjs_marks-crop {
+		align-self: flex-start;
+		height: calc(var(--pagedjs-bleed-top) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_pagebox .pagedjs_margin-top-left-corner,
-.pagedjs_pagebox .pagedjs_margin-top-right-corner,
-.pagedjs_pagebox .pagedjs_margin-bottom-right-corner,
-.pagedjs_pagebox .pagedjs_margin-bottom-left-corner {
-	display: none;
-	align-items: center;
-}
+	.pagedjs_right_page .pagedjs_bleed-top .pagedjs_marks-crop {
+		height: calc(var(--pagedjs-bleed-right-top) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_pagebox .pagedjs_margin-left-top,
-.pagedjs_pagebox .pagedjs_margin-right-top {
-	display: none;
-	align-items: flex-start;
-}
+	.pagedjs_left_page .pagedjs_bleed-top .pagedjs_marks-crop {
+		height: calc(var(--pagedjs-bleed-left-top) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_pagebox .pagedjs_margin-right-middle,
-.pagedjs_pagebox .pagedjs_margin-left-middle {
-	display: none;
-	align-items: center;
-}
+	.pagedjs_bleed-bottom .pagedjs_marks-crop {
+		align-self: flex-end;
+		height: calc(var(--pagedjs-bleed-bottom) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_pagebox .pagedjs_margin-left-bottom,
-.pagedjs_pagebox .pagedjs_margin-right-bottom {
-	display: none;
-	align-items: flex-end;
-}
-*/
+	.pagedjs_right_page .pagedjs_bleed-bottom .pagedjs_marks-crop {
+		height: calc(var(--pagedjs-bleed-right-bottom) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_pagebox .pagedjs_margin-top-left,
-.pagedjs_pagebox .pagedjs_margin-top-right-corner,
-.pagedjs_pagebox .pagedjs_margin-bottom-left,
-.pagedjs_pagebox .pagedjs_margin-bottom-right-corner { text-align: left; }
+	.pagedjs_left_page .pagedjs_bleed-bottom .pagedjs_marks-crop {
+		height: calc(var(--pagedjs-bleed-left-bottom) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_pagebox .pagedjs_margin-top-left-corner,
-.pagedjs_pagebox .pagedjs_margin-top-right,
-.pagedjs_pagebox .pagedjs_margin-bottom-left-corner,
-.pagedjs_pagebox .pagedjs_margin-bottom-right { text-align: right; }
+	.pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
+	.pagedjs_bleed-right .pagedjs_marks-crop:nth-child(1) {
+		height: calc(var(--pagedjs-bleed-top) - var(--pagedjs-crop-stroke));
+		border-bottom: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
+		box-shadow: 0px 1px 0px 0px var(--pagedjs-crop-shadow);
+	}
 
-.pagedjs_pagebox .pagedjs_margin-top-center,
-.pagedjs_pagebox .pagedjs_margin-bottom-center,
-.pagedjs_pagebox .pagedjs_margin-left-top,
-.pagedjs_pagebox .pagedjs_margin-left-middle,
-.pagedjs_pagebox .pagedjs_margin-left-bottom,
-.pagedjs_pagebox .pagedjs_margin-right-top,
-.pagedjs_pagebox .pagedjs_margin-right-middle,
-.pagedjs_pagebox .pagedjs_margin-right-bottom { text-align: center; }
+	.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
+	.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(1) {
+		height: calc(var(--pagedjs-bleed-right-top) - var(--pagedjs-crop-stroke));
+	}
 
-.pagedjs_pages .pagedjs_margin .pagedjs_margin-content {
-	width: 100%;
-}
+	.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(1),
+	.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(1) {
+		height: calc(var(--pagedjs-bleed-left-top) - var(--pagedjs-crop-stroke));
+	}
 
-.pagedjs_pages .pagedjs_margin-left .pagedjs_margin-content::after,
-.pagedjs_pages .pagedjs_margin-top .pagedjs_margin-content::after,
-.pagedjs_pages .pagedjs_margin-right .pagedjs_margin-content::after,
-.pagedjs_pages .pagedjs_margin-bottom .pagedjs_margin-content::after {
-	display: block;
-}
+	.pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
+	.pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
+		height: calc(var(--pagedjs-bleed-bottom) - var(--pagedjs-crop-stroke));
+		border-top: var(--pagedjs-crop-stroke) solid var(--pagedjs-crop-color);
+		box-shadow: 0px -1px 0px 0px var(--pagedjs-crop-shadow);
+	}
 
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-to] {
-	margin-bottom: unset;
-	padding-bottom: unset;
-}
+	.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
+	.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
+		height: calc(var(--pagedjs-bleed-right-bottom) - var(--pagedjs-crop-stroke));
+	}
 
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from] {
-	text-indent: unset;
-	margin-top: unset;
-	padding-top: unset;
-	initial-letter: unset;
-}
+	.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop:nth-child(3),
+	.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop:nth-child(3) {
+		height: calc(var(--pagedjs-bleed-left-bottom) - var(--pagedjs-crop-stroke));
+	}
 
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from] > *::first-letter,
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from]::first-letter {
-	color: unset;
-	font-size: unset;
-	font-weight: unset;
-	font-family: unset;
-	color: unset;
-	line-height: unset;
-	float: unset;
-	padding: unset;
-	margin: unset;
-}
+	.pagedjs_bleed-left .pagedjs_marks-crop {
+		width: calc(var(--pagedjs-bleed-left) - var(--pagedjs-crop-offset));
+		align-self: flex-start;
+	}
 
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-to]:not([data-footnote-call]):after,
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-to]:not([data-footnote-call])::after {
-	content: unset;
-}
+	.pagedjs_right_page .pagedjs_bleed-left .pagedjs_marks-crop {
+		width: calc(var(--pagedjs-bleed-right-left) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from]:not([data-footnote-call]):before,
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from]:not([data-footnote-call])::before {
-	content: unset;
-}
+	.pagedjs_left_page .pagedjs_bleed-left .pagedjs_marks-crop {
+		width: calc(var(--pagedjs-bleed-left-left) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div li[data-split-from]:first-of-type {
-	list-style: none;
-}
+	.pagedjs_bleed-right .pagedjs_marks-crop {
+		width: calc(var(--pagedjs-bleed-right) - var(--pagedjs-crop-offset));
+		align-self: flex-end;
+	}
 
-/*
-[data-page]:not([data-split-from]),
-[data-break-before="page"]:not([data-split-from]),
-[data-break-before="always"]:not([data-split-from]),
-[data-break-before="left"]:not([data-split-from]),
-[data-break-before="right"]:not([data-split-from]),
-[data-break-before="recto"]:not([data-split-from]),
-[data-break-before="verso"]:not([data-split-from])
-{
-	break-before: column;
-}
+	.pagedjs_right_page .pagedjs_bleed-right .pagedjs_marks-crop {
+		width: calc(var(--pagedjs-bleed-right-right) - var(--pagedjs-crop-offset));
+	}
 
-[data-page]:not([data-split-to]),
-[data-break-after="page"]:not([data-split-to]),
-[data-break-after="always"]:not([data-split-to]),
-[data-break-after="left"]:not([data-split-to]),
-[data-break-after="right"]:not([data-split-to]),
-[data-break-after="recto"]:not([data-split-to]),
-[data-break-after="verso"]:not([data-split-to])
-{
-	break-after: column;
-}
-*/
+	.pagedjs_left_page .pagedjs_bleed-right .pagedjs_marks-crop {
+		width: calc(var(--pagedjs-bleed-left-right) - var(--pagedjs-crop-offset));
+	}
 
-.pagedjs_clear-after::after {
-	content: none !important;
-}
+	.pagedjs_marks-middle {
+		display: flex;
+		flex-grow: 1;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+	}
 
-[data-align-last-split-element='justify'] {
-	text-align-last: justify;
-}
+	.pagedjs_marks-cross {
+		display: var(--pagedjs-mark-cross-display);
+		background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIzMi41MzdweCIgaGVpZ2h0PSIzMi41MzdweCIgdmlld0JveD0iMC4xMDQgMC4xMDQgMzIuNTM3IDMyLjUzNyIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwLjEwNCAwLjEwNCAzMi41MzcgMzIuNTM3IiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMy4zODkzIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGQ9Ik0yOS45MzEsMTYuMzczYzAsNy40ODktNi4wNjgsMTMuNTYtMTMuNTU4LDEzLjU2Yy03LjQ4MywwLTEzLjU1Ny02LjA3Mi0xMy41NTctMTMuNTZjMC03LjQ4Niw2LjA3NC0xMy41NTQsMTMuNTU3LTEzLjU1NEMyMy44NjIsMi44MTksMjkuOTMxLDguODg3LDI5LjkzMSwxNi4zNzN6Ii8+PGxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjMuMzg5MyIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiB4MT0iMC4xMDQiIHkxPSIxNi4zNzMiIHgyPSIzMi42NDIiIHkyPSIxNi4zNzMiLz48bGluZSBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMy4zODkzIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHgxPSIxNi4zNzMiIHkxPSIwLjEwNCIgeDI9IjE2LjM3MyIgeTI9IjMyLjY0MiIvPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLXdpZHRoPSIzLjM4OTMiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgZD0iTTI0LjUwOCwxNi4zNzNjMCw0LjQ5Ni0zLjYzOCw4LjEzNS04LjEzNSw4LjEzNWMtNC40OTEsMC04LjEzNS0zLjYzOC04LjEzNS04LjEzNWMwLTQuNDg5LDMuNjQ0LTguMTM1LDguMTM1LTguMTM1QzIwLjg2OSw4LjIzOSwyNC41MDgsMTEuODg0LDI0LjUwOCwxNi4zNzN6Ii8+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjAuNjc3OCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBkPSJNMjkuOTMxLDE2LjM3M2MwLDcuNDg5LTYuMDY4LDEzLjU2LTEzLjU1OCwxMy41NmMtNy40ODMsMC0xMy41NTctNi4wNzItMTMuNTU3LTEzLjU2YzAtNy40ODYsNi4wNzQtMTMuNTU0LDEzLjU1Ny0xMy41NTRDMjMuODYyLDIuODE5LDI5LjkzMSw4Ljg4NywyOS45MzEsMTYuMzczeiIvPjxsaW5lIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIwLjY3NzgiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgeDE9IjAuMTA0IiB5MT0iMTYuMzczIiB4Mj0iMzIuNjQyIiB5Mj0iMTYuMzczIi8+PGxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjAuNjc3OCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiB4MT0iMTYuMzczIiB5MT0iMC4xMDQiIHgyPSIxNi4zNzMiIHkyPSIzMi42NDIiLz48cGF0aCBkPSJNMjQuNTA4LDE2LjM3M2MwLDQuNDk2LTMuNjM4LDguMTM1LTguMTM1LDguMTM1Yy00LjQ5MSwwLTguMTM1LTMuNjM4LTguMTM1LTguMTM1YzAtNC40ODksMy42NDQtOC4xMzUsOC4xMzUtOC4xMzVDMjAuODY5LDguMjM5LDI0LjUwOCwxMS44ODQsMjQuNTA4LDE2LjM3MyIvPjxsaW5lIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLXdpZHRoPSIwLjY3NzgiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgeDE9IjguMjM5IiB5MT0iMTYuMzczIiB4Mj0iMjQuNTA4IiB5Mj0iMTYuMzczIi8+PGxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjAuNjc3OCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiB4MT0iMTYuMzczIiB5MT0iOC4yMzkiIHgyPSIxNi4zNzMiIHkyPSIyNC41MDgiLz48L3N2Zz4=);
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+		background-size: var(--pagedjs-cross-size);
 
+		z-index: 2147483647;
+		width: var(--pagedjs-cross-size);
+		height: var(--pagedjs-cross-size);
+	}
 
-@media print {
-	html {
+	.pagedjs_pagebox {
+		box-sizing: border-box;
+		width: var(--pagedjs-pagebox-width);
+		height: var(--pagedjs-pagebox-height);
+		position: relative;
+		display: grid;
+		grid-template-columns: [left] var(--pagedjs-margin-left) [center] calc(var(--pagedjs-pagebox-width) - var(--pagedjs-margin-left) - var(--pagedjs-margin-right)) [right] var(--pagedjs-margin-right);
+		grid-template-rows: [header] var(--pagedjs-margin-top) [page] calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom)) [footer] var(--pagedjs-margin-bottom);
+		grid-column: sheet-center;
+		grid-row: sheet-middle;
+	}
+
+	.pagedjs_pagebox * {
+		box-sizing: border-box;
+	}
+
+	.pagedjs_margin-top {
+		width: calc(var(--pagedjs-pagebox-width) - var(--pagedjs-margin-left) - var(--pagedjs-margin-right));
+		height: var(--pagedjs-margin-top);
+		grid-column: center;
+		grid-row: header;
+		flex-wrap: nowrap;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: 100%;
+	}
+
+	.pagedjs_margin-top-left-corner-holder {
+		width: var(--pagedjs-margin-left);
+		height: var(--pagedjs-margin-top);
+		display: flex;
+		grid-column: left;
+		grid-row: header;
+	}
+
+	.pagedjs_margin-top-right-corner-holder {
+		width: var(--pagedjs-margin-right);
+		height: var(--pagedjs-margin-top);
+		display: flex;
+		grid-column: right;
+		grid-row: header;
+	}
+
+	.pagedjs_margin-top-left-corner {
+		width: var(--pagedjs-margin-left);
+	}
+
+	.pagedjs_margin-top-right-corner {
+		width: var(--pagedjs-margin-right);
+	}
+
+	.pagedjs_margin-right {
+		height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
+		width: var(--pagedjs-margin-right);
+		right: 0;
+		grid-column: right;
+		grid-row: page;
+		display: grid;
+		grid-template-rows: repeat(3, 33.3333%);
+		grid-template-columns: 100%;
+	}
+
+	.pagedjs_margin-bottom {
+		width: calc(var(--pagedjs-pagebox-width) - var(--pagedjs-margin-left) - var(--pagedjs-margin-right));
+		height: var(--pagedjs-margin-bottom);
+		grid-column: center;
+		grid-row: footer;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: 100%;
+	}
+
+	.pagedjs_margin-bottom-left-corner-holder {
+		width: var(--pagedjs-margin-left);
+		height: var(--pagedjs-margin-bottom);
+		display: flex;
+		grid-column: left;
+		grid-row: footer;
+	}
+
+	.pagedjs_margin-bottom-right-corner-holder {
+		width: var(--pagedjs-margin-right);
+		height: var(--pagedjs-margin-bottom);
+		display: flex;
+		grid-column: right;
+		grid-row: footer;
+	}
+
+	.pagedjs_margin-bottom-left-corner {
+		width: var(--pagedjs-margin-left);
+	}
+
+	.pagedjs_margin-bottom-right-corner {
+		width: var(--pagedjs-margin-right);
+	}
+
+	.pagedjs_margin-left {
+		height: calc(var(--pagedjs-pagebox-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
+		width: var(--pagedjs-margin-left);
+		grid-column: left;
+		grid-row: page;
+		display: grid;
+		grid-template-rows: repeat(3, 33.33333%);
+		grid-template-columns: 100%;
+	}
+
+	.pagedjs_pages .pagedjs_pagebox .pagedjs_margin:not(.hasContent) {
+		visibility: hidden;
+	}
+
+	.pagedjs_pagebox > .pagedjs_area {
+		grid-column: center;
+		grid-row: page;
 		width: 100%;
 		height: 100%;
-		-webkit-print-color-adjust: exact;
-		print-color-adjust: exact;
+		padding: var(--pagedjs-padding-top) var(--pagedjs-padding-right) var(--pagedjs-padding-bottom) var(--pagedjs-padding-left);
+		border-top: var(--pagedjs-border-top);
+		border-right: var(--pagedjs-border-right);
+		border-bottom: var(--pagedjs-border-bottom);
+		border-left: var(--pagedjs-border-left);
 	}
-	body {
-		margin: 0;
-		padding: 0;
-		width: 100% !important;
-		height: 100% !important;
-		min-width: 100%;
-		max-width: 100%;
-		min-height: 100%;
-		max-height: 100%;
+
+	.pagedjs_pagebox > .pagedjs_area > .pagedjs_page_content {
+		width: 100%;
+		height: calc(100% - var(--pagedjs-footnotes-height));
+		position: relative;
+		column-fill: auto;
 	}
-	.pagedjs_pages {
-		width: auto;
-		display: block !important;
-		transform: none !important;
-		height: 100% !important;
-		min-height: 100%;
-		max-height: 100%;
-		overflow: visible;
+
+	.pagedjs_pagebox > .pagedjs_area > .pagedjs_page_content > div {
+		height: inherit;
 	}
+
+	.pagedjs_pagebox > .pagedjs_area > .pagedjs_footnote_area {
+		position: relative;
+		overflow: hidden;
+		height: var(--pagedjs-footnotes-height);
+		display: flex;
+			justify-content: flex-end;
+			flex-flow: column;
+	}
+
+	.pagedjs_pagebox > .pagedjs_area > .pagedjs_footnote_area > .pagedjs_footnote_content {
+		overflow: hidden;
+	}
+
+	.pagedjs_pagebox > .pagedjs_area > .pagedjs_footnote_area > .pagedjs_footnote_inner_content {
+		overflow: hidden;
+	}
+
+	.pagedjs_area [data-footnote-call] {
+		all: unset;
+		counter-increment: footnote;
+	}
+
+	.pagedjs_area [data-split-from] {
+		counter-increment: unset;
+		counter-reset: unset;
+	}
+
+	[data-footnote-call]::after {
+		vertical-align: super;
+		font-size: 65%;
+		line-height: normal;
+		content: counter(footnote);
+	}
+
+	@supports ( font-variant-position: super ) {
+		[data-footnote-call]::after {
+			vertical-align: baseline;
+			font-size: 100%;
+			line-height: inherit;
+			font-variant-position: super;
+		}
+	}
+
+	.pagedjs_footnote_empty {
+		display: none;
+	}
+
+	.pagedjs_area [data-split-from] {
+		counter-increment: unset;
+		counter-reset: unset;
+	}
+
+	[data-footnote-marker]:not([data-split-from]) {
+		counter-increment: footnote-marker;
+		text-indent: 0;
+		display: list-item;
+		list-style-position: inside;
+	}
+
+	[data-footnote-marker]::marker {
+		content: counter(footnote-marker) ". ";
+	}
+
+	[data-footnote-marker][data-split-from]::marker {
+		content: unset;
+	}
+
+	.pagedjs_area .pagedjs_footnote_inner_content [data-note-display="inline"] {
+		display: inline;
+	}
+
 	.pagedjs_page {
-		margin: 0;
-		padding: 0;
-		max-height: 100%;
-		min-height: 100%;
-		height: 100% !important;
-		page-break-after: always;
-		break-after: page;
+		counter-increment: page var(--pagedjs-page-counter-increment);
+		width: var(--pagedjs-width);
+		height: var(--pagedjs-height);
 	}
-	.pagedjs_sheet {
-		margin: 0;
-		padding: 0;
-		max-height: 100%;
-		min-height: 100%;
-		height: 100% !important;
+
+	.pagedjs_page.pagedjs_right_page {
+		width: var(--pagedjs-width-right);
+		height: var(--pagedjs-height-right);
+	}
+
+	.pagedjs_page.pagedjs_left_page {
+		width: var(--pagedjs-width-left);
+		height: var(--pagedjs-height-left);
+	}
+
+	.pagedjs_pages {
+		counter-reset: pages var(--pagedjs-page-count) footnote var(--pagedjs-footnotes-count) footnote-marker var(--pagedjs-footnotes-count);
+	}
+
+	.pagedjs_pagebox .pagedjs_margin-top-left-corner,
+	.pagedjs_pagebox .pagedjs_margin-top-right-corner,
+	.pagedjs_pagebox .pagedjs_margin-bottom-left-corner,
+	.pagedjs_pagebox .pagedjs_margin-bottom-right-corner,
+	.pagedjs_pagebox .pagedjs_margin-top-left,
+	.pagedjs_pagebox .pagedjs_margin-top-right,
+	.pagedjs_pagebox .pagedjs_margin-bottom-left,
+	.pagedjs_pagebox .pagedjs_margin-bottom-right,
+	.pagedjs_pagebox .pagedjs_margin-top-center,
+	.pagedjs_pagebox .pagedjs_margin-bottom-center,
+	.pagedjs_pagebox .pagedjs_margin-top-center,
+	.pagedjs_pagebox .pagedjs_margin-bottom-center,
+	.pagedjs_margin-right-middle,
+	.pagedjs_margin-left-middle  {
+		display: flex;
+		align-items: center;
+	}
+
+	.pagedjs_margin-right-top,
+	.pagedjs_margin-left-top  {
+		display: flex;
+		align-items: flex-top;
+	}
+
+
+	.pagedjs_margin-right-bottom,
+	.pagedjs_margin-left-bottom  {
+		display: flex;
+		align-items: flex-end;
+	}
+
+
+
+	/*
+	.pagedjs_pagebox .pagedjs_margin-top-center,
+	.pagedjs_pagebox .pagedjs_margin-bottom-center {
+		height: 100%;
+		display: none;
+		align-items: center;
+		flex: 1 0 33%;
+		margin: 0 auto;
+	}
+
+	.pagedjs_pagebox .pagedjs_margin-top-left-corner,
+	.pagedjs_pagebox .pagedjs_margin-top-right-corner,
+	.pagedjs_pagebox .pagedjs_margin-bottom-right-corner,
+	.pagedjs_pagebox .pagedjs_margin-bottom-left-corner {
+		display: none;
+		align-items: center;
+	}
+
+	.pagedjs_pagebox .pagedjs_margin-left-top,
+	.pagedjs_pagebox .pagedjs_margin-right-top {
+		display: none;
+		align-items: flex-start;
+	}
+
+	.pagedjs_pagebox .pagedjs_margin-right-middle,
+	.pagedjs_pagebox .pagedjs_margin-left-middle {
+		display: none;
+		align-items: center;
+	}
+
+	.pagedjs_pagebox .pagedjs_margin-left-bottom,
+	.pagedjs_pagebox .pagedjs_margin-right-bottom {
+		display: none;
+		align-items: flex-end;
+	}
+	*/
+
+	.pagedjs_pagebox .pagedjs_margin-top-left,
+	.pagedjs_pagebox .pagedjs_margin-top-right-corner,
+	.pagedjs_pagebox .pagedjs_margin-bottom-left,
+	.pagedjs_pagebox .pagedjs_margin-bottom-right-corner { text-align: left; }
+
+	.pagedjs_pagebox .pagedjs_margin-top-left-corner,
+	.pagedjs_pagebox .pagedjs_margin-top-right,
+	.pagedjs_pagebox .pagedjs_margin-bottom-left-corner,
+	.pagedjs_pagebox .pagedjs_margin-bottom-right { text-align: right; }
+
+	.pagedjs_pagebox .pagedjs_margin-top-center,
+	.pagedjs_pagebox .pagedjs_margin-bottom-center,
+	.pagedjs_pagebox .pagedjs_margin-left-top,
+	.pagedjs_pagebox .pagedjs_margin-left-middle,
+	.pagedjs_pagebox .pagedjs_margin-left-bottom,
+	.pagedjs_pagebox .pagedjs_margin-right-top,
+	.pagedjs_pagebox .pagedjs_margin-right-middle,
+	.pagedjs_pagebox .pagedjs_margin-right-bottom { text-align: center; }
+
+	.pagedjs_pages .pagedjs_margin .pagedjs_margin-content {
+		width: 100%;
+	}
+
+	.pagedjs_pages .pagedjs_margin-left .pagedjs_margin-content::after,
+	.pagedjs_pages .pagedjs_margin-top .pagedjs_margin-content::after,
+	.pagedjs_pages .pagedjs_margin-right .pagedjs_margin-content::after,
+	.pagedjs_pages .pagedjs_margin-bottom .pagedjs_margin-content::after {
+		display: block;
+	}
+
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-to] {
+		margin-bottom: unset;
+		padding-bottom: unset;
+	}
+
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from] {
+		text-indent: unset;
+		margin-top: unset;
+		padding-top: unset;
+		initial-letter: unset;
+	}
+
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from] > *::first-letter,
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from]::first-letter {
+		color: unset;
+		font-size: unset;
+		font-weight: unset;
+		font-family: unset;
+		color: unset;
+		line-height: unset;
+		float: unset;
+		padding: unset;
+		margin: unset;
+	}
+
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-to]:not([data-footnote-call]):after,
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-to]:not([data-footnote-call])::after {
+		content: unset;
+	}
+
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from]:not([data-footnote-call]):before,
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div [data-split-from]:not([data-footnote-call])::before {
+		content: unset;
+	}
+
+	.pagedjs_pages > .pagedjs_page > .pagedjs_sheet > .pagedjs_pagebox > .pagedjs_area > div li[data-split-from]:first-of-type {
+		list-style: none;
+	}
+
+	/*
+	[data-page]:not([data-split-from]),
+	[data-break-before="page"]:not([data-split-from]),
+	[data-break-before="always"]:not([data-split-from]),
+	[data-break-before="left"]:not([data-split-from]),
+	[data-break-before="right"]:not([data-split-from]),
+	[data-break-before="recto"]:not([data-split-from]),
+	[data-break-before="verso"]:not([data-split-from])
+	{
+		break-before: column;
+	}
+
+	[data-page]:not([data-split-to]),
+	[data-break-after="page"]:not([data-split-to]),
+	[data-break-after="always"]:not([data-split-to]),
+	[data-break-after="left"]:not([data-split-to]),
+	[data-break-after="right"]:not([data-split-to]),
+	[data-break-after="recto"]:not([data-split-to]),
+	[data-break-after="verso"]:not([data-split-to])
+	{
+		break-after: column;
+	}
+	*/
+
+	.pagedjs_clear-after::after {
+		content: none !important;
+	}
+
+	[data-align-last-split-element='justify'] {
+		text-align-last: justify;
+	}
+
+
+	@media print {
+		html {
+			width: 100%;
+			height: 100%;
+			-webkit-print-color-adjust: exact;
+			print-color-adjust: exact;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+			width: 100% !important;
+			height: 100% !important;
+			min-width: 100%;
+			max-width: 100%;
+			min-height: 100%;
+			max-height: 100%;
+		}
+		.pagedjs_pages {
+			width: auto;
+			display: block !important;
+			transform: none !important;
+			height: 100% !important;
+			min-height: 100%;
+			max-height: 100%;
+			overflow: visible;
+		}
+		.pagedjs_page {
+			margin: 0;
+			padding: 0;
+			max-height: 100%;
+			min-height: 100%;
+			height: 100% !important;
+			page-break-after: always;
+			break-after: page;
+		}
+		.pagedjs_sheet {
+			margin: 0;
+			padding: 0;
+			max-height: 100%;
+			min-height: 100%;
+			height: 100% !important;
+		}
 	}
 }
 `;
@@ -32984,60 +32936,14 @@
 
 	EventEmitter(Previewer.prototype);
 
-	var Paged = /*#__PURE__*/Object.freeze({
-		__proto__: null,
-		Chunker: Chunker,
-		Polisher: Polisher,
-		Previewer: Previewer,
-		Handler: Handler,
-		registeredHandlers: registeredHandlers,
-		registerHandlers: registerHandlers,
-		initializeHandlers: initializeHandlers
-	});
+	exports.Chunker = Chunker;
+	exports.Handler = Handler;
+	exports.Polisher = Polisher;
+	exports.Previewer = Previewer;
+	exports.initializeHandlers = initializeHandlers;
+	exports.registerHandlers = registerHandlers;
+	exports.registeredHandlers = registeredHandlers;
 
-	window.Paged = Paged;
-
-	let ready = new Promise(function(resolve, reject){
-		if (document.readyState === "interactive" || document.readyState === "complete") {
-			resolve(document.readyState);
-			return;
-		}
-
-		document.onreadystatechange = function ($) {
-			if (document.readyState === "interactive") {
-				resolve(document.readyState);
-			}
-		};
-	});
-
-	let config = window.PagedConfig || {
-		auto: true,
-		before: undefined,
-		after: undefined,
-		content: undefined,
-		stylesheets: undefined,
-		renderTo: undefined,
-		settings: undefined
-	};
-
-	let previewer = new Previewer(config.settings);
-
-	ready.then(async function () {
-		let done;
-		if (config.before) {
-			await config.before();
-		}
-
-		if(config.auto !== false) {
-			done = await previewer.preview(config.content, config.stylesheets, config.renderTo);
-		}
-
-
-		if (config.after) {
-			await config.after(done);
-		}
-	});
-
-	return previewer;
+	Object.defineProperty(exports, '__esModule', { value: true });
 
 }));

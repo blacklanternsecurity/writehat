@@ -34,10 +34,11 @@ class ElementCleaner extends Paged.Handler {
         const cleanup = [ 
             ".generated-table table", 
             ".finding-content pre",
-            ".finding-content",
             "tbody",
             "ul",
-            "ol"
+            "ul li",
+            "ol",
+            "ol li"
         ];
 
         cleanup.forEach( e => $(page.element).find(e).each( function() { removeEmpty($(this), page.id); } ) );
@@ -64,6 +65,10 @@ class ElementCleaner extends Paged.Handler {
                 }
             }
         }
+
+        // Remove empty finding-content sections
+        $('.finding-content:has(.finding-content-body:empty)').remove()
+        $('section div.page-break:empty').remove()
 
         let t1 = performance.now();
         console.log("Rendering took " + Number.parseFloat((t1 - t0)/1000).toPrecision(3) + " seconds.");
@@ -135,13 +140,17 @@ class ElementCleaner extends Paged.Handler {
 
     onBreakToken(breakToken, overflow, rendered) {
         if (breakToken) {
-            let token = $(breakToken.node)
-            let token_parent = token.closest('.avoid-split')
-            let should_avoid_split = token_parent.length > 0
-
-            if (should_avoid_split) {
-                breakToken.node = token_parent.get(0)
-                breakToken.offset = 0
+            let node = $(breakToken.node)
+            if (node.hasClass('page-break')) {
+                let content = node.closest('.finding-content')
+                if (content.length > 0) {
+                    content = content.get(0)
+                    if (node.is(':last-child')) {
+                        content.parentNode.insertBefore(breakToken.node, content.nextSibling)
+                    } else if (node.is(':first-child')) {
+                        content.parentNode.insertBefore(breakToken.node, content)
+                    }
+                }
             }
         }
 
