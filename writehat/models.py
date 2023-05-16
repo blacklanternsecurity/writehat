@@ -199,7 +199,7 @@ class WriteHatBaseModel(models.Model):
             if label in validFormFields:
                 initialFormData.update({label: value})
                 log.debug(f'   Successfully copied: {label}')
-            #else:
+            # else:
             #    log.debug(f'   Did not copy: {label}')
 
         #log.debug(f'initialFormData: {initialFormData}')

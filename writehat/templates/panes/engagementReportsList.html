@@ -4,6 +4,10 @@
       <h4>Reports: {{ engagement.reports|length }}</h4>
     </div>
     <div class='ml-auto'>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="isActiveToggle" checked="checked">
+        <label class="form-check-label" for="isActiveToggle">Filter by Active</label>
+      </div>
       {% include 'snippets/textButton.html' with name='New Report' id='reportCreate' type='plus' class='btn-primary' %}
     </div>
   </div>
@@ -19,22 +23,23 @@
       </tr>
     </thead>
     <tbody class="text-nowrap">
+
       {% for report in engagement.reports|dictsortreversed:"modifiedDate" %}
-        <tr report-id="{{ report.id }}" report-name="{{ report.name }}">
-          <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.name }}</a></td>
-          <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.numComponents }}</a></td>
-          <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.createdDate }}</a></td>
-          <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.modifiedDate }}</a></td>
-          <td>
-            <div class="floating float-right vertical-align-center mt-1">
-              {% include 'snippets/smallButton.html' with title='Generate PDF' type='file-pdf' class='reportGeneratePDF engagement-reports text-white' attrs='style="border: 2px solid var(--danger)"' %}
-              {% include 'snippets/smallButton.html' with title='Generate HTML' type='file-code' class='reportGenerateHTML engagement-reports text-white' attrs='style="border: 2px solid var(--warning)"' %}
-              {% include 'snippets/smallButton.html' with title='Clone Report' type='copy' class='reportClone text-white' %}
-              {% include 'snippets/smallButton.html' with title='Edit Report' type='pen' class='reportEdit text-dark' %}
-              {% include 'snippets/smallButton.html' with title='Delete Report' type='times-circle' class='reportDelete text-danger' %}
-            </div>
-          </td>
-        </tr>
+          <tr class="report-row" report-id="{{ report.id }}" report-name="{{ report.name }}" {% if not report.isActive %}data-is-active="false"{% else %}data-is-active="true"{% endif %}>
+            <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.name }}</a></td>
+            <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.numComponents }}</a></td>
+            <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.createdDate }}</a></td>
+            <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.modifiedDate }}</a></td>
+            <td>
+              <div class="floating float-right vertical-align-center mt-1">
+                {% include 'snippets/smallButton.html' with title='Generate PDF' type='file-pdf' class='reportGeneratePDF engagement-reports text-white' attrs='style="border: 2px solid var(--danger)"' %}
+                {% include 'snippets/smallButton.html' with title='Generate HTML' type='file-code' class='reportGenerateHTML engagement-reports text-white' attrs='style="border: 2px solid var(--warning)"' %}
+                {% include 'snippets/smallButton.html' with title='Clone Report' type='copy' class='reportClone text-white' %}
+                {% include 'snippets/smallButton.html' with title='Edit Report' type='pen' class='reportEdit text-dark' %}
+                {% include 'snippets/smallButton.html' with title='Delete Report' type='times-circle' class='reportDelete text-danger' %}
+              </div>
+            </td>
+          </tr>
       {% endfor %}
     </tbody>
   </table>

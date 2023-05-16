@@ -30,15 +30,17 @@ class BaseReport(WriteHatBaseModel):
     # JSON-serialized dictionary of component UUIDs
     _components = models.TextField(blank=True, default=str, validators=[isValidComponentJSON])
     pageTemplateID = models.UUIDField(null=True, blank=True)
+    isActive = models.BooleanField(default=bool)
 
     @classmethod
-    def new(cls, name, components=None, engagementParent=None):
+    def new(cls, name, components=None, engagementParent=None, isActive=True):
         log.debug(f"{type(cls).__name__}.new()")
 
         log.debug(f"components: {components}")
 
         reportModel = cls(name=name)
         reportModel.engagementParent = engagementParent
+        reportModel.isActive = isActive
         #reportModel.save()
 
         if components is not None:
@@ -212,13 +214,17 @@ class BaseReport(WriteHatBaseModel):
         return tmpComponents
 
 
-    def update(self, componentJSON=None, name=None, pageTemplate=None):
+    def update(self, componentJSON=None, name=None, pageTemplate=None, isActive=None):
         log.debug("Report.update() called")
 
         # handle name
         if name is not None:
             log.debug(f"Setting report.name to {name}")
             self.name = name
+
+        if isActive is not None:
+            log.debug(f"Setting report.isActive to {isActive}")
+            self.isActive = isActive
 
         self.pageTemplateID = pageTemplate
 
@@ -712,12 +718,12 @@ class Report(BaseReport):
 
 
 
-    def update(self, componentJSON=None, reportName=None, pageTemplate=None, findings=None):
+    def update(self, componentJSON=None, reportName=None, pageTemplate=None, findings=None, isActive=None):
         '''
         Do everything that the parent function does, and also update findings
         '''
 
-        super().update(componentJSON, reportName, pageTemplate)
+        super().update(componentJSON, reportName, pageTemplate, isActive)
         if findings is not None:
             log.debug(f'Updating report findings: {findings}')
             validated_finding_uuids = list(self.validate_finding_uuids(findings))
@@ -824,5 +830,9 @@ class reportForm(forms.Form):
         widget=PageTemplateSelect()
     )
 
+    isActive = forms.BooleanField(
+        label='Is report active?',
+        initial=True
+    )
 
 BaseReport.formClass = reportForm
