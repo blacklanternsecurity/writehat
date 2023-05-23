@@ -61,7 +61,6 @@ $(document).ready(function() {
   var isActiveInitially = isActiveToggle.prop('checked');
   filterRowsByActive(isActiveInitially);
 
-
   // edit button
   $('#engagementEdit').click(function(e) {
     loadModal('engagementEdit', function(engagementEditModal) {

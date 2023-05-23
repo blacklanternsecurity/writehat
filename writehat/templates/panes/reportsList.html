@@ -4,6 +4,10 @@
       <h5>Report Templates</h5>
     </div>
     <div class='ml-auto'>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="isActiveToggle" checked="checked">
+        <label class="form-check-label" for="isActiveToggle">Filter by Active</label>
+      </div>
       {% include 'snippets/textButton.html' with href='/templates/new' name='New Report Template' type='plus' class='btn-primary' %}
     </div>
   </div>
@@ -19,7 +23,7 @@
     </thead>
     <tbody class="text-nowrap">
       {% for report in reports|dictsortreversed:"modifiedDate" %}
-        <tr report-id="{{ report.id }}" report-name="{{ report.name }}">
+        <tr class="report-row" report-id="{{ report.id }}" report-name="{{ report.name }}" {% if not report.isActive %}data-is-active="false"{% else %}data-is-active="true"{% endif %}>
           <td class="pl-2 reportEdit" style="cursor:pointer">{{ report.name }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.numComponents }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.createdDate }}</td>

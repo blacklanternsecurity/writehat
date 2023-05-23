@@ -292,9 +292,9 @@ def reportCreate(request, uuid=None, fromTemplate=False):
 
     try:
         reportName = decodedJson['name']
-        activeStatus = True if decodedJson['isActive'] == "on" else False
         log.debug(f"reportName: {reportName}")
         reportComponents = decodedJson['reportComponents']
+        activeStatus = decodedJson.get('isActive') == 'on'
         # Everything is validated, lets instantiate the report
         report = None
         if uuid:
@@ -388,9 +388,7 @@ def reportUpdate(request,uuid,fromTemplate=False):
         reportName = reportJSON.get('name', None)
         reportPageTemplate = reportJSON.get('pageTemplateID', None)
         reportFindings = reportJSON.get('reportFindings', None)
-        reportActiveStatus = reportJSON.get('isActive', None)
-
-        reportActiveStatus = True if reportActiveStatus == "on" else False
+        reportActiveStatus = reportJSON.get('isActive') == 'on'
 
         if componentJSON is not None:
             log.debug("In reportUpdate()")
