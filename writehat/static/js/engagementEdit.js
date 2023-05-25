@@ -34,32 +34,31 @@ $(document).ready(function() {
 
   });
 
-  // Toggle filtering by active reports
-  function filterRowsByActive(isActive) {
-    $('.report-row').each(function() {
-      if (isActive) {
-        if (!$(this).data('isActive')) {
-          $(this).hide();
-        } else {
-          $(this).show();
-        }
-      } else {
-        $(this).show();
-      }
-    });
-  }
+  // Table Filtering
 
-  // Toggle filtering by active reports
-  var isActiveToggle = $('#isActiveToggle');
+  var actvToggle = $('#filterActiveToggle');
+
+  // Custom range filtering function
+  $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+      var isActv = actvToggle.prop('checked');
+      var itemActive = data[4]; // use data for the active status column
   
-  isActiveToggle.change(function() {
-    var isActive = $(this).prop('checked');
-    filterRowsByActive(isActive);
+      if (isActv) {
+          return itemActive == "True";
+      } else {
+          return true;
+      }
   });
-    
-  // Call the filterRowsByActive function on page load
-  var isActiveInitially = isActiveToggle.prop('checked');
-  filterRowsByActive(isActiveInitially);
+  
+  var table = $('#reports').DataTable();
+  
+  // Bind the change event handler
+  actvToggle.change(function() {
+      table.draw();
+  });
+  
+  // Trigger the change event to set the filter active by default
+  actvToggle.trigger('change');
 
   // edit button
   $('#engagementEdit').click(function(e) {

@@ -5,29 +5,32 @@
     </div>
     <div class='ml-auto'>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="isActiveToggle" checked="checked">
+        <input class="form-check-input" type="checkbox" id="filterActiveToggle" checked>
         <label class="form-check-label" for="isActiveToggle">Filter by Active</label>
       </div>
       {% include 'snippets/textButton.html' with href='/templates/new' name='New Report Template' type='plus' class='btn-primary' %}
     </div>
   </div>
-  <table class="container-fluid writehat-table table-light table-striped table-hover overflow-auto paginate writehat-reports">
+  <table class="container-fluid writehat-table table-light table-striped table-hover overflow-auto paginate writehat-reports" id="reports">
     <thead>
+      <th></th>
       <tr>
         <th><strong>Name</strong></th>
         <th><strong>Components</strong></th>
         <th><strong>Created</strong></th>
         <th><strong>Modified</strong></th>
-        <th></th>
+        <th><strong>Active</strong></th>
+        <th>
       </tr>
     </thead>
     <tbody class="text-nowrap">
       {% for report in reports|dictsortreversed:"modifiedDate" %}
-        <tr class="report-row" report-id="{{ report.id }}" report-name="{{ report.name }}" {% if not report.isActive %}data-is-active="false"{% else %}data-is-active="true"{% endif %}>
+        <tr class="report-row" report-id="{{ report.id }}" report-name="{{ report.name }}">
           <td class="pl-2 reportEdit" style="cursor:pointer">{{ report.name }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.numComponents }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.createdDate }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.modifiedDate }}</td>
+          <td class="reportEdit" style="cursor:pointer">{{ report.isActive }}</td>
           <td>
             <div class="floating float-right mt-1">
               {% include 'snippets/smallButton.html' with title='Clone Report' type='copy' class='reportClone text-white' %}

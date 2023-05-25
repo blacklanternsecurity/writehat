@@ -5,31 +5,32 @@
     </div>
     <div class='ml-auto'>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="isActiveToggle" checked="checked">
+        <input class="form-check-input" type="checkbox" id="filterActiveToggle" checked>
         <label class="form-check-label" for="isActiveToggle">Filter by Active</label>
       </div>
       {% include 'snippets/textButton.html' with name='New Report' id='reportCreate' type='plus' class='btn-primary' %}
     </div>
   </div>
-
-  <table class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate writehat-reports">
+  <table class="writehat-table container-fluid table-light table-striped table-hover overflow-auto paginate writehat-reports" id="reports">
     <thead>
+      <th></th>
       <tr>
         <th><strong>Name</strong></th>
         <th><strong>Components</strong></th>
         <th><strong>Created</strong></th>
         <th><strong>Modified</strong></th>
+        <th><strong>Active</strong></th>
         <th></th>
       </tr>
     </thead>
     <tbody class="text-nowrap">
-
       {% for report in engagement.reports|dictsortreversed:"modifiedDate" %}
-          <tr class="report-row" report-id="{{ report.id }}" report-name="{{ report.name }}" {% if not report.isActive %}data-is-active="false"{% else %}data-is-active="true"{% endif %}>
+          <tr class="report-row" report-id="{{ report.id }}" report-name="{{ report.name }}">
             <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.name }}</a></td>
             <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.numComponents }}</a></td>
             <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.createdDate }}</a></td>
             <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.modifiedDate }}</a></td>
+            <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.isActive }}</a></td>
             <td>
               <div class="floating float-right vertical-align-center mt-1">
                 {% include 'snippets/smallButton.html' with title='Generate PDF' type='file-pdf' class='reportGeneratePDF engagement-reports text-white' attrs='style="border: 2px solid var(--danger)"' %}
