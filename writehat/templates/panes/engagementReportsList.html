@@ -5,8 +5,15 @@
     </div>
     <div class='ml-auto'>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="filterActiveToggle" checked>
-        <label class="form-check-label" for="isActiveToggle">Filter by Active</label>
+        <form id="status-radio">
+          <label class="form-check-label" for="isActiveToggle">Filter by Status</label>
+          <input type="radio" id="inactive" name="status" value="inactive">
+          <label for="inactive">Inactive</label><br>
+          <input type="radio" id="active" name="status" value="active">
+          <label for="active">Active</label><br>
+          <input type="radio" id="draft" name="status" value="draft">
+          <label for="draft">Draft</label>
+        </form>
       </div>
       {% include 'snippets/textButton.html' with name='New Report' id='reportCreate' type='plus' class='btn-primary' %}
     </div>
@@ -19,7 +26,7 @@
         <th><strong>Components</strong></th>
         <th><strong>Created</strong></th>
         <th><strong>Modified</strong></th>
-        <th><strong>Active</strong></th>
+        <th><strong>Status</strong></th>
         <th></th>
       </tr>
     </thead>
@@ -30,7 +37,7 @@
             <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.numComponents }}</a></td>
             <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.createdDate }}</a></td>
             <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.modifiedDate }}</a></td>
-            <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.isActive }}</a></td>
+            <td><a href="/engagements/report/{{ report.id }}/edit">{{ report.status }}</a></td>
             <td>
               <div class="floating float-right vertical-align-center mt-1">
                 {% include 'snippets/smallButton.html' with title='Generate PDF' type='file-pdf' class='reportGeneratePDF engagement-reports text-white' attrs='style="border: 2px solid var(--danger)"' %}

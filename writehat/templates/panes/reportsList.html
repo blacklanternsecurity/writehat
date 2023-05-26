@@ -3,10 +3,16 @@
     <div>
       <h5>Report Templates</h5>
     </div>
-    <div class='ml-auto'>
+    <div class='auto-ml'>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="filterActiveToggle" checked>
-        <label class="form-check-label" for="isActiveToggle">Filter by Active</label>
+        <form id="status-radio">
+          <input type="radio" id="inactive" name="status" value="inactive">
+          <label for="inactive">Inactive</label><br>
+          <input type="radio" id="active" name="status" value="active">
+          <label for="active">Active</label><br>
+          <input type="radio" id="draft" name="status" value="draft">
+          <label for="draft">Draft</label>
+        </form>
       </div>
       {% include 'snippets/textButton.html' with href='/templates/new' name='New Report Template' type='plus' class='btn-primary' %}
     </div>
@@ -19,7 +25,7 @@
         <th><strong>Components</strong></th>
         <th><strong>Created</strong></th>
         <th><strong>Modified</strong></th>
-        <th><strong>Active</strong></th>
+        <th><strong>Status</strong></th>
         <th>
       </tr>
     </thead>
@@ -30,7 +36,7 @@
           <td class="reportEdit" style="cursor:pointer">{{ report.numComponents }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.createdDate }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.modifiedDate }}</td>
-          <td class="reportEdit" style="cursor:pointer">{{ report.isActive }}</td>
+          <td class="reportEdit" style="cursor:pointer">{{ report.status }}</td>
           <td>
             <div class="floating float-right mt-1">
               {% include 'snippets/smallButton.html' with title='Clone Report' type='copy' class='reportClone text-white' %}
