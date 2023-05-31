@@ -3,17 +3,8 @@
     <div>
       <h5>Report Templates</h5>
     </div>
-    <div class='auto-ml'>
-      <div class="form-check">
-        <form id="status-radio">
-          <input type="radio" id="inactive" name="status" value="inactive">
-          <label for="inactive">Inactive</label><br>
-          <input type="radio" id="active" name="status" value="active">
-          <label for="active">Active</label><br>
-          <input type="radio" id="draft" name="status" value="draft">
-          <label for="draft">Draft</label>
-        </form>
-      </div>
+    <div class='ml-auto'>
+      {% include 'snippets/statusButtonGroup.html' %}
       {% include 'snippets/textButton.html' with href='/templates/new' name='New Report Template' type='plus' class='btn-primary' %}
     </div>
   </div>

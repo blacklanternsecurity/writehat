@@ -2,23 +2,19 @@ $(document).ready(function() {
 
   // Table Filtering
   var status = $('input[name="status"]:checked');
-  console.log("status:" + status);
 
   // Custom range filtering function
   $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-    statusValue = $("input[name='status']:checked").val();
-    console.log("status value: " + statusValue);
+    var statusValue = new Array();
+    $.each($("input[name='status']:checked"), function() {
+      statusValue.push($(this).val());
+    });
+
     var itemActive = data[4]; // use data for the active status column
 
-    if (statusValue == "inactive") {
-      return itemActive == "inactive";
-    } else if (statusValue == "active") {
-      return itemActive == "active";
-    } else if ( statusValue == "draft") {
-      return itemActive == "draft";
-    }
+    if (statusValue.includes(itemActive)) { return true; }
 
-    return true;
+    return false;
   });
   
   var table = $('#reports').DataTable();
@@ -26,10 +22,9 @@ $(document).ready(function() {
   // Bind the change event handler
   $('#status-radio').change(function() {
       table.draw();
-      console.log("status change detevted.")
   });
   
   // Trigger the change event to set the filter active by default
   $('#status-radio').trigger('change');
 
-})
+});
