@@ -832,7 +832,7 @@ class reportForm(forms.Form):
 
     status = forms.ChoiceField(
         label='Report Status',
-        widget=forms.RadioSelect,
+        widget=forms.Select,
         choices=[
             ('inactive', 'Inactive'),
             ('active', 'Active'),
