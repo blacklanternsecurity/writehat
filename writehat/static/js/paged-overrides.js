@@ -19,15 +19,6 @@ function removeEmpty(e, page_id) {
 
 }
 
-let msgTimeout = null;
-function showFinished() {
-    if (msgTimeout !== null) {
-        clearTimeout(msgTimeout)
-    }
-    $(".pagedjs_pages").removeClass("finished_loading").addClass("no_message")
-    $("<input type='hidden' value='1' id='finished_loading' />").appendTo("html");
-}
-
 let last_node = false, last_thead = false, last_tr = false;
 class ElementCleaner extends Paged.Handler {
 
@@ -39,24 +30,51 @@ class ElementCleaner extends Paged.Handler {
         $("#report-body > div.pagedjs_pages").css("justify-content", "center");
     }
 
-    afterPageLayout(pageFragment, page) {
+    afterPageLayout(pageElement, page, breakToken) {
         const cleanup = [ 
             ".generated-table table", 
             ".finding-content pre",
-            ".finding-content",
-            "tbody"
+            "tbody",
+            "ul",
+            "ul li",
+            "ol",
+            "ol li"
         ];
 
         cleanup.forEach( e => $(page.element).find(e).each( function() { removeEmpty($(this), page.id); } ) );
     }
 
     afterRendered(pages) {
+        for (let i = 0; i < pages.length; i++) {
+            let page = $(pages[i].element)
+            let split_to = page.find('.finding-content[data-split-to]')
+
+            if (split_to.length > 0) {
+                let body = split_to.find('.finding-content-body')
+                let header = split_to.find('.finding-content-header')
+
+                let split_id = split_to.attr('data-split-to')
+                let next_page = $(pages[i + 1].element)
+
+                let split_from = next_page.find(`.finding-content[data-split-from='${split_id}']`)
+
+                split_from.prepend(header.clone())
+
+                if (body.text().length == 0) {
+                    split_to.remove()
+                }
+            }
+        }
+
+        // Remove empty finding-content sections
+        $('.finding-content:has(.finding-content-body:empty)').remove()
+        $('section div.page-break:empty').remove()
+
         let t1 = performance.now();
         console.log("Rendering took " + Number.parseFloat((t1 - t0)/1000).toPrecision(3) + " seconds.");
 
+        $("<input type='hidden' value='1' id='finished_loading' />").appendTo("html");
         console.log($("#finished_loading"));
-        $(".pagedjs_pages").addClass("finished_loading")
-        msgTimeout = setTimeout(showFinished, 1000)
     }
 
     renderNode(node, sourceNode, layout) {
@@ -121,6 +139,21 @@ class ElementCleaner extends Paged.Handler {
     }
 
     onBreakToken(breakToken, overflow, rendered) {
+        if (breakToken) {
+            let node = $(breakToken.node)
+            if (node.hasClass('page-break')) {
+                let content = node.closest('.finding-content')
+                if (content.length > 0) {
+                    content = content.get(0)
+                    if (node.is(':last-child')) {
+                        content.parentNode.insertBefore(breakToken.node, content.nextSibling)
+                    } else if (node.is(':first-child')) {
+                        content.parentNode.insertBefore(breakToken.node, content)
+                    }
+                }
+            }
+        }
+
         if (overflow) {
             let sc = $(overflow.startContainer)[0];
             if ($(sc).is("td") || $(sc).parent().is("td") || $(sc).is("tbody")) {
@@ -159,6 +192,7 @@ $().ready( function() {
     let t0 = performance.now();
     let paged = new Paged.Previewer()
 	paged.preview(flowText.content).then((flow) => {
+        hljs.highlightAll();
         let t1 = performance.now();
         console.log("Rendering " + flow.total + " pages took " + (t1 - t0) + " milliseconds.");
     })

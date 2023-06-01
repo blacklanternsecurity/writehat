@@ -1,14 +1,7 @@
-<section class="l{{ level }} component part{% if pageBreakBefore %} page-break{% endif %}">
-{% include 'componentTemplates/Heading.html' with classes="finding-heading" %}
+<section class="l{{ level }} container component part{% if pageBreakBefore %} page-break{% endif %}">
   {% for finding in findingGroup.findings %}
     {% if not report.finding_uuids or finding.id in report.finding_uuids %}
-      {% if forloop.first and showTitle %}
-        <div class='first-finding-container'>
-      {% endif %}
-      {% include finding.htmlTemplate with finding=finding %}
-      {% if forloop.first %} 
-        </div>
-      {% endif %}
+      {% include finding.htmlTemplate with finding=finding first=forloop.first %}
       {% if not forloop.last %}
         <div class="page-break"></div>
       {% endif %}

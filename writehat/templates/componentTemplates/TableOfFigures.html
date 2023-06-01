@@ -3,8 +3,8 @@
   <div id="table-of-figures">
     <ul class="tof-list">
       {% for figure in report.figures %}
-        <a href='#figure_{{ figure.id }}'>
-          <li class="tof-entry">
+        <li>
+          <a class="tof-entry" href='#figure_{{ figure.id }}'>
             <span class="tof-item">
                 <span class="tof-header">
                     Figure <span class="tof-counter" target-component='#figure_{{ figure.id }}'></span>. 
@@ -13,8 +13,8 @@
             </span>
             <span class="tof-dots"></span>
             <span class="toc-pagenumber" target-component='#figure_{{ figure.id }}'></span>
-          </li>
-        </a>
+          </a>
+        </li>
       {% endfor %}
     </ul>
   </div>

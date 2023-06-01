@@ -2,6 +2,9 @@
 <html>
   <head>
     {% include 'reportTemplates/reportDependencies.html' with report=report %}
+    {% for css in component_css %}
+      <link href="/static/css/component/{{ css }}.css" rel="stylesheet">
+    {% endfor %}
   </head>
 
   <body>
