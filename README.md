@@ -260,6 +260,82 @@ $ sudo tar --same-owner -xvpzf db_backup.tar.gz
 $ systemctl start writehat
 ~~~
 
+## Configuring LDAP
+
+Writehat integrates with both Active Directory and OpenLDAP. Your choice
+of technology will affect the two following files:
+
+**writehat/settings.py**
+
+```python
+# LDAP CONFIGURATION
+LDAP_AUTH_URL = writehat_config['ldap']['url']
+LDAP_AUTH_USE_TLS = writehat_config['ldap']['tls']
+LDAP_AUTH_SEARCH_BASE = writehat_config['ldap']['base']
+LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = writehat_config['ldap']['domain']
+LDAP_AUTH_CONNECTION_USERNAME = writehat_config['ldap']['username']
+LDAP_AUTH_CONNECTION_PASSWORD = writehat_config['ldap']['password']
+
+# The LDAP class that represents a user.
+#LDAP_AUTH_OBJECT_CLASS = "user" --> Replace line below for AD
+LDAP_AUTH_OBJECT_CLASS = "posixAccount"
+
+# User model fields mapped to the LDAP
+# attributes that represent them.
+LDAP_AUTH_USER_FIELDS = {
+    # "username": "sAMAccountName", --> Replace line below for AD
+    "username": "uid",
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail",
+}
+
+# A tuple of django model fields used to uniquely identify a user.
+LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
+
+# Path to a callable that takes a dict of {model_field_name: value},
+# returning a dict of clean model data.
+# Use this to customize how data loaded from LDAP is saved to the User model.
+LDAP_AUTH_CLEAN_USER_DATA = "django_python3_ldap.utils.clean_user_data"
+
+# Path to a callable that takes a user model and a dict of {ldap_field_name: [value]},
+# and saves any additional user relationships based on the LDAP data.
+# Use this to customize how data loaded from LDAP is saved to User model relations.
+# For customizing non-related User model fields, use LDAP_AUTH_CLEAN_USER_DATA.
+LDAP_AUTH_SYNC_USER_RELATIONS = "django_python3_ldap.utils.sync_user_relations"
+
+# Path to a callable that takes a dict of {ldap_field_name: value},
+# returning a list of [ldap_search_filter]. The search filters will then be AND'd
+# together when creating the final search filter.
+LDAP_AUTH_FORMAT_SEARCH_FILTERS = "django_python3_ldap.utils.format_search_filters"
+
+# Path to a callable that takes a dict of {model_field_name: value}, and returns
+# a string of the username to bind to the LDAP server.
+# Use this to support different types of LDAP server.
+# LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_active_directory_principal" --> Replace line below for AD
+LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_openldap"
+
+# Set connection/receive timeouts (in seconds) on the underlying `ldap3` library.
+LDAP_AUTH_CONNECT_TIMEOUT = None
+LDAP_AUTH_RECEIVE_TIMEOUT = None
+```
+
+**writehat/config/writehat.conf**
+
+```
+[ldap]
+# The URL of the LDAP server
+url = 'ldap://your-ldap-server'
+# Domain
+domain = 'yourdomain.local'
+# Initiate TLS on connection
+tls = true
+# The LDAP search base for looking up users
+base = 'cn=users,cn=accounts,dc=yourdomain,dc=local'
+# The LDAP username and password for querying the LDAP database
+username = 'your-ldap-lookup-account'
+password = 'your-ldap-lookup-password'
+```
 
 ## Roadmap / *Potential* Future Developments:
 - Change tracking and revisions
