@@ -128,7 +128,7 @@ A **Page Template** lets you customize report background images and footers.  Yo
 You can automatically insert client-specific information such as the client name, URL, e-mail, etc. in your reports, by inserting
 `{Client<field>}` in the text. This is particularly useful for report templates.
 
-For example, if you want to refer to the client in your executive summary, you can insert `{ClientName}` in the text. For a specific
+For example, if you want to refer to the client in your executive summary, you can insert `{ClientName}` or `{customer.name}` in the text. For a specific
 list of fields you can insert, or to insert more, refer to [the markdown.py file](writehat/lib/markdown.py)
 
 Finally, please note that you can also use the editor's 🔗 icon to select these placeholders (and more!).
