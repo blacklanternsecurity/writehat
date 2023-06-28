@@ -30,7 +30,8 @@ class BaseReport(WriteHatBaseModel):
     # JSON-serialized dictionary of component UUIDs
     _components = models.TextField(blank=True, default=str, validators=[isValidComponentJSON])
     pageTemplateID = models.UUIDField(null=True, blank=True)
-    status = models.TextField(default='active')
+    status = models.TextField(default='active',
+                              choices=[("active", "Active"), ("inactive", "Inactive"), ("draft", "Draft")] )
 
     @classmethod
     def new(cls, name, components=None, engagementParent=None, status='active'):
