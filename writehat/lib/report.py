@@ -26,12 +26,19 @@ class BaseReport(WriteHatBaseModel):
 
     class Meta:
         abstract = True
+
+    
+    statusChoices = [
+        ("active", "Active"), 
+        ("inactive", "Inactive"), 
+        ("draft", "Draft")
+    ]
     
     # JSON-serialized dictionary of component UUIDs
     _components = models.TextField(blank=True, default=str, validators=[isValidComponentJSON])
     pageTemplateID = models.UUIDField(null=True, blank=True)
     status = models.TextField(default='active',
-                              choices=[("active", "Active"), ("inactive", "Inactive"), ("draft", "Draft")] )
+                              choices=statusChoices )
 
     @classmethod
     def new(cls, name, components=None, engagementParent=None, status='active'):
@@ -834,11 +841,7 @@ class reportForm(forms.Form):
     status = forms.ChoiceField(
         label='Report Status',
         widget=forms.Select,
-        choices=[
-            ('inactive', 'Inactive'),
-            ('active', 'Active'),
-            ('draft', 'Draft')
-        ],
+        choices=BaseReport.statusChoices,
         initial='active'
     )
 
