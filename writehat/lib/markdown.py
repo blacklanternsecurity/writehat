@@ -262,15 +262,16 @@ def user_template_replace(markdown_text, context):
 
     proactive = 0
  
-    findingGroups = set()
-    for finding in report.findings:
-        findingGroups.add(finding.findingGroup)
+    findingGroups = []
+    engagement = context.get('engagement', '')
+    if engagement:
+        findingGroups = engagement.fgroups
 
-    fg_id = len(findingGroups)
+    fg_id = 1
     for fgroup in findingGroups:
         total, informational, low, medium, high, critical = 0,0,0,0,0,0
         for finding in report.findings:
-            if finding.findingGroup == fgroup:
+            if finding.findingGroup == fgroup.id:
                 if finding.scoringType == "CVSS":
                     cvss['total']+=1
                     total+=1
@@ -320,7 +321,7 @@ def user_template_replace(markdown_text, context):
         user_context[f'{f}{fg}{fg_id}mediumcount'] = medium
         user_context[f'{f}{fg}{fg_id}highcount'] = high
         user_context[f'{f}{fg}{fg_id}criticalcount'] = critical
-        fg_id-=1
+        fg_id+=1
 
     # total per severity 
     user_context[f'{f}informationalcount'] = cvss['informational'] + dread['informational']
