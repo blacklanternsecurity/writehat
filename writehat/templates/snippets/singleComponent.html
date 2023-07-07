@@ -4,7 +4,7 @@
   <div style="text-align: center; width: 2rem; padding: .2rem">
     <i class="{{ component.iconType }}" style="color: {% if component.iconColorDynamic %}{{ component.iconColorDynamic }}{% else %}{{ component.iconColor }}{% endif %}"></i>
   </div>
-  <div class="componentName">{% if component.todoItems %}{% include 'snippets/smallButton.html' with class='tooltipTodo text-warning' id='tooltip-todo' type='exclamation-circle '%} {% endif %}{{ component.name }}</div>
+  <div class="componentName">{% if component.todoItems %}{% include 'widgets/tooltipTodo.html' with component_id=component.id component_name=component.name todo_items=component.todoItems %} {% endif %}{{ component.name }}</div>
   {% if editControls %}
     <div class="componentEditControls">
       <span class="assignee">{{ component.json.assignee_name }}</span>
