@@ -97,6 +97,39 @@ class Component(BaseComponent):
 
 
     @property
+    def todoItems(self):
+
+        out = []
+
+        try:
+
+            fgroupID = None
+            try:
+                fgroupID = self.getFindingGroup.id
+            except AttributeError:
+                try:
+                    fgroupID = UUID(str(self.findingGroup))
+                except ValueError:
+                    pass
+
+            for finding in self.report.findings:
+                findingFgroupID = None
+                try:
+                    findingFgroupID = UUID(str(finding.findingGroup))
+                except (AttributeError, ValueError):
+                    pass
+                if findingFgroupID == fgroupID:
+                    for item in finding.todoItems:
+                        out.append(f"{finding.name}: {item}")
+
+        except AttributeError as e:
+            # this report doesn't have findings
+            pass
+
+        return out
+
+
+    @property
     def iconColorDynamic(self):
     
         try:
