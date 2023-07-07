@@ -80,6 +80,10 @@ table.writehat-form .btn-group button.n11:last-child { width: 12%;}
   margin-left: 2%;
 }
 
+.tooltipTodo {
+  display: inline;
+}
+
 /* checkboxes */
 table.writehat-form div.large-checkbox .custom-control-label::before,
 table.writehat-form div.large-checkbox .custom-control-label::after,
