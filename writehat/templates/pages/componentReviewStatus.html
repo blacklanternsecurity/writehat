@@ -55,6 +55,11 @@
 {% block footer %}
 
 <script type='text/javascript' src='/static/js/componentReviewStatus.js'></script>
+<script type="text/javascript">
+  $().ready( function() {
+    loadToolTips();
+  });
+</script>
 <span id="engagement-info" engagement-id="{{ engagement.id }}" style="display: none;"></span>
 <span id="report-info" report-id="{{ report.id }}" style="display: none;"></span>
 {% endblock %}
