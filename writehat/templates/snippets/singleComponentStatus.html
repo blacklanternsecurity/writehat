@@ -3,7 +3,7 @@
   <div style="text-align: center; width: 2rem; padding: .2rem">
     <i class="{{ component.iconType }}" style="color: {{ component.iconColor }}"></i>
   </div>
-  <div class='component-name'>{{ component.name }}</div>
+  <div class='component-name'>{% if component.todoItems %}{% include 'widgets/tooltipTodo.html' with component_id=component.id component_name=component.name todo_items=component.todoItems %} {% endif %}{{ component.name }}</div>
   {% if editControls %}
     <div class="componentEditControls">
       {% include 'snippets/smallButton.html' with name='Edit Component' type='pen' class='componentEdit text-dark' attrs='componentID='|addstr:component.id %}

@@ -310,6 +310,16 @@ function loadToolTips() {
       tooltipSelectModal.find('.modal-body').html(selectedTooltipText);
     });
   });
+  $('.tooltipTodo').click(function(e){
+    var componentId = $(e.currentTarget).attr('id').replace("tooltipTodo-", "");
+    loadModal('tooltipTodo', function(tooltipTodoModal) {
+      tooltipTodoModal.modal('show');
+      selectedTooltipText = $('#tooltipTodoText-'+componentId).html();
+      tooltipTodoModal.find('.modal-body').html(selectedTooltipText);
+      selectedTooltipTitle = $('#tooltipTodoTitle-'+componentId).html();
+      tooltipTodoModal.find('.modal-title').html(selectedTooltipTitle);
+    });
+  });
 };
 
 

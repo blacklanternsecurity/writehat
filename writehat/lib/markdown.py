@@ -69,6 +69,14 @@ reference_templates = {
         ),
         'allowed_fields': ('size'),
     },
+    'todo': {
+        'constructor': None,
+        'template': 'reportTemplates/blank.html',
+        'regex': re.compile(
+            r'{\s{0,2}[Tt][Oo][Dd][Oo](?P<todo_note>\|[^}]+)?\s{0,2}}'
+        ),
+        'allowed_fields': ('todo_note'),
+    },
 }
 
 # Tags allowed for rendering markdown
