@@ -41,6 +41,19 @@ table.writehat-form label {
   margin: 0rem;
 }
 
+table.writehat-form label.todo {
+  position: relative;
+}
+
+table.writehat-form label.todo::before {
+  position: absolute;
+  display: block;
+  left: -22px;
+  content: "\f06a";
+  font-family: "Font Awesome 5 Free";
+  color: orange;
+}
+
 table.writehat-form .container {
   padding: 0px;
 }
