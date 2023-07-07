@@ -478,12 +478,8 @@ class BaseComponent():
             if getattr(v, "markdown", False):
                 match = re.search(todo_re, str(getattr(self, k, "")))
                 if match is not None:
-                    note = match.group("todo_note")
-                    if not note:
-                        note = "n/a"
-                    out.append(f"{k}: {note}")
-        log.debug(out)
-        return "\n".join(out)
+                    out.append(k)
+        return out
 
 
     @staticmethod
