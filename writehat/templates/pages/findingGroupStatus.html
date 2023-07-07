@@ -51,7 +51,7 @@
                   </a>
               </td>
               <td class='cvss dread proactive findingAttr'>
-                  {% if "description" in finding.todoFields %}
+                  {% if "description" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.description %}
                       <i class="text-muted fa fa-check"></i>
@@ -60,7 +60,7 @@
                   {% endif %}
               </td>
               <td class='cvss dread proactive findingAttr'>
-                  {% if "affectedResources" in finding.todoFields %}
+                  {% if "affectedResources" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.affectedResources %}
                       <i class="text-muted fa fa-check"></i>
@@ -69,7 +69,7 @@
                   {% endif %}
               </td>
               <td class='dread findingAttr'>
-                  {% if "impact" in finding.todoFields %}
+                  {% if "impact" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.impact %}
                       <i class="text-muted fa fa-check"></i>
@@ -78,7 +78,7 @@
                   {% endif %}
               </td>
               <td class='cvss dread proactive findingAttr'>
-                  {% if "background" in finding.todoFields %}
+                  {% if "background" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.background %}
                       <i class="text-muted fa fa-check"></i>
@@ -87,7 +87,7 @@
                   {% endif %}
               </td>
               <td class='cvss findingAttr'>
-                  {% if "proofOfConcept" in finding.todoFields %}
+                  {% if "proofOfConcept" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.proofOfConcept %}
                       <i class="text-muted fa fa-check"></i>
@@ -96,7 +96,7 @@
                   {% endif %}
               </td>
               <td class='cvss findingAttr'>
-                  {% if "toolsUsed" in finding.todoFields %}
+                  {% if "toolsUsed" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.toolsUsed %}
                       <i class="text-muted fa fa-check"></i>
@@ -105,7 +105,7 @@
                   {% endif %}
               </td>
               <td class='cvss dread findingAttr'>
-                  {% if "remediation" in finding.todoFields %}
+                  {% if "remediation" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.remediation %}
                       <i class="text-muted fa fa-check"></i>
@@ -114,7 +114,7 @@
                   {% endif %}
               </td>
               <td class='cvss dread proactive findingAttr'>
-                  {% if "references" in finding.todoFields %}
+                  {% if "references" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.references %}
                       <i class="text-muted fa fa-check"></i>
@@ -186,7 +186,7 @@
                   {% endif %}
               </td>
               <td class='dread findingAttr'>
-                  {% if "descDamage" in finding.todoFields %}
+                  {% if "descDamage" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.descDamage %}
                       <i class="text-muted fa fa-check"></i>
@@ -202,7 +202,7 @@
                   {% endif %}
               </td>
               <td class='dread findingAttr'>
-                  {% if "descReproducibility" in finding.todoFields %}
+                  {% if "descReproducibility" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.descReproducibility %}
                       <i class="text-muted fa fa-check"></i>
@@ -218,7 +218,7 @@
                   {% endif %}
               </td>
               <td class='dread findingAttr'>
-                  {% if "descExploitability" in finding.todoFields %}
+                  {% if "descExploitability" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.descExploitability %}
                       <i class="text-muted fa fa-check"></i>
@@ -234,7 +234,7 @@
                   {% endif %}
               </td>
               <td class='dread findingAttr'>
-                  {% if "descAffectedUsers" in finding.todoFields %}
+                  {% if "descAffectedUsers" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.descAffectedUsers %}
                       <i class="text-muted fa fa-check"></i>
@@ -250,7 +250,7 @@
                   {% endif %}
               </td>
               <td class='dread findingAttr'>
-                  {% if "descDiscoverability" in finding.todoFields %}
+                  {% if "descDiscoverability" in finding.todoItems %}
                       <i class="text-warning fa fa-exclamation-circle"></i>
                   {% elif finding.descDiscoverability %}
                       <i class="text-muted fa fa-check"></i>

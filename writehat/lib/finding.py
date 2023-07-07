@@ -196,7 +196,7 @@ class BaseDatabaseFinding(WriteHatBaseModel):
 
 
     @property
-    def todoFields(self):
+    def todoItems(self):
         out = []
         for field in self._meta.get_fields():
             try:
@@ -208,7 +208,6 @@ class BaseDatabaseFinding(WriteHatBaseModel):
                         out.append(field.name)
             except AttributeError:
                 continue
-        log.debug(out)
         return out
 
 
