@@ -53,7 +53,7 @@ var default_toolbar_icons = [
       var selections = editor.codemirror.getSelections();
       var highlighted = [];
       for (var i = 0; i < selections.length; i++) {
-        highlighted.push('{todo|}');
+        highlighted.push('{todo|todo comment here}');
       }
       editor.codemirror.replaceSelections(highlighted);
     },
