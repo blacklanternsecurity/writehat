@@ -1,0 +1,12 @@
+{% include 'django/forms/widgets/multiwidget.html' %} <a href="#id_reportDate_day" id="set_today_val">Today</span>
+
+<script type="text/javascript">
+  $().ready(function() {
+    $("#set_today_val").click( function() {
+      const date = new Date();
+      $("#id_reportDate_month").val(date.getMonth() + 1);
+      $("#id_reportDate_day").val(date.getDate());
+      $("#id_reportDate_year").val(date.getFullYear());
+    });
+  });
+</script>
