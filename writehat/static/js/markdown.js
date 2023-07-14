@@ -47,6 +47,19 @@ var default_toolbar_icons = [
     className: 'fa fa-sticky-note',
     title: 'Footnote'
   },
+  {
+    name: 'todo',
+    action: function(editor) {
+      var selections = editor.codemirror.getSelections();
+      var highlighted = [];
+      for (var i = 0; i < selections.length; i++) {
+        highlighted.push('{todo|todo comment here}');
+      }
+      editor.codemirror.replaceSelections(highlighted);
+    },
+    className: 'fa fa-check',
+    title: 'Todo'
+  },
   '|',
   {
     name: 'reference',
