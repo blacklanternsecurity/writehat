@@ -5,12 +5,14 @@ from datetime import datetime
 current_year = datetime.now().year
 years = range(current_year-5, current_year+5)
 
-
 class TitlePageForm(ComponentForm):
+    class CustomDateWidget(forms.SelectDateWidget):
+        template_name = "widgets/custom_date.html"
+
    # ComponentID = forms.UUIDField(label='Report ID')
     company = forms.CharField(label='Company Name', required=False)
     assessmentType = forms.CharField(label='Report Title', required=False)
-    reportDate = forms.DateTimeField(widget=forms.SelectDateWidget(years=years), label='Report Date', required=False)
+    reportDate = forms.DateTimeField(widget=CustomDateWidget(years=years), label='Report Date', required=False)
 
 
 class Component(BaseComponent):
