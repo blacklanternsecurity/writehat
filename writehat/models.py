@@ -273,6 +273,9 @@ class WriteHatBaseModel(models.Model):
         '''
         Validates all fields before saving to database
         '''
+        log.debug(f'{self.className}.save() called')
+        self.clean_fields()
+
         updateTimestamp = kwargs.pop('updateTimestamp', True)
         isComponent = kwargs.pop('isComponent',False)
 
@@ -287,8 +290,6 @@ class WriteHatBaseModel(models.Model):
 
 
         from writehat.lib.revision import Revision
-        log.debug(f'{self.className}.save() called')
-        self.clean_fields()
 
         for f in self._meta.fields:
 
