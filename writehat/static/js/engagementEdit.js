@@ -8,8 +8,29 @@ function updateFindingPrefix() {
   $('.modal').find('input[name="prefix"]').val(prefixes[scoringType]);
 }
 
+function saveState() {
+  console.log("SAVED");
+  var status = {};
+  $(".btn-save-state").each(function() {
+    status[$(this).attr("id")] = $(this).prop("checked");
+  });
+  localStorage.setItem("status", JSON.stringify(status));
+}
 
 $(document).ready(function() {
+
+  if (localStorage.getItem("status")) {
+    var savedStatus = JSON.parse(localStorage.getItem("status"));
+    if (savedStatus) {
+      $(".btn-save-state").each(function() {
+        var id = $(this).attr("id");
+        if (savedStatus.hasOwnProperty(id)) {
+          $(this).prop("checked", savedStatus[id]);
+          $(this).closest("label").toggleClass("active", savedStatus[id]);
+        }
+      });
+    }
+  }
 
   var engagementID = $('#engagement-info').attr('engagement-id');
   var engagementName = $('#engagement-info').attr('engagement-name');
@@ -34,27 +55,17 @@ $(document).ready(function() {
 
   });
 
-  // Table Filtering
-  var status = $('input[name="status"]:checked');
-
   // Custom range filtering function
   $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-    var statusValue = new Array();
-    $.each($("input[name='status']:checked"), function() {
-      statusValue.push($(this).val());
-    });
-
-    var itemActive = data[4]; // use data for the active status column
-
-    if (statusValue.includes(itemActive)) { return true; }
-
-    return false;
+    var itemStatus = data[4];
+    return $(`input[name='status'][value='${itemStatus}']:checked`).length === 1;
   });
-  
+
   var table = $('#reports').DataTable();
   
   // Bind the change event handler
   $('#status-radio').change(function() {
+      saveState();
       table.draw();
   });
   
