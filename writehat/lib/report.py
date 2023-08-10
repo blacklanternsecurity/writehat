@@ -26,19 +26,29 @@ class BaseReport(WriteHatBaseModel):
 
     class Meta:
         abstract = True
+
+    
+    statusChoices = [
+        ("active", "Active"), 
+        ("inactive", "Inactive"), 
+        ("draft", "Draft")
+    ]
     
     # JSON-serialized dictionary of component UUIDs
     _components = models.TextField(blank=True, default=str, validators=[isValidComponentJSON])
     pageTemplateID = models.UUIDField(null=True, blank=True)
+    status = models.TextField(default='active',
+                              choices=statusChoices )
 
     @classmethod
-    def new(cls, name, components=None, engagementParent=None):
+    def new(cls, name, components=None, engagementParent=None, status='active'):
         log.debug(f"{type(cls).__name__}.new()")
 
         log.debug(f"components: {components}")
 
         reportModel = cls(name=name)
         reportModel.engagementParent = engagementParent
+        reportModel.status = status
         #reportModel.save()
 
         if components is not None:
@@ -212,13 +222,17 @@ class BaseReport(WriteHatBaseModel):
         return tmpComponents
 
 
-    def update(self, componentJSON=None, name=None, pageTemplate=None):
+    def update(self, componentJSON=None, name=None, pageTemplate=None, status=None):
         log.debug("Report.update() called")
 
         # handle name
         if name is not None:
             log.debug(f"Setting report.name to {name}")
             self.name = name
+
+        if status is not None:
+            log.debug(f"Setting report.status to {status}")
+            self.status = status
 
         self.pageTemplateID = pageTemplate
 
@@ -712,12 +726,12 @@ class Report(BaseReport):
 
 
 
-    def update(self, componentJSON=None, reportName=None, pageTemplate=None, findings=None):
+    def update(self, componentJSON=None, reportName=None, pageTemplate=None, findings=None, status=None):
         '''
         Do everything that the parent function does, and also update findings
         '''
 
-        super().update(componentJSON, reportName, pageTemplate)
+        super().update(componentJSON, reportName, pageTemplate, status)
         if findings is not None:
             log.debug(f'Updating report findings: {findings}')
             validated_finding_uuids = list(self.validate_finding_uuids(findings))
@@ -824,5 +838,11 @@ class reportForm(forms.Form):
         widget=PageTemplateSelect()
     )
 
+    status = forms.ChoiceField(
+        label='Report Status',
+        widget=forms.Select,
+        choices=BaseReport.statusChoices,
+        initial='active'
+    )
 
 BaseReport.formClass = reportForm

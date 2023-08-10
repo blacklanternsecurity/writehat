@@ -294,18 +294,19 @@ def reportCreate(request, uuid=None, fromTemplate=False):
         reportName = decodedJson['name']
         log.debug(f"reportName: {reportName}")
         reportComponents = decodedJson['reportComponents']
+        status = decodedJson.get('status')
         # Everything is validated, lets instantiate the report
         report = None
         if uuid:
             log.debug(f"saving report (with engagementParent) reportComponents: {reportComponents}")
-            report = Report.new(name=reportName, components=reportComponents,engagementParent=uuid)
+            report = Report.new(name=reportName, components=reportComponents, engagementParent=uuid, status=status)
         #    report.engagementParent = uuid
        #     report.save()
         else:
             if fromTemplate:
-                report = SavedReport.new(name=reportName, components=reportComponents)
+                report = SavedReport.new(name=reportName, components=reportComponents, status=status)
             else:
-                report = Report.new(name=reportName, components=reportComponents)
+                report = Report.new(name=reportName, components=reportComponents, status=status)
 
     except ReportValidationError:
         log.warn("reportCreate() threw ReportValidationError")
@@ -387,6 +388,7 @@ def reportUpdate(request,uuid,fromTemplate=False):
         reportName = reportJSON.get('name', None)
         reportPageTemplate = reportJSON.get('pageTemplateID', None)
         reportFindings = reportJSON.get('reportFindings', None)
+        reportStatus = reportJSON.get('status', None)
 
         if componentJSON is not None:
             log.debug("In reportUpdate()")
@@ -398,12 +400,12 @@ def reportUpdate(request,uuid,fromTemplate=False):
         if fromTemplate:
             log.debug("fromTemplate is true:")
             report = SavedReport.get(id=uuid)
-            report.update(componentJSON, reportName, reportPageTemplate)
+            report.update(componentJSON, reportName, reportPageTemplate, status=reportStatus)
         else:
             log.debug("fromTemplate is false:")
             # Update the report
             report = Report.get(id=uuid)
-            report.update(componentJSON, reportName, reportPageTemplate, reportFindings)
+            report.update(componentJSON, reportName, reportPageTemplate, reportFindings, status=reportStatus)
 
 
     except ReportValidationError as e:
