@@ -202,7 +202,7 @@ class BaseDatabaseFinding(WriteHatBaseModel):
             try:
                 if field.markdown:
                     log.debug(field.name)
-                    data = getattr(self, field.name, "")
+                    data = str(getattr(self, field.name, ""))
                     match = re.search(todo_re, data)
                     if match is not None:
                         out.append(field.name)
