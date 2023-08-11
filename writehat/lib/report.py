@@ -816,7 +816,7 @@ def getSavedReports():
     '''
     log.debug('getSavedReports() called')
     savedReportList = []
-    for report in SavedReport.objects.all():
+    for report in SavedReport.objects.filter(status="active"):
         savedReportList.append({
             'id': str(report.id),
             'name': f'{report.name} ({report.numComponents:,} components)'
