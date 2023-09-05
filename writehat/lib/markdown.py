@@ -100,6 +100,7 @@ markdown_attrs = {
     'th': ['align'],
     'td': ['align', 'finding-severity'],
     'hl': ['purple', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'gray', 'mono'], # custom color highlights
+    'ol': ['start'],
 }
 
 
