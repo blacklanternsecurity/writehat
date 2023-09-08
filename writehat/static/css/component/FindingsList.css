@@ -68,6 +68,7 @@
     padding: 1rem;
     vertical-align: top;
     text-align: right;
+    break-inside: avoid;
 
     font-weight: bold;
 }
@@ -157,4 +158,3 @@
 .finding-content-header .dread-exploitability::after { content: "Exploitability" !important; }
 .finding-content-header .dread-affected-users::after { content: "Affected Users" !important; }
 .finding-content-header .dread-discoverability::after { content: "Discoverability" !important; }
-.finding-content-header.dread-impact::after { content: "Impact" !important; }
