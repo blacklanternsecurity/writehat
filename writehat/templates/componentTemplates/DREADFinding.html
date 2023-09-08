@@ -1,24 +1,30 @@
 {% load custom_tags %}
 <div id="finding-{{ finding.id }}" scoring-type="DREAD" class="finding" finding-severity="{{ finding.severity }}">
-    <div class='finding-header'>
-        <div class='finding-severity background-color-severity'>
-            {{ finding.score }}
-            <br />
-            {{ finding.severity }}
-        </div>
-        <div class='finding-title'>
-            [{{ finding.number }}] {{ finding.name }}
-        </div>
+    <div>
+        {% if first %}
+            {% include 'componentTemplates/Heading.html' with classes="finding-heading" %}
+        {% endif %}
     </div>
-    <div class='finding-content'>
-        <div class='finding-content-header'>
-            Category
+    <div class="finding-table">
+        <div class='finding-header'>
+            <div class='finding-severity background-color-severity'>
+                {{ finding.score }}
+                <br />
+                {{ finding.severity }}
+            </div>
+            <div class='finding-title'>
+                [{{ finding.number }}] {{ finding.name }}
+            </div>
         </div>
-        <div class='finding-content-body' style='font-weight: bold'>
-            {{ finding.categoryFull }}
+        <div class='finding-content'>
+            <div class='finding-content-header'>
+                Category
+            </div>
+            <div class='finding-content-body' style='font-weight: bold'>
+                {{ finding.categoryFull }}
+            </div>
         </div>
-    </div>
-    {% if finding.affectedResources %}
+        {% if finding.affectedResources %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 Affected Resources
@@ -27,20 +33,22 @@
                 {% markdown finding.affectedResources %}
             </div>
         </div>
-    {% endif %}
-    {% if finding.dreadImpact %}
+        {% endif %}
+        {% if finding.dreadImpact %}
         <div class='finding-content'>
-            <div class='finding-content-header dread-impact'></div>
+            <div class='finding-content-header dread-impact'>
+                Impact
+            </div>
             <div class='finding-content-body dread-impact'>
                 <ul>
                     {% for i in finding.impact %}
-                        <li>{{ i }}</li>
+                    <li>{{ i }}</li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
-    {% endif %}
-    {% if finding.description %}
+        {% endif %}
+        {% if finding.description %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 Description
@@ -49,8 +57,8 @@
                 {% markdown finding.description %}
             </div>
         </div>
-    {% endif %}
-    {% if finding.background %}
+        {% endif %}
+        {% if finding.background %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 Background
@@ -59,8 +67,8 @@
                 {% markdown finding.background %}
             </div>
         </div>
-    {% endif %}
-    {% if finding.descDamage %}
+        {% endif %}
+        {% if finding.descDamage %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 <span class="dread-damage"></span>
@@ -71,8 +79,8 @@
                 {% markdown finding.descDamage %}
             </div>
         </div>
-    {% endif %}
-    {% if finding.descReproducibility %}
+        {% endif %}
+        {% if finding.descReproducibility %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 <span class="dread-reproducibility"></span>
@@ -83,8 +91,8 @@
                 {% markdown finding.descReproducibility %}
             </div>
         </div>
-    {% endif %}
-    {% if finding.descExploitability %}
+        {% endif %}
+        {% if finding.descExploitability %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 <span class="dread-exploitability"></span>
@@ -95,8 +103,8 @@
                 {% markdown finding.descExploitability %}
             </div>
         </div>
-    {% endif %}
-    {% if finding.descAffectedUsers %}
+        {% endif %}
+        {% if finding.descAffectedUsers %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 <span class="dread-affected-users"></span>
@@ -107,8 +115,8 @@
                 {% markdown finding.descAffectedUsers %}
             </div>
         </div>
-    {% endif %}
-    {% if finding.descDiscoverability %}
+        {% endif %}
+        {% if finding.descDiscoverability %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 <span class="dread-discoverability"></span>
@@ -119,7 +127,7 @@
                 {% markdown finding.descDiscoverability %}
             </div>
         </div>
-    {% endif %}
+        {% endif %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 Score
@@ -132,7 +140,7 @@
                 D:{{ finding.dread.dict.dreadDiscoverability }}
                 ) / 5 = {{ finding.score }} ({{ finding.severity }}) </div>
         </div>
-    {% if finding.remediation %}
+        {% if finding.remediation %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 Remediation
@@ -141,8 +149,8 @@
                 {% markdown finding.remediation %}
             </div>
         </div>
-    {% endif %}
-    {% if finding.references %}
+        {% endif %}
+        {% if finding.references %}
         <div class='finding-content'>
             <div class='finding-content-header'>
                 References
@@ -151,8 +159,9 @@
                 {% markdown finding.references %}
             </div>
         </div>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
 {% for figure in finding.figures_ending %}
-  {% include 'reportTemplates/figure.html' with figure=figure %}
-{% endfor %}
+    {% include 'reportTemplates/figure.html' with figure=figure %}
+    {% endfor %}
