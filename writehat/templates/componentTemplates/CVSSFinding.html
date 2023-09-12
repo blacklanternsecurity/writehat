@@ -19,21 +19,27 @@
         </div>
         {% if showVector %}
             <div class='finding-content'>
-                <div class='finding-content-header cvss-vector'></div>
+                <div class='finding-content-header cvss-vector'>
+                    CVSS 3.1 Vector
+                </div>
                 <div class='finding-content-body'>
                     {{ finding.cvss.vector }}
                 </div>
             </div>
         {% endif %}
             <div class='finding-content'>
-                <div class='finding-content-header category'></div>
+                <div class='finding-content-header category'>
+                    Category
+                </div>
                 <div class='finding-content-body' style='font-weight: bold'>
                     {{ finding.categoryFull }}
                 </div>
             </div>
         {% if finding.affectedResources %}
             <div class='finding-content'>
-                <div class='finding-content-header affected-resources'></div>
+                <div class='finding-content-header affected-resources'>
+                    Affected Resources
+                </div>
                 <div class='finding-content-body'>
                     {% markdown finding.affectedResources %}
                 </div>
@@ -41,7 +47,9 @@
         {% endif %}
         {% if finding.description %}
             <div class='finding-content'>
-                <div class='finding-content-header description'></div>
+                <div class='finding-content-header description'>
+                    Description
+                </div>
                 <div class='finding-content-body'>
                     {% markdown finding.description %}
                 </div>
@@ -49,7 +57,9 @@
         {% endif %}
         {% if finding.background %}
             <div class='finding-content'>
-                <div class='finding-content-header background'></div>
+                <div class='finding-content-header background'>
+                    Background
+                </div>
                 <div class='finding-content-body'>
                     {% markdown finding.background %}
                 </div>
@@ -57,7 +67,9 @@
         {% endif %}
         {% if finding.toolsUsed %}
             <div class='finding-content'>
-                <div class='finding-content-header cvss-tools-used'></div>
+                <div class='finding-content-header cvss-tools-used'>
+                    Tools Used
+                </div>
                 <div class='finding-content-body'>
                     {% markdown finding.toolsUsed %}
                 </div>
@@ -65,7 +77,9 @@
         {% endif %}
         {% if finding.proofOfConcept %}
             <div class='finding-content'>
-                <div class='finding-content-header cvss-poc'></div>
+                <div class='finding-content-header cvss-poc'>
+                    Proof of Concept
+                </div>
                 <div class='finding-content-body'>
                     {% markdown finding.proofOfConcept %}
                 </div>
@@ -73,7 +87,9 @@
         {% endif %}
         {% if finding.remediation %}
             <div class='finding-content'>
-                <div class='finding-content-header remediation'></div>
+                <div class='finding-content-header remediation'>
+                    Remediation
+                </div>
                 <div class='finding-content-body'>
                     {% markdown finding.remediation %}
                 </div>
@@ -81,7 +97,9 @@
         {% endif %}
         {% if finding.references %}
             <div class='finding-content'>
-                <div class='finding-content-header references'></div>
+                <div class='finding-content-header references'>
+                    References
+                </div>
                 <div class='finding-content-body'>
                     {% markdown finding.references %}
                 </div>
