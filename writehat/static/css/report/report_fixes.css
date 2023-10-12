@@ -1,0 +1,5 @@
+/* used to make an element invisible but still take up space on the page.
+helpful for when extra padding needs to be added after a screwy render */
+.hidden-padding-fix {
+    visibility: hidden;
+}
