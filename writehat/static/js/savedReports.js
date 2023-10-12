@@ -24,8 +24,21 @@ $(document).ready(function() {
 
   // Custom range filtering function
   $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-    var itemStatus = data[4];
-    return $(`input[name='status'][value='${itemStatus}']:checked`).length === 1;
+    if (settings.nTable.id !== "reports") {
+      return true
+    }
+
+    let wrapper = $(settings.nTableWrapper)
+
+    let itemStatus = data[4];
+    let name = data[0].toLowerCase()
+    let query = wrapper.find('[type="search"]').val().toLowerCase()
+
+    selected_status = $(`input[name='status'][value='${itemStatus}']:checked`).length === 1;
+    searched_name = name.indexOf(query) != -1
+
+    return selected_status && searched_name
+
   });
   
   var table = $('#reports').DataTable();
