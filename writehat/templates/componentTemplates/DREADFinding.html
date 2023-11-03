@@ -71,9 +71,7 @@
         {% if finding.descDamage %}
         <div class='finding-content'>
             <div class='finding-content-header'>
-                <span class="dread-damage"></span>
-                <br/>
-                {{ finding.dread.dict.dreadDamage }}:
+                Damage ({{ finding.dread.dict.dreadDamage }})
             </div>
             <div class='finding-content-body'>
                 {% markdown finding.descDamage %}
@@ -83,9 +81,7 @@
         {% if finding.descReproducibility %}
         <div class='finding-content'>
             <div class='finding-content-header'>
-                <span class="dread-reproducibility"></span>
-                <br/>
-                {{ finding.dread.dict.dreadReproducibility }}:
+                Reproducibility ({{ finding.dread.dict.dreadReproducibility }})
             </div>
             <div class='finding-content-body'>
                 {% markdown finding.descReproducibility %}
@@ -95,9 +91,7 @@
         {% if finding.descExploitability %}
         <div class='finding-content'>
             <div class='finding-content-header'>
-                <span class="dread-exploitability"></span>
-                <br/>
-                {{ finding.dread.dict.dreadExploitability }}:
+                Exploitability ({{ finding.dread.dict.dreadExploitability }})
             </div>
             <div class='finding-content-body'>
                 {% markdown finding.descExploitability %}
@@ -107,9 +101,7 @@
         {% if finding.descAffectedUsers %}
         <div class='finding-content'>
             <div class='finding-content-header'>
-                <span class="dread-affected-users"></span>
-                <br/>
-                {{ finding.dread.dict.dreadAffectedUsers }}:
+                Affected Users ({{ finding.dread.dict.dreadAffectedUsers }})
             </div>
             <div class='finding-content-body'>
                 {% markdown finding.descAffectedUsers %}
@@ -119,9 +111,7 @@
         {% if finding.descDiscoverability %}
         <div class='finding-content'>
             <div class='finding-content-header'>
-                <span class="dread-discoverability"></span>
-                <br/>
-                {{ finding.dread.dict.dreadDiscoverability }}:
+                Discoverability ({{ finding.dread.dict.dreadDiscoverability }})
             </div>
             <div class='finding-content-body'>
                 {% markdown finding.descDiscoverability %}
