@@ -150,6 +150,39 @@ div.finding-content > div.impact ul li {
   margin: 4px;
 }
 
+div.finding-content > div.affected-resources ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+div.finding-content > div.affected-resources ul li {
+  padding: 4px;
+  border: 1px solid #ddd;
+  background-color: rgba(240, 240, 240, 0.2);
+  border-radius: 5px;
+  margin: 4px;
+  font-family: monospace;
+  font-weight: 550;
+}
+
+/* The following section removes code highlighting for cases where a finding's
+ * affected resources are wrapped in backticks. This is to avoid
+ * double-formatting list items entered into the markdown editor as such:
+ *  * `127.0.0.1`
+ *
+ */
+div.finding-content > div.affected-resources ul li > code {
+    font-weight: inherit;
+    background-color: inherit;
+    padding: 0;
+    margin: 0;
+    display: inline;
+}
+
 div.finding div.finding-content > div.category::before           { content: "Category" !important; }
 div.finding div.finding-content > div.affected-resources::before { content: "Affected Resources" !important; }
 div.finding div.finding-content > div.description::before        { content: "Description" !important; }

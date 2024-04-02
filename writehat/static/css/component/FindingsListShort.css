@@ -81,5 +81,20 @@ div.finding-short div.finding-content ul li {
   background-color: rgba(240, 240, 240, 0.2);
   border-radius: 5px;
   margin: 4px;
-  min-width: 8rem;
+  font-family: monospace;
+  font-weight: 550;
+}
+
+/* The following section removes code highlighting for cases where a finding's
+ * affected resources are wrapped in backticks. This is to avoid
+ * double-formatting list items entered into the markdown editor as such:
+ *  * `127.0.0.1`
+ *
+ */
+div.finding-short div.finding-content ul li > code {
+    font-weight: inherit;
+    background-color: inherit;
+    padding: 0;
+    margin: 0;
+    display: inline;
 }
