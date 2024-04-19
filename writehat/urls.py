@@ -36,6 +36,10 @@ urlpatterns = [
 
     #url(rf'^images/test/{uuid}$', views.imageTest),
 
+    # Statistics URLs
+    path('statistics', views.statistics, name='statistics'),
+    path('get_statistics', views.getStatistics, name='get_statistics'),
+
 
     # findings urls
     path('findings', views.findingsList),
