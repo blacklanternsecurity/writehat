@@ -1,0 +1,89 @@
+div.finding-group-name {
+    padding: .5em;
+    margin: .5em;
+    font-weight: bold;
+    font-size: 1.1em;
+    width: 100%;
+    text-align: center;
+  }
+  
+  p.findings-status-summary-entry {
+      padding: .5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      margin: 0 10rem 2px calc(2rem + 4px);
+      position: relative;
+      background-color: #BEDDBA;
+  }
+  
+  p.findings-status-summary-entry::before {
+      content: '';
+      padding: 1rem;
+      position: absolute;
+      background-color: #7BB274;
+      display: inline-block;
+      left: calc(-2rem - 2px);
+      bottom: 0;
+      top: 0;
+  }
+
+  p.findings-status-summary-entry::after {
+    content: attr(finding-status);
+    padding: .5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    position: absolute;
+    background-color: #BEDDBA;
+    display: inline-block;
+    left: calc(36.8rem + 2px);
+    bottom: 0;
+    top: 0;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 8rem;
+    text-align: center;
+}
+  
+  p.findings-status-summary-entry a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 16px;
+  }
+
+  p.findings-status-summary-title-entry {
+    color: black;
+    padding: .5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin: 0 10rem 2px calc(2rem + 4px);
+    position: relative;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+  p.findings-status-summary-title-entry::after {
+    content: 'Status';
+    padding: .5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    position: absolute;
+    background-color: #ffffff;
+    display: inline-block;
+    left: calc(36.8rem + 2px);
+    bottom: 0;
+    top: 0;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 8rem;
+    text-align: center;
+}
+

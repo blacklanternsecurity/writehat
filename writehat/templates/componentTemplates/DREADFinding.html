@@ -10,6 +10,13 @@
             [{{ finding.number }}] {{ finding.name }}
         </div>
     </div>
+    {% if showStatus %}
+    <div class='finding-content'>
+        <div class='status' style='font-weight: bold'>
+            {{ finding.status }}
+        </div>
+    </div>
+    {% endif %}
     <div class='finding-content'>
         <div class='category' style='font-weight: bold'>
             {{ finding.categoryFull }}
@@ -91,6 +98,13 @@
             D:{{ finding.dread.dict.dreadDiscoverability }}
             ) / 5 = {{ finding.score }} ({{ finding.severity }}) </div>
     </div>
+    {% if finding.retest %}
+    <div class='finding-content'>
+        <div class='retest'>
+            {% markdown finding.retest %}
+        </div>
+    </div>
+    {% endif %}
     {% if finding.remediation %}
         <div class='finding-content'>
             <div class='remediation'>

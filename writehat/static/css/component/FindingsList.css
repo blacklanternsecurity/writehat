@@ -150,10 +150,12 @@ div.finding-content > div.impact ul li {
   margin: 4px;
 }
 
+div.finding div.finding-content > div.status::before             { content: "Status" !important; }
 div.finding div.finding-content > div.category::before           { content: "Category" !important; }
 div.finding div.finding-content > div.affected-resources::before { content: "Affected Resources" !important; }
 div.finding div.finding-content > div.description::before        { content: "Description" !important; }
 div.finding div.finding-content > div.background::before         { content: "Background" !important; }
+div.finding div.finding-content > div.retest::before             { content: "Retest" !important; }
 div.finding div.finding-content > div.remediation::before        { content: "Remediation" !important; }
 div.finding div.finding-content > div.references::before         { content: "References" !important; }
 

@@ -5,9 +5,16 @@
             {{ finding.severity }}
         </div>
         <div class='finding-title'>
-            [{{ finding.number }}] {{ finding.name }}
+            {% if showFindingNumbers %}[{{ finding.number }}] {% endif %}{{ finding.name }}
         </div>
     </div>
+    {% if showStatus %}
+    <div class='finding-content'>
+        <div class='status' style='font-weight: bold'>
+            {{ finding.status }}
+        </div>
+    </div>
+    {% endif %}
     <div class='finding-content'>
         <div class='category' style='font-weight: bold'>
             {{ finding.categoryFull }}
@@ -33,6 +40,13 @@
                 {% markdown finding.background %}
             </div>
         </div>
+    {% endif %}
+    {% if finding.retest %}
+    <div class='finding-content'>
+        <div class='retest'>
+            {% markdown finding.retest %}
+        </div>
+    </div>
     {% endif %}
     {% if finding.references %}
         <div class='finding-content'>
