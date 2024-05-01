@@ -147,6 +147,10 @@ $(document).ready(function() {
     reportUpdateAndRefresh()
   })
 
+  $('#reportRevisions').click(function() {
+    var url = '/engagements/report/' + reportID + '/revisions';
+    window.location.href = url
+  })
 
   $('#reportGenerate').click(function() {
     var url = '/engagements/report/' + reportID + '/generate';

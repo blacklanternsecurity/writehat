@@ -2,14 +2,8 @@
 <link rel='stylesheet' href='/static/css/report/print.css' />
 <link rel='stylesheet' href='/static/css/component/TableOfContents.css' />
 <link rel='stylesheet' href='/static/css/report/interface.css' />
+<link rel='stylesheet' href='/static/css/report/report_fixes.css' />
 
-<style type="text/css">
-/* Must be in HTML doc or paged.js will override it */
-.pagedjs_pages>.pagedjs_page>.pagedjs_sheet>.pagedjs_pagebox>.pagedjs_area>div .finding-content[data-split-from] div {
-    padding-top: 1rem!important;
-}
-
-</style>
 <script type="text/javascript">
     window.PagedConfig = {
         auto: false
@@ -18,30 +12,11 @@
 
 <script src="/static/js/thirdparty/paged.js"></script>
 <script src="/static/js/thirdparty/jquery-3.5.1.min.js"></script>
+<script src="/static/js/thirdparty/highlight.min.js"></script>
 <script type="text/javascript" src="/static/js/paged-overrides.js"></script>
 
 <style>
   .pagedjs_page {
     background-image: url('/images/{{ report.pageTemplate.backgroundImageID }}') !important;
-  }
-
-  .pagedjs_pages {
-      position: relative;
-  }
-
-  .pagedjs_pages:after {
-      content: "Loading...";
-      position: absolute;
-      margin: 3rem;
-      top: 0;
-      left: 0;
-  }
-
-  .pagedjs_pages.no_message:after {
-      content: "";
-  }
-
-  .pagedjs_pages.finished_loading:after {
-      content: "Finished loading";
   }
 </style>

@@ -1,5 +1,15 @@
+.tot-item, .tot-pagenumber, .tot-dots, .tot-dots::before, .tot-pagenumber::after {
+  page-break-inside: avoid;
+  page-break-before: avoid;
+  page-break-after: avoid;
+}
+
 .tot-item {
   padding-right: 1ch;
+}
+
+.tot-list li {
+  list-style-type: none;
 }
 
 .tot-list a {

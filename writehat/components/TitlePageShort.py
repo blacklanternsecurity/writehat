@@ -7,6 +7,8 @@ years = range(current_year-5, current_year+5)
 
 
 class Component(TitlePageComponent):
+    class CustomDateWidget(forms.SelectDateWidget):
+        template_name = "widgets/custom_date.html"
 
     default_name = 'Title Page (Abridged)'
     htmlTemplate = 'componentTemplates/TitlePageShort.html'

@@ -230,22 +230,30 @@ class JSONModel(attr_dict):
     def updateRevision(self):
         from writehat.lib.revision import Revision
         from django_currentuser.middleware import get_current_authenticated_user
-        needsUpdate = False
-        try:
-            # check to see if previous revisions exist
-            mostRecent = Revision.getMostRecent(parentId=self.id,isComponent=True,fieldName="text")
 
-            # determine if this save is different than the last revision
-            if mostRecent.fieldText != self['text']:
+        revisable_fields = {}
+        for key, val in self.validFields.items():
+            is_markdown = getattr(val, "markdown", False)
+            if is_markdown:
+                revisable_fields[key] = self[key]
+
+        for field, new_value in revisable_fields.items():
+            needsUpdate = False
+            try:
+                # check to see if previous revisions exist
+                mostRecent = Revision.getMostRecent(parentId=self.id,isComponent=True,fieldName=field)
+
+                # determine if this save is different than the last revision
+                if mostRecent.fieldText != self[field]:
+                    needsUpdate = True
+            except Revision.DoesNotExist:
                 needsUpdate = True
-        except Revision.DoesNotExist:
-            needsUpdate = True
-  
-        # create a new revision
-        if needsUpdate == True:
-            log.debug(f'component has changed on record with componentID: {self.id}, generating new Revision')
-            r = Revision.new(owner=get_current_authenticated_user(),componentID=self.id, isComponent=True,fieldName="text", fieldText=self['text'])
-            r.save()
+    
+            # create a new revision
+            if needsUpdate:
+                log.debug(f'component has changed on record with componentID: {self.id}, generating new Revision')
+                r = Revision.new(owner=get_current_authenticated_user(),componentID=self.id, isComponent=True,fieldName=field, fieldText=new_value)
+                r.save()
 
 
 
@@ -257,9 +265,7 @@ class JSONModel(attr_dict):
         result = self._mongo_op(self.collection.update, {'_id': self.id}, self, upsert=True)
         log.debug(f'result: {result}')
 
-
-        if self['type'] == "MarkdownComponent":
-            self.updateRevision()
+        self.updateRevision()
 
 
 

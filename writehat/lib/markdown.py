@@ -4,6 +4,9 @@ import bleach
 import logging
 import importlib
 import markdown as md
+from writehat.lib.cvss import *
+from writehat.lib.dread import *
+from markdown.extensions.codehilite import CodeHiliteExtension
 from django.template.loader import render_to_string
 
 
@@ -66,6 +69,14 @@ reference_templates = {
         ),
         'allowed_fields': ('size'),
     },
+    'todo': {
+        'constructor': None,
+        'template': 'reportTemplates/blank.html',
+        'regex': re.compile(
+            r'{\s{0,2}[Tt][Oo][Dd][Oo](?P<todo_note>\|[^}]+)?\s{0,2}}'
+        ),
+        'allowed_fields': ('todo_note'),
+    },
 }
 
 # Tags allowed for rendering markdown
@@ -89,6 +100,7 @@ markdown_attrs = {
     'th': ['align'],
     'td': ['align', 'finding-severity'],
     'hl': ['purple', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'gray', 'mono'], # custom color highlights
+    'ol': ['start'],
 }
 
 
@@ -180,9 +192,7 @@ def list_figures(markdown_text):
                 'caption': caption
             }
 
-
-
-user_template_regex = re.compile(r'{ {0,2}(?P<keyword>[a-zA-Z\.]{3,30}) {0,2}}')
+user_template_regex = re.compile(r'{ {0,2}(?P<keyword>[a-zA-Z0-9\.]{3,60}) {0,2}}')
 def user_template_replace(markdown_text, context):
     '''
     Finds and replaces predefined keywords in markdown data
@@ -233,20 +243,138 @@ def user_template_replace(markdown_text, context):
     if report:
         user_context['report'] = report.name
 
+    # https://github.com/blacklanternsecurity/writehat/issues/67
+    # total per severity plus the ability to scope this to finding group
+    # or finding type
+
+    # variables for user_context dict
+
+    f,c,d,p,fg = "findings", "cvss", "dread", "proactive", "group"
+    
+    cvss = {
+            "informational":0,
+            "low": 0,
+            "medium":0,
+            "high":0,
+            "critical":0,
+            "total":0
+            }
+
+    dread = {
+            "informational":0,
+            "low": 0,
+            "medium":0,
+            "high":0,
+            "critical":0,
+            "total":0
+            }
+
+    proactive = 0
+ 
+    findingGroups = []
+    engagement = context.get('engagement', '')
+    if engagement:
+        findingGroups = engagement.fgroups
+
+    fg_id = 1
+    for fgroup in findingGroups:
+        total, informational, low, medium, high, critical = 0,0,0,0,0,0
+        for finding in report.findings:
+            if finding.findingGroup == fgroup.id:
+                if finding.scoringType == "CVSS":
+                    cvss['total']+=1
+                    total+=1
+                    res = CVSS(finding.vector)
+                    if res.severity == "Informational":
+                        cvss['informational']+=1
+                        informational+=1
+                    elif res.severity == "Low":
+                        cvss['low']+=1
+                        low+=1
+                    elif res.severity == "Medium":
+                        cvss['medium']+=1
+                        medium+=1
+                    elif res.severity == "High":
+                        cvss['high']+=1
+                        high+=1
+                    else:
+                        cvss['critical']+=1
+                        critical+=1
+                elif finding.scoringType == "DREAD":
+                    dread['total']+=1
+                    total+=1
+                    res = DREAD(finding.vector)
+                    if res.severity == "Informational":
+                        dread['informational']+=1
+                        informational+=1
+                    elif res.severity == "Low":
+                        dread['low']+=1
+                        low+=1
+                    elif res.severity == "Medium":
+                        dread['medium']+=1
+                        medium+=1
+                    elif res.severity == "High":
+                        dread['high']+=1
+                        high+=1
+                    else:
+                        dread['critical']+=1
+                        critical+=1
+                else:
+                    total+=1
+                    proactive+=1
+
+        # total per category
+        user_context[f'{f}{fg}{fg_id}totalcount'] = total
+        user_context[f'{f}{fg}{fg_id}informationalcount'] = informational
+        user_context[f'{f}{fg}{fg_id}lowcount'] = low
+        user_context[f'{f}{fg}{fg_id}mediumcount'] = medium
+        user_context[f'{f}{fg}{fg_id}highcount'] = high
+        user_context[f'{f}{fg}{fg_id}criticalcount'] = critical
+        fg_id+=1
+
+    # total per severity 
+    user_context[f'{f}informationalcount'] = cvss['informational'] + dread['informational']
+    user_context[f'{f}lowcount'] = cvss['low'] + dread['low']
+    user_context[f'{f}mediumcount'] = cvss['medium'] + dread['medium']
+    user_context[f'{f}highcount'] = cvss['high'] + dread['high']
+    user_context[f'{f}criticalcount'] = cvss['critical'] + dread['critical']
+    user_context[f'{f}totalcount'] = (user_context[f'{f}informationalcount'] + 
+                                         user_context[f'{f}lowcount'] + 
+                                         user_context[f'{f}mediumcount'] + 
+                                         user_context[f'{f}highcount'] + 
+                                         user_context[f'{f}criticalcount'])
+
+    # cvss
+    user_context[f'{f}{c}totalcount'] = cvss['total']
+    user_context[f'{f}{c}informationalcount'] = cvss['informational']
+    user_context[f'{f}{c}lowcount'] = cvss['low']
+    user_context[f'{f}{c}mediumcount'] = cvss['medium']
+    user_context[f'{f}{c}highcount'] = cvss['high']
+    user_context[f'{f}{c}criticalcount'] = cvss['critical']
+
+    # dread
+    user_context[f'{f}{d}totalcount'] = dread['total']
+    user_context[f'{f}{d}informationalcount'] = dread['informational']
+    user_context[f'{f}{d}lowcount'] = dread['low']
+    user_context[f'{f}{d}mediumcount'] = dread['medium']
+    user_context[f'{f}{d}highcount'] = dread['high']
+    user_context[f'{f}{d}criticalcount'] = dread['critical']
+
+    # proactive 
+    user_context[f'{f}{p}totalcount'] = proactive
+
     new_markdown_text = str(markdown_text)
+    
     for match in user_template_regex.finditer(markdown_text):
         keyword = dict(match.groupdict()).get('keyword', '').lower().replace('.', '')
         value = user_context.get(keyword, '')
         if keyword:
-            if not value:
+            if value == '':
                 value = ''
             match_text = markdown_text[match.span()[0]:match.span()[-1]]
-            new_markdown_text = new_markdown_text.replace(match_text, value)
+            new_markdown_text = new_markdown_text.replace(match_text, str(value))
 
     return new_markdown_text
-
-
-
 
 def render_markdown(markdown_text, context=None):
 
@@ -299,7 +427,9 @@ def render_markdown(markdown_text, context=None):
     # replace user-defined variables
     markdown_text = user_template_replace(markdown_text, context)
 
-    rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists', 'codehilite'])
+    codehilite_ext = CodeHiliteExtension(use_pygments=False)
+
+    rendered = md.markdown(markdown_text, extensions=['extra', 'nl2br', 'sane_lists', codehilite_ext])
     cleaned = bleach.clean(rendered, tags=markdown_tags, attributes=markdown_attrs)
 
     for render_placeholder, rendered_obj in temp_placeholders:

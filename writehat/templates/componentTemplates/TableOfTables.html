@@ -4,18 +4,18 @@
   <div id="table-of-tables">
     <ul class="tot-list">
       {% for component in tot_components %}
-        <a href='#caption_{{ component.id }}'>
-          <li class="tot-entry">
+        <li>
+          <a href='#caption_{{ component.id }}' class="tot-entry">
             <span class="tot-item">
-                <span class="tot-header">
-                    Table <span class="tot-counter" target-component='#caption_{{ component.id }}'></span>. 
-                </span>
-                {{ component.caption }}
+              <span class="tot-header">
+                Table <span class="tot-counter" target-component='#caption_{{ component.id }}'></span>. 
+              </span>
+              {{ component.caption }}
             </span>
             <span class="tot-dots"></span>
             <span class="toc-pagenumber" target-component='#caption_{{ component.id }}'></span>
-          </li>
-        </a>
+          </a>
+        </li>
       {% endfor %}
     </ul>
   </div>
