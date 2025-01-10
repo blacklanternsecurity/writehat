@@ -4,6 +4,7 @@ import json
 import base64
 import logging
 import uuid as uuidlib
+import calendar
 
 # django
 from django.conf import settings
@@ -44,6 +45,7 @@ from writehat.lib.pageTemplate import *
 from writehat.lib.findingCategory import *
 from writehat.lib.engagementFinding import *
 from writehat.lib.excel import generateExcel
+from writehat.lib.statistic import *
 
 
 # Selenium
@@ -73,6 +75,46 @@ def index(request):
 
     return HttpResponseRedirect('/engagements')
 
+@require_http_methods(['GET'])
+@csrf_exempt
+def statistics(request):
+    return render(request,"pages/statistics.html", {})
+
+# stats dashboard
+@require_http_methods(['GET'])
+@csrf_exempt
+def getStatistics(request):
+    try:
+        startDate = datetime.strptime(request.GET.get("startDate"), '%d-%m-%Y')
+        endDate = datetime.strptime(request.GET.get("endDate"), '%d-%m-%Y')
+    except ValueError:
+        log.error("invalid or null timestamp provided, defaulting to current months statistics")
+        today = datetime.now()
+        startDate = datetime.strptime(f'1-{today.month}-{today.year}', '%d-%m-%Y')
+        endDate = datetime.strptime(f'{calendar.monthrange(today.year, today.month)[1]}-{today.month}-{today.year}', '%d-%m-%Y')
+
+    severity_labels, cvss_severity_data, dread_severity_data, proactive_severity_data = severity_statistics(startDate, endDate)
+    category_labels, category_data = category_statistics(startDate, endDate)
+    customer_labels, customer_data = customer_statistics(startDate, endDate)
+    engagement_data = engagement_statistics(startDate, endDate)
+    engagement_name_data = engagement_name_statistics(startDate, endDate)
+    
+    return JsonResponse(data={
+        'cvss_severity_labels': severity_labels,
+        'cvss_severity_data': cvss_severity_data,
+        'dread_severity_labels': severity_labels,
+        'dread_severity_data': dread_severity_data,
+        'proactive_severity_labels': severity_labels,
+        'proactive_severity_data': proactive_severity_data,
+        'category_labels': category_labels,
+        'category_data': category_data,
+        'customer_labels': customer_labels,
+        'customer_data':customer_data,
+        'engagement_labels':'Engagements',
+        'engagement_data':engagement_data,
+        'engagement_name_label':'Engagement Names',
+        'engagement_name_data':engagement_name_data,
+    })
 
 # Validation - returns allowed characters
 @require_http_methods(['GET'])
