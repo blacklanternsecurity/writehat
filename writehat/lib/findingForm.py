@@ -29,11 +29,30 @@ class FindingForm(forms.Form):
         max_length=30000,
         required=False)
 
+    retest = forms.CharField(
+        label='Retest',
+        widget=forms.Textarea(),
+        max_length=30000,
+        required=False)
+
     categoryID = forms.UUIDField(
         label='Category',
         widget=CategoryBootstrapSelectEngagements(
             attrs={'required': 'true'}
         ),
+        required=True)
+
+    #vulnerability status
+    statusChoices = (
+    ("Open", "Open"),
+    ("Partially Fixed", "Partially Fixed"),
+    ("Risk Accepted", "Risk Accepted"),
+    ("Fixed", "Fixed"),
+    ("Not Fixed", "Not Fixed"),
+    ("Closed", "Closed")
+    )
+    status = forms.ChoiceField(choices=statusChoices,
+        label='Status',
         required=True)
 
     @property
@@ -420,7 +439,7 @@ class EngagementFindingForm(forms.Form):
 class CVSSEngagementFindingForm(EngagementFindingForm,CVSSForm):
 
     findingGroup = forms.UUIDField(label='Finding Group',required=True)
-    field_order = ['name','findingGroup','categoryID','description','affectedResources','background','proofOfConcept','toolsUsed','remediation','references','cvssAV','cvssAC','cvssPR','cvssUI','cvssS','cvssC','cvssI','cvssA','cvssE','cvssRL','cvssRC','cvssCR','cvssIR','cvssAR','cvssMAV','cvssMAC','cvssMPR','cvssMUI','cvssMS','cvssMC','cvssMI','cvssMA',]
+    field_order = ['name','status','findingGroup','categoryID','description','affectedResources','background','proofOfConcept','retest','toolsUsed','remediation','references','cvssAV','cvssAC','cvssPR','cvssUI','cvssS','cvssC','cvssI','cvssA','cvssE','cvssRL','cvssRC','cvssCR','cvssIR','cvssAR','cvssMAV','cvssMAC','cvssMPR','cvssMUI','cvssMS','cvssMC','cvssMI','cvssMA',]
 
 
 class DREADEngagementFindingForm(EngagementFindingForm,DREADForm):
@@ -452,12 +471,14 @@ class DREADEngagementFindingForm(EngagementFindingForm,DREADForm):
 
     field_order = [
         'name',
+        'status',
         'findingGroup',
         'categoryID',
         'description',
         'affectedResources',
         'dreadImpact',
         'background',
+        'retest',
         'remediation',
         'references',
         'dreadDamage',
@@ -476,7 +497,7 @@ class DREADEngagementFindingForm(EngagementFindingForm,DREADForm):
 class ProactiveEngagementFindingForm(EngagementFindingForm,ProactiveForm):
 
     findingGroup = forms.UUIDField(label='Finding Group',required=True)
-    field_order = ['name','findingGroup','categoryID','description','affectedResources','background','references']
+    field_order = ['name','status','findingGroup','categoryID','description','affectedResources','background','retest','references']
 
 
 class CVSSDatabaseFindingForm(CVSSForm):

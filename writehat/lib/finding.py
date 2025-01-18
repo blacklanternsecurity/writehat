@@ -27,6 +27,17 @@ class BaseDatabaseFinding(WriteHatBaseModel):
     background = MarkdownField(max_length=30000, null=True, blank=True)
     remediation = MarkdownField(max_length=30000, null=True, blank=True)
     references = MarkdownField(max_length=30000, null=True, blank=True)
+    retest = MarkdownField(max_length=30000, null=True, blank=True)
+    # status choices
+    status_choices = (
+    ("Open", "Open"),
+    ("Partially Fixed", "Partially Fixed"),
+    ("Risk Accepted", "Risk Accepted"),
+    ("Fixed", "Fixed"),
+    ("Not Fixed", "Not Fixed"),
+    ("Closed", "Closed"),
+)
+    status = models.CharField(max_length=30, choices=status_choices, default="Open")
 
     # Overridden by child class
     scoringType = models.CharField(default='None', max_length=50)

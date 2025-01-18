@@ -5,6 +5,16 @@
             {% include 'componentTemplates/Heading.html' with classes="finding-heading" %}
         {% endif %}
     </div>
+    {% if showStatus %}
+    <div class='finding-content'>
+        <div class='status' style='font-weight: bold'>
+            {{ finding.status }}
+        </div>
+    </div>
+    {% endif %}
+    <div class='finding-content'>
+        <div class='category' style='font-weight: bold'>
+            {{ finding.categoryFull }}
     <div class="finding-table">
         <div class='finding-header'>
             <div class='finding-severity background-color-severity'>
@@ -117,6 +127,24 @@
                 {% markdown finding.descDiscoverability %}
             </div>
         </div>
+    {% endif %}
+    <div class='finding-content'>
+        <div class='dread-category bold' category='Score'>(
+            D:{{ finding.dread.dict.dreadDamage }} + 
+            R:{{ finding.dread.dict.dreadReproducibility }} + 
+            E:{{ finding.dread.dict.dreadExploitability }} + 
+            A:{{ finding.dread.dict.dreadAffectedUsers }} + 
+            D:{{ finding.dread.dict.dreadDiscoverability }}
+            ) / 5 = {{ finding.score }} ({{ finding.severity }}) </div>
+    </div>
+    {% if finding.retest %}
+    <div class='finding-content'>
+        <div class='retest'>
+            {% markdown finding.retest %}
+        </div>
+    </div>
+    {% endif %}
+    {% if finding.remediation %}
         {% endif %}
         <div class='finding-content'>
             <div class='finding-content-header'>

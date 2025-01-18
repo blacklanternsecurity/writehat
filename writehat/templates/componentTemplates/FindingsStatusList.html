@@ -1,0 +1,24 @@
+<section class="l{{ level }} component {% if pageBreakBefore %} page-break{% endif %}">
+    {% include 'componentTemplates/Heading.html' with name=name %}
+
+      {% for fgroup in report.ordered_fgroups %}
+    
+        <!-- Only include the title if there are findings -->
+        {% if fgroup.findings %}
+        <div class='finding-group-name'>
+          {{ fgroup.name }}
+        </div>
+        <p class="findings-status-summary-title-entry" finding-status-title="Status">
+          Finding
+        </p>
+        {% for finding in fgroup %}
+          {% if not report.finding_uuids or finding.id in report.finding_uuids %}
+            <p class="findings-status-summary-entry" finding-status="{{ finding.status }}">
+              <a href="#finding-{{ finding.id }}">[{{ finding.number }}] {{ finding.name }}</a>
+            </p>
+          {% endif %}
+        {% endfor %}
+
+        {% endif %}
+      {% endfor %}
+    </section>

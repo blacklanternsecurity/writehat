@@ -1,4 +1,23 @@
 {% load custom_tags %}
+<div id="finding-{{ finding.id }}" scoring-type="PROACTIVE" class="finding container" finding-severity="{{ finding.severity }}">
+    <div class='finding-header'>
+        <div class='finding-severity background-color-severity'>
+            {{ finding.severity }}
+        </div>
+        <div class='finding-title'>
+            {% if showFindingNumbers %}[{{ finding.number }}] {% endif %}{{ finding.name }}
+        </div>
+    </div>
+    {% if showStatus %}
+    <div class='finding-content'>
+        <div class='status' style='font-weight: bold'>
+            {{ finding.status }}
+        </div>
+    </div>
+    {% endif %}
+    <div class='finding-content'>
+        <div class='category' style='font-weight: bold'>
+            {{ finding.categoryFull }}
 <div id="finding-{{ finding.id }}" scoring-type="PROACTIVE" class="finding" finding-severity="{{ finding.severity }}">
     <div>
         {% if first %}
@@ -43,6 +62,15 @@
                 {% markdown finding.background %}
             </div>
         </div>
+    {% endif %}
+    {% if finding.retest %}
+    <div class='finding-content'>
+        <div class='retest'>
+            {% markdown finding.retest %}
+        </div>
+    </div>
+    {% endif %}
+    {% if finding.references %}
         {% endif %}
         {% if finding.references %}
         <div class='finding-content'>

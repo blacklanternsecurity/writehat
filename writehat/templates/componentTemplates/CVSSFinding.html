@@ -13,6 +13,24 @@
                 <br />
                 {{ finding.severity }}
             </div>
+        </div>
+    {% endif %}
+    {% if showStatus %}
+    <div class='finding-content'>
+        <div class='status' style='font-weight: bold'>
+            {{ finding.status }}
+        </div>
+    </div>
+    {% endif %}
+    <div class='finding-content'>
+        <div class='category' style='font-weight: bold'>
+            {{ finding.categoryFull }}
+        </div>
+    </div>
+    {% if finding.affectedResources %}
+        <div class='finding-content'>
+            <div class='affected-resources'>
+                {% markdown finding.affectedResources %}
             <div class='finding-title'>
                 {% if showFindingNumbers %}[{{ finding.number }}] {% endif %}{{ finding.name }}
             </div>
@@ -54,6 +72,19 @@
                     {% markdown finding.description %}
                 </div>
             </div>
+        </div>
+    {% endif %}
+    {% if finding.retest %}
+        <div class='finding-content'>
+            <div class='retest'>
+                {% markdown finding.retest %}
+            </div>
+        </div>
+    {% endif %}
+    {% if finding.remediation %}
+        <div class='finding-content'>
+            <div class='remediation'>
+                {% markdown finding.remediation %}
         {% endif %}
         {% if finding.background %}
             <div class='finding-content'>
