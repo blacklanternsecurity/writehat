@@ -24,6 +24,8 @@ LOGOUT_URL = '/'
 LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/'
 
+# maximum time in seconds for how long the selenium driver should wait for a pdf file to render
+SELENIUM_TIMEOUT = writehat_config['writehat']['selenium_timeout']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -71,7 +73,7 @@ LDAP_AUTH_SYNC_USER_RELATIONS = "django_python3_ldap.utils.sync_user_relations"
 # Path to a callable that takes a dict of {ldap_field_name: value},
 # returning a list of [ldap_search_filter]. The search filters will then be AND'd
 # together when creating the final search filter.
-LDAP_AUTH_FORMAT_SEARCH_FILTERS = "django_python3_ldap.utils.format_search_filters"
+LDAP_AUTH_FORMAT_SEARCH_FILTERS = "writehat.lib.auth.custom_format_search_filters"
 
 # Path to a callable that takes a dict of {model_field_name: value}, and returns
 # a string of the username to bind to the LDAP server.
@@ -110,7 +112,6 @@ MIDDLEWARE = [
     'writehat.lib.LoginRequiredMiddleware.LoginRequiredMiddleware',
     'django_currentuser.middleware.ThreadLocalUserMiddleware'
 ]
-
 
 ROOT_URLCONF = 'writehat.urls'
 

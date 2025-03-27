@@ -1,0 +1,5 @@
+mongo/
+mysql/
+venv/
+**/__pycache__/**
+migrations

@@ -1,0 +1,10 @@
+{% load custom_tags %}
+{% include 'snippets/smallButton.html' with class='tooltipTodo text-warning' id='tooltipTodo-'|addstr:component_id type='exclamation-circle '%}
+<div id="tooltipTodoTitle-{{ component_id }}" style="display:none">TODO: {{ component_name }}</div>
+<div id="tooltipTodoText-{{ component_id }}" style="display:none">
+    <ul>
+      {% for item in todo_items %}
+          <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+</div>

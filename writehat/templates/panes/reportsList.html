@@ -4,26 +4,30 @@
       <h5>Report Templates</h5>
     </div>
     <div class='ml-auto'>
+      {% include 'snippets/statusButtonGroup.html' %}
       {% include 'snippets/textButton.html' with href='/templates/new' name='New Report Template' type='plus' class='btn-primary' %}
     </div>
   </div>
-  <table class="container-fluid writehat-table table-light table-striped table-hover overflow-auto paginate writehat-reports">
+  <table class="container-fluid writehat-table table-light table-striped table-hover overflow-auto paginate writehat-reports" id="reports">
     <thead>
+      <th></th>
       <tr>
         <th><strong>Name</strong></th>
         <th><strong>Components</strong></th>
         <th><strong>Created</strong></th>
         <th><strong>Modified</strong></th>
-        <th></th>
+        <th><strong>Status</strong></th>
+        <th>
       </tr>
     </thead>
     <tbody class="text-nowrap">
       {% for report in reports|dictsortreversed:"modifiedDate" %}
-        <tr report-id="{{ report.id }}" report-name="{{ report.name }}">
+        <tr class="report-row" report-id="{{ report.id }}" report-name="{{ report.name }}">
           <td class="pl-2 reportEdit" style="cursor:pointer">{{ report.name }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.numComponents }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.createdDate }}</td>
           <td class="reportEdit" style="cursor:pointer">{{ report.modifiedDate }}</td>
+          <td class="reportEdit" style="cursor:pointer">{{ report.status|title }}</td>
           <td>
             <div class="floating float-right mt-1">
               {% include 'snippets/smallButton.html' with title='Clone Report' type='copy' class='reportClone text-white' %}

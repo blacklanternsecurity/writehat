@@ -47,6 +47,19 @@ var default_toolbar_icons = [
     className: 'fa fa-sticky-note',
     title: 'Footnote'
   },
+  {
+    name: 'todo',
+    action: function(editor) {
+      var selections = editor.codemirror.getSelections();
+      var highlighted = [];
+      for (var i = 0; i < selections.length; i++) {
+        highlighted.push('{todo|todo comment here}');
+      }
+      editor.codemirror.replaceSelections(highlighted);
+    },
+    className: 'fa fa-check',
+    title: 'Todo'
+  },
   '|',
   {
     name: 'reference',
@@ -337,6 +350,19 @@ function highlightMono(editor) {
 }
 
 
+// 'todo' marker handling
+function checkTodoMarker(elem) {
+  var value = elem.getValue();
+  var editor = elem.getTextArea();
+  var label = $(editor).parent().siblings("th").children("label");
+  var regex = /\{\s{0,2}todo(\|[^}]+)?\s{0,2}\}/i;
+  console.log(value.match(regex));
+  if (value.match(regex)) {
+    label.addClass("todo");
+  } else {
+    label.removeClass("todo");
+  }
+}
 
 /* searches for textareas and turns them into markdown editors */
 function loadMarkdown() {
@@ -361,6 +387,9 @@ function loadMarkdown() {
       simplemde.codemirror.setOption("theme", "monokai");
       simplemde.codemirror.options.extraKeys['Tab'] = false;
       simplemde.codemirror.options.extraKeys['Shift-Tab'] = false;
+
+      simplemde.codemirror.on("blur", (elem => checkTodoMarker(elem)));
+      checkTodoMarker(simplemde.codemirror);
     })
   }
 

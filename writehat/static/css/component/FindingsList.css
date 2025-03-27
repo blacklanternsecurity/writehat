@@ -1,171 +1,160 @@
-/* GENERIC, APPLIES TO ALL FINDING TYPES */
-
-section > h1.finding-heading {
-    margin: 0px !important;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-
-div.finding div.finding-content div > p { 
-    text-align: justify;
-    text-align-last: auto !important;
-    overflow: hidden;
-}
-
-.finding-severity {
-    font-weight: bold;
-    color: white;
-    font-size: 1.5em;
-    padding: 0px;
-    padding-top: 1.5em;
-    padding-bottom: 1.5em;
-    text-align: center;
-}
-
-div.finding {
+.finding {
     --header-text-color: black;
     --stripe-background-color: rgba(128,128,128,.1);
-  
+
+    display: flex;
+    flex-direction: column;
+
     width: 100%;
     height: 100%;
     padding: 0px;
     margin: 0px;
+}
 
+.finding-table {
     display: flex;
     flex-direction: column;
-    border-top: 3px solid var(--severity-color);
-    border-bottom: 3px solid var(--severity-color);
+    flex-grow: 1;
+
+    border-top: 5px solid var(--severity-color);
+    border-spacing: 0;
+    border-radius: 5px 5px 0px 0px;
 }
 
-section.l1 div.first-finding-container { height: calc(100% - 30px - 2.3rem); }
-section.l2 div.first-finding-container { height: calc(100% - 30px - 2.2rem); }
-section.l3 div.first-finding-container { height: calc(100% - 26px - 2.0rem); }
-
-section.l1 div.first-finding-container[data-split-from], 
-section.l2 div.first-finding-container[data-split-from], 
-section.l3 div.first-finding-container[data-split-from] {
-    height: 100%;
-}
-
-div.finding table {
-    page-break-inside: avoid;
-}
-
-div.finding div.finding-header {
+.finding-header {
     display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
 }
 
-div.finding div.finding-header div.finding-severity {
-    width: 11rem;
+.finding-severity {
+    height: 100%;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: white;
+    padding: 0px;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    text-align: center;
+
     max-width: 11rem;
     min-width: 11rem;
 }
 
-div.finding div.finding-header div.finding-title {
-    flex-grow: 1;
+.finding-title {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 1.5rem;
+    overflow-wrap: anywhere;
+    max-width: calc(var(--page-content-width) - 11rem);
+    font-size: 1.5em;
     font-weight: bold;
-    line-height: 3.5rem;
     color: var(--header-text-color);
     background-color: var(--stripe-background-color);
-    font-size: 1.5rem;
-    text-align: left;
-    padding: 1.5rem;
 }
 
-div.finding div.finding-content {
-    position: relative;
+.finding-content {
+    --header-width: 11rem;
 }
 
-div.finding div.finding-content:last-child {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
+.finding-content-header {
+    float: left;
+    background-color: var(--severity-color-faded);
 
-div.finding div.finding-content > div {
-    margin-left: 11rem;
+    height: 100%;
+    min-width: var(--header-width);
+    max-width: var(--header-width);
     padding: 1rem;
+    vertical-align: top;
+    text-align: right;
+    break-inside: avoid;
+
+    font-weight: bold;
+}
+
+.finding-content-body {
+    padding: 1rem;
+    height: 100%;
+
+    width: 100%;
+    margin-left: var(--header-width);
+    max-width: calc(var(--page-content-width) - var(--header-width));
+
     overflow-wrap: break-word;
-    flex-grow: 1;
+    vertical-align: top;
+    text-align: left;
 }
 
-div.finding div.finding-content > div > p:first-child {
-    margin-block-start: 0;
-} 
-
-div.finding div.finding-content > div > p:last-child {
-    margin-block-end: 0;
+.finding-content:last-child .finding-content-body pre:last-child > code[data-split-to] {
+    border-radius: .5rem .5rem 0rem 0rem;
 }
 
-div.finding div.finding-content:nth-of-type(odd) > div {
+.finding-content:first-child .finding-content-body pre:first-child > code[data-split-from] {
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
+}
+
+.finding-content:first-child .finding-content-body:has(pre:first-child > code[data-split-from]) {
+    padding-top: unset;
+}
+
+.finding-content:first-child .finding-content-body pre > code[data-split-from][data-split-to] {
+    border-radius: 0;
+}
+
+.finding-content-body > *:last-child,
+.finding-content:last-child .finding-content-body {
+    padding-bottom: unset;
+    margin-bottom: unset;
+}
+
+.finding-content:nth-of-type(odd) > .finding-content-body {
     background-color: var(--stripe-background-color);
 }
 
-div.finding div.finding-content > div::before {
-    position: absolute;
-    background-color: var(--severity-color-faded);
-    min-width: 9rem;
-    max-width: 9rem;
-    text-align: right;
-    padding: 1rem;
-    font-weight: bold;
-    display: inline-block;
-    left: 0;
-    bottom: 0;
-    top: 0;
+.finding .finding-content:last-child{
+    height: 100%;
 }
 
-/* DREAD Categories */
+.finding-content li, p {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
 
-div.finding.content > div.dread-category { 
+.dread-impact ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: start;
 }
 
-div.finding-content > div.dread-category > p {
-    display: table-cell;
+.dread-impact ul li {
+    padding: 4px;
+    border: 1px solid #ddd;
+    background-color: rgba(240, 240, 240, 0.2);
+    border-radius: 5px;
+    margin: 4px;
 }
 
-div.finding-content > div.dread-category > p.dread-score { 
-    padding-right: 1rem;
-    vertical-align: middle;
-}
-
-div.finding-content > div.impact ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
-}
-
-div.finding-content > div.impact ul li {
-  padding: 4px;
-  border: 1px solid #ddd;
-  background-color: rgba(240, 240, 240, 0.2);
-  border-radius: 5px;
-  margin: 4px;
-}
-
-div.finding div.finding-content > div.category::before           { content: "Category" !important; }
-div.finding div.finding-content > div.affected-resources::before { content: "Affected Resources" !important; }
-div.finding div.finding-content > div.description::before        { content: "Description" !important; }
-div.finding div.finding-content > div.background::before         { content: "Background" !important; }
-div.finding div.finding-content > div.remediation::before        { content: "Remediation" !important; }
-div.finding div.finding-content > div.references::before         { content: "References" !important; }
-
-/* CVSS SPECIFIC */
-
-div.finding div.finding-content > div.vector::before             { content: "CVSS3 Vector" !important; }
-div.finding div.finding-content > div.tools-used::before         { content: "Tools Used" !important; }
-div.finding div.finding-content > div.poc::before                { content: "Proof of Concept" !important; }
-
+/* .finding-content-header.category::after { content: "Category" !important; } */
+/* .finding-content-header.affected-resources::after { content: "Affected Resources" !important; } */
+/* .finding-content-header.description::after { content: "Description" !important; } */
+/* .finding-content-header.background::after { content: "Background" !important; } */
+/* .finding-content-header.remediation::after { content: "Remediation" !important; } */
+/* .finding-content-header.references::after { content: "References" !important; } */
+/**/
+/* /* CVSS SPECIFIC */ */
+/**/
+/* .finding-content-header.cvss-vector::after { content: "CVSS 3.1 Vector" !important; } */
+/* .finding-content-header.cvss-tools-used::after { content: "Tools Used" !important; } */
+/* .finding-content-header.cvss-poc::after { content: "Proof of Concept" !important; } */
+/**/
 /* DREAD SPECIFIC */
-
-div.finding div.finding-content > div.dread-category::before     { content: attr(category) !important; }
-div.finding div.finding-content > div.impact::before             { content: "Impact" !important; }
-
-/* PROACTIVE SPECIFIC */
+/**/
+/* .finding-content-header .dread-damage::after { content: "Damage" !important; } */
+/* .finding-content-header .dread-reproducibility::after { content: "Reproducibility" !important; } */
+/* .finding-content-header .dread-exploitability::after { content: "Exploitability" !important; } */
+/* .finding-content-header .dread-affected-users::after { content: "Affected Users" !important; } */
+/* .finding-content-header .dread-discoverability::after { content: "Discoverability" !important; } */

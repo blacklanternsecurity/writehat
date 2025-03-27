@@ -1,5 +1,15 @@
+.tof-item, .tof-pagenumber, .tof-dots, .tof-dots::before, .tof-pagenumber::after {
+  page-break-inside: avoid;
+  page-break-before: avoid;
+  page-break-after: avoid;
+}
+
 .tof-item {
   padding-right: 1ch;
+}
+
+.tof-list li {
+  list-style-type: none;
 }
 
 .tof-list a {

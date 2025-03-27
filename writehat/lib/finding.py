@@ -12,6 +12,7 @@ from writehat.lib.revision import Revision
 
 
 log = logging.getLogger(__name__)
+todo_re = r"\{\s{0,2}[Tt][Oo][Dd][Oo](?P<todo_note>[|][^}]+)?\s{0,2}\}"
 
 class BaseDatabaseFinding(WriteHatBaseModel):
 
@@ -193,6 +194,21 @@ class BaseDatabaseFinding(WriteHatBaseModel):
             'name': 'Findings Database'
         }
 
+
+    @property
+    def todoItems(self):
+        out = []
+        for field in self._meta.get_fields():
+            try:
+                if field.markdown:
+                    log.debug(field.name)
+                    data = str(getattr(self, field.name, ""))
+                    match = re.search(todo_re, data)
+                    if match is not None:
+                        out.append(field.name)
+            except AttributeError:
+                continue
+        return out
 
 
 class DREADFinding(BaseDatabaseFinding):

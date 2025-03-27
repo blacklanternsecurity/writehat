@@ -15,6 +15,7 @@ from django.template.loader import get_template
 from writehat.lib.markdown import list_figures
 
 log = logging.getLogger(__name__)
+todo_re = r"\{\s{0,2}[Tt][Oo][Dd][Oo](?P<todo_note>[|][^}]+)?\s{0,2}\}"
 
 class caption(Enum):
     none = 0
@@ -340,8 +341,8 @@ class BaseComponent():
         template = get_template(self.htmlTemplate)
         context = self.preprocess(context=context)
         contentHTML = template.render(context)
-        styleHTML = get_template(f'snippets/componentCSS.html').render({'component': self.type})
-        return styleHTML + contentHTML
+        # styleHTML = get_template(f'snippets/componentCSS.html').render({'component': self.type})
+        return contentHTML
 
 
     def delete(self):
@@ -467,6 +468,18 @@ class BaseComponent():
             return ReviewStatusField._choices[self.reviewStatus]
         except (KeyError, AttributeError):
             return ReviewStatusField._choices['unassigned']
+
+
+    @property
+    def todoItems(self):
+
+        out = []
+        for k,v in self.validFields().items():
+            if getattr(v, "markdown", False):
+                match = re.search(todo_re, str(getattr(self, k, "")))
+                if match is not None:
+                    out.append(k)
+        return out
 
 
     @staticmethod

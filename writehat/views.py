@@ -7,9 +7,10 @@ import uuid as uuidlib
 
 # django
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.html import escape
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.http import require_http_methods
@@ -17,6 +18,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.contrib import messages
 
 
 # WRITEHAT
@@ -49,7 +51,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from selenium.common.exceptions import InvalidCookieDomainException
+from selenium.common.exceptions import InvalidCookieDomainException, TimeoutException
 
 
 
@@ -151,6 +153,19 @@ def reportEdit(request,uuid):
             "componentsList": settings.VALID_COMPONENTS,
 
         })
+
+@require_http_methods(['GET'])
+def reportRevisions(request, uuid):
+    log.debug("reportRevisions() called; UUID: {0}".format(uuid))
+    log.debug("Found {0} available components".format(len(settings.VALID_COMPONENTS)))
+
+    report = Report.get(id=uuid)
+
+    return render(request, "pages/reportRevisions.html", {
+        "report": report,
+        "engagement": report.engagement,
+        "revisions": report.revisions
+    })
 
 @require_http_methods(['GET'])
 @csrf_protect
@@ -279,18 +294,19 @@ def reportCreate(request, uuid=None, fromTemplate=False):
         reportName = decodedJson['name']
         log.debug(f"reportName: {reportName}")
         reportComponents = decodedJson['reportComponents']
+        status = decodedJson.get('status')
         # Everything is validated, lets instantiate the report
         report = None
         if uuid:
             log.debug(f"saving report (with engagementParent) reportComponents: {reportComponents}")
-            report = Report.new(name=reportName, components=reportComponents,engagementParent=uuid)
+            report = Report.new(name=reportName, components=reportComponents, engagementParent=uuid, status=status)
         #    report.engagementParent = uuid
        #     report.save()
         else:
             if fromTemplate:
-                report = SavedReport.new(name=reportName, components=reportComponents)
+                report = SavedReport.new(name=reportName, components=reportComponents, status=status)
             else:
-                report = Report.new(name=reportName, components=reportComponents)
+                report = Report.new(name=reportName, components=reportComponents, status=status)
 
     except ReportValidationError:
         log.warn("reportCreate() threw ReportValidationError")
@@ -372,6 +388,7 @@ def reportUpdate(request,uuid,fromTemplate=False):
         reportName = reportJSON.get('name', None)
         reportPageTemplate = reportJSON.get('pageTemplateID', None)
         reportFindings = reportJSON.get('reportFindings', None)
+        reportStatus = reportJSON.get('status', None)
 
         if componentJSON is not None:
             log.debug("In reportUpdate()")
@@ -383,12 +400,12 @@ def reportUpdate(request,uuid,fromTemplate=False):
         if fromTemplate:
             log.debug("fromTemplate is true:")
             report = SavedReport.get(id=uuid)
-            report.update(componentJSON, reportName, reportPageTemplate)
+            report.update(componentJSON, reportName, reportPageTemplate, status=reportStatus)
         else:
             log.debug("fromTemplate is false:")
             # Update the report
             report = Report.get(id=uuid)
-            report.update(componentJSON, reportName, reportPageTemplate, reportFindings)
+            report.update(componentJSON, reportName, reportPageTemplate, reportFindings, status=reportStatus)
 
 
     except ReportValidationError as e:
@@ -706,7 +723,12 @@ def reportGeneratePdf(request,uuid):
     try:
         # Wait for page to finish rendering, assuming less than one minute
         log.debug("Waiting for request to finish")
-        element = WebDriverWait(browser, 120).until(expected_conditions.presence_of_element_located((By.ID, "finished_loading")))
+        timeout = getattr(settings, "SELENIUM_TIMEOUT", 120)
+        WebDriverWait(browser, timeout).until(expected_conditions.presence_of_element_located((By.ID, "finished_loading")))
+    except TimeoutException as e:
+        log.debug(f"Timeout of {timeout} seconds exceeded when attempting to render report with id {report.id} to PDF")
+        messages.add_message(request, messages.ERROR, "PDF took too long to render! Please contact a web administrator for more information")
+        return redirect(f"/engagements/report/{report.id}/edit", uuid=report.id)
     finally:
         # Send request to Selenium to call Page.printToPDF
         log.debug("Finished loading")
@@ -720,8 +742,8 @@ def reportGeneratePdf(request,uuid):
         log.debug(browser.get_log("driver"))
         log.debug(browser.get_log("browser"))
 
-#       # Close the browser
-        browser.close()
+        # Close the browser
+        browser.quit()
 
     # Base64-decode PDF response and render to HttpResponse
     response = HttpResponse(base64.b64decode(response.get('value').get('data')), content_type='application/pdf')
@@ -1124,20 +1146,6 @@ def timestamp(request,uuid):
     p = resolve(uuid,hint)
 
     return HttpResponse(p.modifiedDate)
-
-
-
-
-@csrf_protect
-@require_http_methods(['POST'])
-def revisionSave(request):
-    # componentID
-    id = request.POST["UUID"]
-    text = request.POST["text"]
-    fieldName = request.POST["fieldName"]
-    p = Revision.new(componentID=id,fieldName=fieldName,fieldText=text)
-    p.save()
-    return HttpResponse(p.version)
 
 
 @csrf_protect

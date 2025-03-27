@@ -63,6 +63,7 @@ div.generated-table tr {
 div.generated-table td {
   padding: 8px;
   break-inside: avoid;
+  overflow-wrap: anywhere; 
 }
 
 div.generated-table td strong {
